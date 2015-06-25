@@ -1,0 +1,13 @@
+function orientationChange(){ 
+switch(window.orientation) {
+	case 0: // Portrait 
+	case 180: // Upside-down Portrait 
+	// Javascript to setup Portrait view 
+	break; 
+	case -90: // Landscape: turned 90 degrees counter-clockwise 
+	case 90: // Landscape: turned 90 degrees clockwise 
+	// Javascript to steup Landscape view 
+	break; 
+} 
+} 
+window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize", orientationChange, false); 
