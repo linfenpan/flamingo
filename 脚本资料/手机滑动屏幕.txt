@@ -1,4 +1,4 @@
-Swiper 2.0 - Mobile Touch Slider
+Swiper 2.0 - Mobile Touch Slider 
  * Swiper 2.0 - Mobile Touch Slider
  * http://www.idangero.us/sliders/swiper/
  *
