@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>测试跨域</title>
+    <script type="text/javascript" src="http://www.100bt.com/resource/js/lib/jquery-mig-min.js"></script>
+    <script src="crossRequest.js" charset="utf-8"></script>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+var isDebug = true;
+if(isDebug){
+  // 现在只能跨单个域名
+  ~function(){
+      var cr = crossRequest({
+          url: ['http://my.100bt.com/common/cross-domain.jsp', 'http://qq.100bt.com/common/cross-domain.jsp'],
+          domain: '100bt.com' // 所有域名，包括现在的页面，都必须有一个相同的父域
+      });
+      var list = ['get', 'post', 'ajax', 'getJSON'], fn;
+      for(var i = list.length; i--; ){
+          fn = list[i];
+          // 很不喜欢这种写法，但只是调试而已~，别当真
+          (function(fn, cr, $){
+              $[fn] = function(){
+                  cr[fn].apply(cr, arguments);
+              }
+          })(fn, cr, $);
+      }
+  }();
+}
+
+$.get("http://qq.100bt.com/recomment/getFlowerInfo.json", {ids:78380}, function(data){
+    console.log(2, data);
+}, "json");
+$.get("http://my.100bt.com/GetReminds.action", function(data){
+    console.log(1, data);
+}, "json");
+
+</script>
+</html>
