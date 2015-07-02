@@ -1,0 +1,14 @@
+target与currentTarget的区别？ 
+
+通俗易懂的说法： 
+比如说现在有A和B， 
+A.addChild(B) 
+A监听鼠标点击事件 
+那么当点击B时，target是B，currentTarget是A 
+也就是说，currentTarget始终是监听事件者，而target是事件的真正发出者 
+
+
+总结： 
+target在事件流的目标阶段；currentTarget在事件流的捕获，目标及冒泡阶段。
+只有当事件流处在目标阶段的时候，两个的指向才是一样的， 
+而当处于捕获和冒泡阶段的时候，target指向被单击的对象而currentTarget指向当前事件活动的对象（一般为父级）。 
