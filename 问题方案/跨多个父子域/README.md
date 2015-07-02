@@ -29,3 +29,5 @@ cr.get/cr.post/cr.ajax
 如何方便使用，可参考index.html里的方法。通过 isDebug 参数，控制是否跨域请求。
 
 本例子，请部署到 http://test.100bt.com/ 域名下，方可看到效果。
+
+PS: 所有的文件，记得修正jquery的引用路径啊~
