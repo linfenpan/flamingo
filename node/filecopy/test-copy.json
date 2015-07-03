@@ -1,0 +1,8 @@
+{
+    "isClearRoot": true,
+    "fromRoot": "./test",
+    "toRoot": "E:\\github\\flamingo\\node\\copy\\test",
+    "xxx/js": "yyy/js/xxcms4",
+    "xxx/images": "yyy/images/xxcms4",
+    "xxx/css": "yyy/css/xxcms4"
+}

@@ -1,0 +1,25 @@
+.img-404-wrapper {
+	margin: 0 auto;
+	text-align: center;
+	margin-top: 50px;
+}
+.img-404-wrapper p {
+	margin-top: 30px;
+}
+.img-404-wrapper p a {
+	color: #2f3f4f;
+	font-size: 20px;
+	/*text-decoration: underline;*/
+	
+	display: inline-block;
+	padding-bottom: 4px;
+	border-bottom: 1px solid #2f3f4f;
+	cursor: pointer;
+}
+.img-404-wrapper p a:hover {
+	color: #1b9cfd;
+	border-bottom: 1px solid #1b9cfd;
+}
+#restart {
+	margin-left: 130px;
+}
