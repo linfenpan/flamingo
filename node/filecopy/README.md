@@ -35,4 +35,6 @@ xxx.json是复制命令的参数配置:
 
 把 ./filecopy 目录，放在 npm/node_modules 目录下
 
+进入 npm/node_modules/filecopy目录，在此目录，运行命令: npm install 安装相关依赖
+
 在控制台，输入 filecopy 测试
