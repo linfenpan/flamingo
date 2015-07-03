@@ -7,5 +7,35 @@
 </head>
 <body>
 
+<div id="content">
+
+</div>
+
+<script id="tmp1" type="text/template">
+<h1>测试数据</h1>
+<% if(name){ %>
+    <p>
+        Name:<%= name %>
+    </p>
+<%}%>
+<p>
+    转义: <%= message %>
+</p>
+<p>
+    不转义: <%:= message %> <br/>
+    或: <%- message %>
+</p>
+</script>
+
+<script type="text/javascript">
+    // 总体用法，跟ejs类似，不过，少了异步请求的模块
+    // <%:v title %> 把onclick等事件中的参数，进行转义
+    // <%:u title %> 对链接参数encode
+    content.innerHTML = baidu.template('tmp1', {
+        name: 'da宗熊',
+        message: '<strong>这里是消息</strong>'
+    });
+</script>
+
 </body>
 </html>
