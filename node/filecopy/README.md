@@ -30,7 +30,9 @@ xxx.json是复制命令的参数配置:
 # 如何使用
 
 通过 npm config get prefix 查看node modules的安装目录
+
 把 ./bat 目录下的两个文件，放在 npm 目录下
+
 把 ./filecopy 目录，放在 npm/node_modules 目录下
 
 在控制台，输入 filecopy 测试
