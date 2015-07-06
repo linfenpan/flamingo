@@ -11,17 +11,24 @@
 </body>
 <script id="template" type="html/template">
     <h1><%= title %></h1>
-    <% if(type == 1){ %> 
+    <% var m = 123 %>
+    <% console.log(m) %>
+    <% if(type == 1){ %>
         <p  class="123">状态: <%= status %></p>
     <%}%> xx..
 </script>
 <script>
+// 删除两个空格
 function trim(str){
     return str.replace(/^\s*|\s*$/g, "");
 }
 // 转移 ' 和 "
 function quote(str){
     return str.replace(/('|")/g, '\\$1');
+}
+// 给句子添加换行
+function sentence(str){
+    return str + '\n';
 }
 
 
@@ -35,34 +42,32 @@ var resList = [], fnStr = '', rightContent = '';
 
 
 // 去除换行
-html = html.replace(/\s/g, " ");
+html.replace(/\s/g, " ").replace(/(.*?)(<%.*%>)(.*)/g, function(str, left, center, right){
+    // 因为 'xx内容<% 表达式 %>' 这种形式比较好用正则匹配，所以，把 '前面内容<%表达式%>后面内容' 的 '前面' 和 '后面' 去掉
 
-// 因为 'xx内容<% 表达式 %>' 这种形式比较好用正则匹配，所以，把 '前面内容<%表达式%>后面内容' 的 '前面' 和 '后面' 去掉
-html = html.replace(/(.*?)(<%.*%>)(.*)/g, function(str, left, center, right){
     rightContent = right;
     resList.push(left);
     console.log("left:%s center:%s right:%s", left, center, right);
     return center;
-});
+}).replace(/(.*?)<%(.*?)%>/g, function(str, html, exp){
+    // 开始匹配表达式
 
-// 开始匹配表达式
-html.replace(/(.*?)<%(.*?)%>/g, function(str, html, exp){
     console.log("html:%s exp:%s", html, exp);
     // html内容
-    fnStr += __TMP_LIST__ + ".push('" + quote(html) + "');";
+    fnStr += sentence(__TMP_LIST__ + ".push('" + quote(html) + "');");
 
     // 表达式内容
     if(exp.indexOf("=") === 0){
-        fnStr += __TMP_LIST__ + ".push("+ exp.slice(1) +");";
+        fnStr += sentence(__TMP_LIST__ + ".push("+ exp.slice(1) +");");
     }else{
-        fnStr += exp;
+        fnStr += sentence(exp);
     }
 });
 
 // 构建变量定义
 var varStatement = "";
 for(var name in data){
-    varStatement += 'var ' + name + '=__TMP_DATA__.' + name + ';';
+    varStatement += sentence('var ' + name + '=__TMP_DATA__.' + name + ';');
 }
 fnStr = varStatement + fnStr;
 
@@ -72,9 +77,12 @@ var fn = new Function(__TMP_DATA__, __TMP_LIST__, fnStr);
 if(resList.length > 0){
     fn(data, resList);
     resList.push(rightContent);
-    console.log(resList.join(""));
-}else{
-    console.log(html);
+
+    html = resList.join("");
 }
+
+
+console.log(html);
+content.innerHTML = html;
 </script>
 </html>

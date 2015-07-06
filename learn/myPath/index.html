@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>脚本依赖路径学习</title>
+        <script src="sea.js" charset="utf-8" id="seajsnode"></script>
+    </head>
+    <body>
+
+    </body>
+    <script type="text/javascript">
+        seajs.config({
+            // base: "./script"
+            alias: {
+                "jquery": 'http://cdn.xxzhushou.cn/uploads/static/lib/jquery_44f7138.js'
+            }
+            // paths: {} 路径设置，方便跨目录调用
+        });
+
+        // 使用模块
+        seajs.use("index", function(Index){
+            Index.sayHi();
+        });
+
+        // 1、根据脚本引入路径，确定跟路径
+        // 在非 ie6/7 下, script.src 是绝对路径
+        // 在 ie6/7 下，如果传入参数4，返回绝对路径值
+        function getScriptAbsoluteSrc(node) {
+            return node.hasAttribute ? // non-IE6/7
+                node.src :
+                // see http://msdn.microsoft.com/en-us/library/ms536429(VS.85).aspx
+                node.getAttribute("src", 4);
+        };
+        var jsPath = getScriptAbsoluteSrc(seajsnode);
+        console.log("绝对路径:%s", jsPath); // http://lfp.learn.com/learn/myPath/sea.js
+        // 2、每次依赖脚本，根据根路径 + 引入路径，获取绝对路径，进行加载
+        // 返回根目录
+        function getDirname(path){
+            return path.match(/[^#?]*\//)[0];
+        };
+        jsPath = getDirname(jsPath);
+        console.log("根级路径:%s", jsPath); // http://lfp.learn.com/learn/myPath/
+
+        // 1. 绝对路径
+        function isAbsolute(path){
+            return /\/\/|:\//.test(path);
+        }
+        function realPath(path){
+            // 1. 修正 '.'
+            // 把 /a/../b/././c/.././d => /a/../b//c/..//d
+            path = path.replace(/\/\.\//g, '/');
+
+            // 2. 修正 '//'
+            path = path.replace(/[^:]\/{2}/g, '/');
+            // => /a/../b/c/../d
+
+            // 3. 修正 '..'
+            path = path.replace(/\/([^/]*)\/\.\.\//g, '/');
+            // => /b/d
+
+            return path;
+        }
+        // 2. 脚本合并
+        function joinPath(){
+            var arg = arguments, path = [].join.call(arg, '/');
+            return realPath(path);
+        }
+
+
+        console.log(realPath('http://www.100bt.com/./a/../b/./c/.././d'));
+        console.log(realPath('http://www.100bt.com/./x/./y'));
+        console.log(realPath('http://www.100bt.com/mm/d/../tt'));
+        console.log(realPath('http://www.100bt.com/../x/./y'));
+
+        console.log(joinPath('./a/b/c', '../d/./m/../n'));
+
+    </script>
+</html>
