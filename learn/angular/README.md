@@ -92,7 +92,7 @@ $scope.$on();	// 监听事件
 ## 路由
 
 这次的业务，很多的地方，都使用了ngRoute【需额外引用脚本的说..】
-它有3个主要的成员，分别是 \$route， \$routeParams， \$routeProvider
+它有3个主要的成员，分别是 $route， $routeParams， $routeProvider
 
 一个路由的配置，依附在 module 层上:
 
@@ -110,8 +110,8 @@ app.config(["$routeProvider", function($routeProvider){
 }]);
 ```
 
-\$route 保存着路由的配置，和当前路由的信息，一般很少用。
-\$routeParams能获取当前页面，路由配置中的参数:
+$route 保存着路由的配置，和当前路由的信息，一般很少用。
+$routeParams能获取当前页面，路由配置中的参数:
 ```javascript
 var user = app.controller("user", function($scope, $routeParams){
 	console.log($routeParams.id); // 获取 /user/:id 的信息
@@ -137,7 +137,7 @@ angular中，有很多指令，常用的，有:
 
 service是控制器的服务，常用的服务有:
 
-### \$scope
+### $scope
 核心服务，此服务下的值，会绑定到 controller 对应的模板中。
 如:
 ```
@@ -158,7 +158,7 @@ $scope.$emit("event2", 1, 2);
 // 往子层发布事件
 $scope.$broadcast("event2", 1, 2);
 ```
-当\$scope的属性，发生改变时，一般会自己触发属性和模板的双向绑定操作。
+当$scope的属性，发生改变时，一般会自己触发属性和模板的双向绑定操作。
 
 PS:
 当使用jQuery的ajax功能时，angular就是个坑，ajax之后的，数据，并不会产生双向绑定的效果:
@@ -170,14 +170,14 @@ $.get("xx.json", function(data){
 ```
 需要手动调用 angular 的服务，再次触发双向绑定的效果。如 $timeout
 
-### \$timeout和\$interval
+### $timeout和$interval
 
 其实就是window.setTimeout和window.setInterval的angular版本的写法。用法一样，但是，前者，会绑定了angular的双向绑定更新操作。
 
 推荐在angular中，使用前者。
 
 
-### \$http
+### $http
 
 异步请求的服务:
 ```
@@ -191,7 +191,7 @@ $http({
 
 对于post请求，如果带上数据的，必须以以下形式编写:
 ```
-\$http.post("xx.json", {});
+$http.post("xx.json", {});
 ```
 不然，数据可能不被后端所承认
 
