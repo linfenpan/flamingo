@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="phonecatApp">
+<head>
+	<title>angular第二个测试</title>
+	<meta charset="utf-8" />
+	<script src="angular.min.js"></script>
+	<script>
+		var phonecatApp = angular.module("phonecatApp", []);
+
+		phonecatApp.controller("PhoneListCtrl", function($scope, $http){
+			var res = $http.get("data/phone.json");
+			res.success(function(data){
+				$scope.phones = data;
+			});
+
+			$scope.orderProp = "name";
+
+		});
+		/**
+		 * 如果合并代码，可以这样子写:
+		 * phonecatApp.controller("xx", [$scope, $http, function($s, $h){
+			...
+		 }]
+		 * 或者:
+		 function Ctrl($s, $h){}
+		 Ctrl.$inject = ["$scope", "$http"];
+		 phonecatApp.controller("xx", Ctrl);
+		 * 或者:
+		 function Ctrl($s, $h){};
+		 phonecatApp.controller("xx", ["$scope", "$http", Ctrl]);
+		*/
+
+	</script>
+</head>
+<body ng-controller="PhoneListCtrl">
+
+	<h1>动态内容</h1>
+	<ul>
+		<!-- 图片不用ng-src会发送错误请求哦~ -->
+		<li ng-repeat="phone in phones | filter:query | orderBy:orderProp">
+			<span>{{phone.name}}</span>
+			<p>{{phone.snippet}}</p>
+			<a href="#/image/{{phone.id}}"><img ng-src="{{phone.imageUrl}}"/></a>
+			<a href="#/image/{{phone.id}}">{{phone.name}}</a>
+		</li>
+	</ul>
+	<!-- json格式查看内容 -->
+	<pre>{{phones | json}}</pre>
+</body>
+<script>
+
+</script>
+</html>

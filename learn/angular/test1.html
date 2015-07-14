@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>angular学习测试</title>
+        <script src="angular.min.js" charset="utf-8"></script>
+    </head>
+    <body>
+        <div ng-app="myApp">
+            <div ng-init="yourname='haha'" ng-controller="myCtrl">
+                Your name: <input type="text" ng-model="yourname" placeholder="name.." />
+                <hr>
+                Hello {{yourname || "World"}}~!<br/>
+                <p ng-bind="yourname">
+
+                </p>
+
+                <br>
+                <br>
+
+                <h1>列表测试</h1>
+                <ul>
+                    <li ng-repeat="item in list">
+                        {{ item }}
+                    </li>
+                </ul>
+                {{timer}}
+            </div>
+            
+            <div ng-controller="dd">
+                {{dd}}
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        function dd($scope){
+            $scope.dd = 123123;
+        }
+        dd.$inject = ["$scope", "$http"];
+
+        var app = angular.module('myApp', []);
+        app.controller("dd", dd);
+        app.controller("myCtrl", function($scope, $interval, $timeout){
+            $scope.list = [1, 2, 3];
+            $scope.$watch("yourname", function(newV, oldV){
+                console.log("1:%s", newV);
+            });
+
+            $scope.$watch("data", function(newV, oldV){
+                console.log("2:%s", newV);
+            }, true);
+
+            $scope.data = {mmm: 1};
+
+            $timeout(function(){
+                $scope.list = [1, 2];
+                $scope.data = {};
+                $scope.yourname += 22222;
+            }, 2000);
+
+        });
+    </script>
+</html>

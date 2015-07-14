@@ -1,0 +1,14 @@
+<h1>动态模版，电话列表</h1>
+<img ng-src="{{mainImageUrl}}" /><br/>
+search: <input type="text" ng-model="search" /><br/>
+<select ng-model="orderProp">
+	<option value="name">名字</option>
+	<option value="age">时间</option>
+</select>
+<ul>
+	<li ng-repeat="phone in phones | filter:query | orderBy:orderProp">
+		<a href="#/phones/{{phone.id}}"><img ng-src="{{phone.imageUrl}}" /><br/></a>
+		<p ng-click="setImage(phone.imageUrl)">{{phone.name | checkmark}}{{phone.name}}</p>
+		<p>&nbsp;&nbsp;{{phone.snippet}}</p>
+	</li>
+</ul>

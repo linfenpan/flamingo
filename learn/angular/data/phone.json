@@ -1,0 +1,8 @@
+[
+	{"name": "三星", "id": 0,"imageUrl": "http://img3.a0bi.com/upload/articleResource/20140703/1404373186738.jpg",
+	 "snippet": "让世界更加猴急", "age": 20},
+	{"name": "不知名手机1", "id": 1,"imageUrl": "image/bear.jpg",
+	 "snippet": "下一款会更好", "age": 11},
+	{"name": "摩托罗拉", "id": 2, "imageUrl": "image/bear.jpg",
+	 "snippet": "不会有下一款手机了", "age": 12}
+]

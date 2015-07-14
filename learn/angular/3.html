@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="phonecatApp">
+<head>
+	<title>angular第一个测试</title>
+	<meta charset="utf-8" />
+	<script src="angular.min.js"></script>
+	<script src="angular.route.js"></script>
+	<script>
+/** route的使用:
+	1、module需要引用ngRoute
+	2、route的内容，将放在有 "ng-view" 属性的地方
+	3、ngRoute有3个板块 $route, $routeParams, $routeProvider [params提供参数获取，provider提供路由配置, route则是当前路由、全局配置]
+	4、$routeProvider.when('/路径:id', {
+			templateUrl: '模板路径',
+			controller: '对应的controller',
+			template: 模板字符串或函数,
+			resolve: 当前controller依赖的其它板块,
+			redirectTo: 重定向的地址
+		}).otherwise({
+			redirectTo: '/index'
+		});
+	5、$routeParams读取参数，也很简单: $routeParams.id
+*/
+		// 声明一个phonecatControllers的module
+		var phonecatControllers = angular.module("phonecatControllers", ["ngRoute"]);
+
+		// 自定义service
+		phonecatControllers.factory("Data", function(){
+			return {
+				author: "da棕熊",
+				email: "1071093121@qq.com"
+			};
+		});
+
+		phonecatControllers.controller("PhoneListCtrl", ["$scope", "$http", function($scope, $http){
+			$http.get("data/phone.json").success(function(data){
+				$scope.phones = data;
+				$scope.mainImageUrl = data[0].imageUrl;
+			});
+			$scope.orderProp = "age";
+			// 提供外部函数~
+			$scope.setImage = function(url){
+				$scope.mainImageUrl = url;
+			};
+		}]);
+
+		phonecatControllers.controller("PhoneDetailCtrl", ["$scope", "$routeParams", "Data", function($scope, $routeParams, Data){
+			$scope.phoneId = $routeParams.phoneId;
+			$scope.Data = Data;
+		}]);
+
+		// 定义filer
+		phonecatControllers.filter("checkmark", function(){
+			return function(input){
+				return input ? '\u2713' : '\u2718';
+			};
+		});
+
+
+		// phonecatApp依赖ngRoute和phonecatControllers两个module
+		var phonecatApp = angular.module("phonecatApp", [
+			"ngRoute",
+			"phonecatControllers"
+		]);
+
+		phonecatApp.config(["$routeProvider", function($routeProvider){
+
+			$routeProvider.when("/phones", {
+				templateUrl: "page/phone-list.html",
+				controller: "PhoneListCtrl"
+			}).when("/phones/:phoneId", {
+				templateUrl: "page/phone-detail.html",
+				controller: "PhoneDetailCtrl"
+			}).otherwise({
+				redirectTo: "/phones"
+			});
+
+
+		}]);
+
+
+	</script>
+</head>
+<body>
+	<div ng-view><!-- route的内容，将会放到这里 --></div>
+</body>
+<script>
+
+</script>
+</html>

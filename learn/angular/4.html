@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="phonecatAnimation">
+<head>
+	<title>angular第一个测试</title>
+	<meta charset="utf-8" />
+	<script src="angular.min.js"></script>
+	<script src="jquery.js"></script>
+	<script src="angular.animate.js"></script>
+	<link href="animate4.css" rel="stylesheet" />
+	<!-- 依赖了ngAnimate，元素进入时，会触发: .ng-enter---.ng-enter-active -->
+	<!-- 隐藏: .ng-leave---.ng-leave-active -->
+	<!-- 排序触发: .ng-move---.ng-move-active -->
+	<script>
+
+		var phonecatAnimation = angular.module("phonecatAnimation", ["ngAnimate"]);
+
+		phonecatAnimation.controller("phonesListCtrl", ["$scope", "$http", function($scope, $http){
+			$http.get("data/phone.json").success(function(data){
+				$scope.phones = data;
+			});
+		}]);
+
+
+
+
+	</script>
+</head>
+<body ng-controller="phonesListCtrl">
+	search: <input ng-model="query" /><br/>
+	<select ng-model="orderByProp">
+		<option value="age">age</option>
+		<option value="name">name</option>
+	</select>
+	<ul class="phones">
+		<li ng-repeat="phone in phones | filter:query | orderBy:orderByProp"
+			class="thumbnail phone-listing">
+		  <a href="#/phones/{{phone.id}}" class="thumb"><img ng-src="{{phone.imageUrl}}"></a>
+		  <a href="#/phones/{{phone.id}}">{{phone.name}}</a>
+		  <p>{{phone.snippet}}</p>
+		</li>
+	</ul>
+
+
+</body>
+</html>
