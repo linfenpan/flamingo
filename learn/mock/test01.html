@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>mock.js学习测试</title>
+        <script src="jquery.js" charset="utf-8"></script>
+        <!-- 这玩意，一定要最后加载，能更友好的更改其它库 -->
+        <script src="mock.js" charset="utf-8"></script>
+    </head>
+    <body>
+
+    </body>
+<script type="text/javascript">
+// Mock.mock(template)
+var template = {
+    'title': 'Syntax Demo',
+
+    'string1|1-10': '★',
+    'string2|3': 'value',
+
+    'number1|+1': 100,
+    'number2|1-100': 100,
+    'number3|1-100.1-10': 1,
+    'number4|123.1-10': 1,
+    'number5|123.3': 1,
+    'number6|123.10': 1.123,
+
+    'boolean1|1': true,
+    'boolean2|1-2': true,
+
+    'object1|2-4': {
+        '110000': '北京市',
+        '120000': '天津市',
+        '130000': '河北省',
+        '140000': '山西省'
+    },
+    'object2|2': {
+        '310000': '上海市',
+        '320000': '江苏省',
+        '330000': '浙江省',
+        '340000': '安徽省'
+    },
+
+    'array1|1': ['AMD', 'CMD', 'KMD', 'UMD'],
+    'array2|1-10': ['Mock.js'],
+    'array3|3': ['Mock.js'],
+
+    'function': function() {
+        return this.title
+    }
+}
+var data = Mock.mock(template);
+// 简单的模拟数据
+var data2 = Mock.mock({
+    "name": "da宗熊",
+    "money|5-10": 1,
+    "email|1": ["111@qq.com", "222@aobi.com", "3333@mm.com"],
+    "isHeight|1": true
+});
+
+
+// 拦截请求
+// 支持正则 /\.json/
+// 支持字符串，但需要和请求编写的链接，完全匹配才行
+// Mock.mock(链接, 拦截请求的类型GET/POST/PUT/DELETE, template|function);
+Mock.mock("/x/test1.json", {
+    code: 200,
+    data: {
+        "name|1": ["aa", "bb", "cc"]
+    }
+});
+// Mock.mock("/x/test1.json", function(options){
+//     // options 包含了请求的一些参数
+//     console.log(options);
+//     return {};
+// });
+
+// 这种请求拦截，只支持  jQuery、Zepto、KISSY
+$.get("/x/test1.json", function(data){
+    console.log(data);
+}, "json");
+
+
+$('<pre>').text(JSON.stringify(data, null, 4)).appendTo('body');
+
+
+
+
+</script>
+</html>
