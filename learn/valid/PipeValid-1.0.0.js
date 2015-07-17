@@ -83,6 +83,8 @@
 
     // 工具方法:
 
+    var ID = 1; // 内置ID
+
     // 对象的简单合并
     function extend(){
         var args = arguments, o1 = args[0];
@@ -242,7 +244,7 @@
 
     // 表单验证
     function PipeValid(){
-        if(!this instanceof PipeValid){
+        if(!(this instanceof PipeValid)){
             return new PipeValid();
         }
         return this.init();
@@ -310,7 +312,20 @@
             })(fn, name);
             return this;
         },
+        // 自定义错误验证
+        define: function(){
+            var args = arguments;
+            if( typeof args[0] !== "function" ){return;}
 
+            // 添加到 定义 之中
+            var name = "define_func_" + ID++;
+            this.add(name, args[0]);
+
+            // 加入验证
+            this[name].apply(this, [].slice.call(args, 1));
+
+            return this;
+        },
         // 添加验证项
         _addItem: function(name){
             var map = this._map, item = map[name];
