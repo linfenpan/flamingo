@@ -129,7 +129,22 @@ angular中，有很多指令，常用的，有:
  - ng-repeat: 遍历数组，ng-repeat="item in list"
  - ng-selected: 是否选中
  - ng-click: 点击事件
-
+ - ng-include: 加载外部模板
+ 
+ 注意:
+ ng-include 有坑：
+ 
+ 字符串的单引号：ng-include="'模板.html'"
+ 
+ controller：在ng-include的内容外的，任意内容，都不能被双向绑定，只有单向的功能:
+```
+<div ng-controller="xx" ng-include="'xx.html'">这里的controller会没有了双向绑定的功能</div>
+		
+controller必须写在 xx.html 里:
+<div ng-controller="xx">
+   在xx.html里，才有双向绑定的功能
+</div>
+```
 其它的，自己看文档去！
 
 
