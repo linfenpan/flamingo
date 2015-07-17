@@ -5,9 +5,54 @@
     <title>写一个表单验证器 v 1.0.0</title>
 </head>
 <body>
+    完整第1版的表单验证<br/>
+    感觉提供的 then 和 end 方法，没什么用处..<br/>
+    不能跟其它属性搭配，就是挺废的，以后维护，再跟其它属性搭配吧<br/>
+<code style="
+    background-color: #000;
+    display: inline-block;
+    padding: 10px 20px;
+    border: 2px solid #666;
+    margin: 10px;
+    color: #fff;"><pre>
+var valid = new PipeValid();
+
+// then 和 end 必须搭配使用
+valid.check("name").min(10).then().max(20, "名字不能超过20位").end().notEmpty("名字不能为空").max(5, "最大不超过5个字");
+// 跟以往一样
+valid.check("age").int().error("年龄必须是整数")
+
+// 返回改为了 Deferred 对象
+valid.start(true, {
+    name: "123456",
+    age: "xxyy,,"
+}).done(function(){
+    console.log("验证成功");
+}).fail(function(){
+    console.log(arguments);
+});
+
+</pre></code>
 
 </body>
+<script src="PipeValid-1.0.0.min.js" charset="utf-8"></script>
 <script type="text/javascript">
 
+var valid = new PipeValid();
+
+// then 和 end 必须搭配使用
+valid.check("name").min(10).then().max(20, "名字不能超过20位").end().notEmpty("名字不能为空").max(5, "最大不超过5个字");
+// 跟以往一样
+valid.check("age").int().error("年龄必须是整数")
+
+// 返回改为了 Deferred 对象
+valid.start(true, {
+    name: "123456",
+    age: "xxyy,,"
+}).done(function(){
+    console.log("验证成功");
+}).fail(function(){
+    console.log(arguments);
+});
 </script>
 </html>
