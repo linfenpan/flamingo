@@ -79,7 +79,7 @@
             return this;
         }
     };
-    window["Deferred"] = Deferred;
+    // window["Deferred"] = Deferred;
 
     // 工具方法:
 

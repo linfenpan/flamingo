@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>PipeValid 1.1.0版本</title>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+
+// 验证器，真没有那么复杂，使用配置策略，则完成全部功能了
+;!function(window, wName){
+
+    // 林林统统的常用测试函数
+    // 测试对象
+    var VALID = {
+        // max, min, empty, email, url, phone, number, int, float
+        max: function(val, len){
+            return val && val.length <= len;
+        },
+        min: function(val, len){
+            return val && val.length >= len;
+        },
+        notEmpty: function(val){
+            return val && !/^\s*$/g.test(val);
+        },
+        isEmpty: function(val){
+            return !val || /^\s*$/g.test(val);
+        },
+        url: function(val){
+            return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(val);
+        },
+        email: function(val){
+            return /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/.test(val);
+        },
+        number: function(val){
+            return !isNaN(Number(val));
+        },
+        int: function(val){
+            return /^\d+$/.test(val);
+        }
+    };
+
+    // 简单 Deferred 对象
+    // 内置 Deferred 对象
+    function Deferred(){
+        this._dones = [];
+        this._fails = [];
+        this._status = 0;   // 0 没完成, 1 done， 2 fail
+        this._ctx = [];
+    };
+    Deferred.prototype = {
+        // 执行某个列表
+        _execute: function(list, args, status){
+            this._status = status;
+            this._ctx = args;
+            for(var i = 0, max = list.length; i < max; i++){
+                list[i].apply(this, args);
+            }
+            return this;
+        },
+        resolve: function(){
+            return this._execute(this._dones, arguments, 1);
+        },
+        reject: function(){
+            return this._execute(this._fails, arguments, 2);
+        },
+        done: function(cb){
+            this._dones.push(cb);
+            this._status == 1 && cb.apply(this, this._ctx);
+            return this;
+        },
+        fail: function(cb){
+            this._fails.push(cb);
+            this._status == 2 && cb.apply(this, this._ctx);
+            return this;
+        }
+    };
+
+    // 工具方法:
+    var ID = 1; // 内置ID
+
+    // 对象的简单合并
+    function extend(){
+        var args = arguments, o1 = args[0];
+        if(args.length >= 2){
+            var list = [].slice.call(args, 1);
+            for(var i = 0, max = list.length; i < max; i++){
+                var obj = list[i] || {};
+                for(var j in obj){
+                    o1[j] = obj[j];
+                }
+            }
+        }
+        return o1;
+    };
+
+// 1.1.0 版本，重写编译的方法
+
+// 编译，无需太复杂
+// var obj = {name: {vls:{then:"method|1|错误"}, {then:"method|错误"}], error:""}, password: {vls:[{if:["条件|1", "条件|2"], then:["method|错误"]}], error:""}};
+// 如果有 if 条件，先判定 if 条件成立，再验证
+// 如果没有 if 条件，则执行 then 条件的判定
+// 考虑到，每一种方法，都会抛出错误
+// 如果不设置 错误，则统一使用 配置 中的 error 作为错误信息
+
+    // 表单验证
+    function PipeValid(){
+        if(!(this instanceof PipeValid)){
+            return new PipeValid();
+        }
+        return this.init();
+    };
+
+    PipeValid.prototype = {
+        init: function(){
+            // 配置对象
+            this._cf = {};
+            // 执行列表，为了保证执行顺序
+            this._list = [];
+            // 内置数据
+            this._data = {};
+
+            // 编译对象
+            this._cur = null;
+            this._cls = [];
+            this._item = {};
+
+        },
+        // 添加属性的配置对象
+        _addItem: function(name){
+            var item = {
+                name: name,
+                vls: [],
+                error: "发生错误:" + name
+            };
+            this._cf[name] = item;
+            this._list.push(item);
+        },
+        // 检查某个属性的检测对象
+        // 每次 check 都是一次编译的开始
+        check: function(name){
+            this._addItem(name);
+        },
+        // 新的编译 Item
+        _newCitem: function(){
+            this._item = {
+                then: [],
+                "if": []
+            };
+            this._list.push(this._item);
+        },
+        // 编译函数
+        compile: function(type, text){
+            // 一个编译对象: name: { vls: [{then:[], if:[]}, {then: []}], error: "", name: "" }
+            switch ( type ) {
+                case "name":
+                    this._cur = this._cf[text];
+                    if( this._cur ){
+                        this._list = this._cur.vls;
+                        // 拿到列表中的最后一个对象，如果发现是空的，就使用
+                        // 不是，则新建一个
+                        this._newCitem();
+                    }
+                    break;
+                case "fn":
+                    var then = this._item.then;
+                    then.push(text);
+                    break;
+                case "then":
+                    var then = this._item.then, cnd = this._item["if"];
+                    cnd.push.apply(cnd, then);
+                    // 清空 then
+                    then.splice(0);
+                    break;
+                case "end":
+                    // 给当前列表，再注册一个新对象，多余的空对象，如果不用，就干掉
+                    this._newCitem();
+                    break;
+                case "error":
+                    this._cur.error = text;
+                default:
+
+            }
+        }
+    };
+
+
+    // 依附到window对象中
+    window[wName || "PipeValid"] = PipeValid;
+}(window, window.PIPEVALID);
+
+
+</script>
+
+</html>
