@@ -8,9 +8,9 @@
     <script src="compiler.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="timerMain"></div>
-    <div id="todoMain"></div>
+    <div id="main"></div>
 </body>
+<!--
 <script type="riot/tag">
     <timer>
         <h3>Times: {index}</h3>
@@ -23,21 +23,22 @@
         var timer = setInterval(this.tick, 1000);
     </timer>
 </script>
+-->
 <script>
     // 第3个参数设置的，都是opts的值..
     // riot.mount("#timerMain", "timer", {start: 20});
 
-    riot.compile("./index-todo.tag", function(){
-        // 把todoMain元素，编译为 todo 标签
-        var tag = riot.mount("#todoMain", "todo")[0];
-        // 只有通过update传入的，才是 this 的值
-        tag.update({title: "介绍", age: 11, name: "da宗熊"});
-
-        // 下面竟然走得通...
-        // setTimeout(function(){
-        //     riot.mount("#todoMain", "timer", {start: 11});
-        // }, 3000);
-    });
+    // riot.compile("./index-todo.tag", function(){
+    //     // 把todoMain元素，编译为 todo 标签
+    //     var tag = riot.mount("#todoMain", "todo")[0];
+    //     // 只有通过update传入的，才是 this 的值
+    //     tag.update({title: "介绍", age: 11, name: "da宗熊"});
+    //
+    //     // 下面竟然走得通...
+    //     // setTimeout(function(){
+    //     //     riot.mount("#todoMain", "timer", {start: 11});
+    //     // }, 3000);
+    // });
 
     // 重写路由规则
     // 定义一个这让的路由: #/user/home/:userId/:appId
@@ -98,9 +99,25 @@
         riot.mRoute._otherwise_ = url;
     };
 
+    riot.mixin("tool", {
+        include: function(url, tagName, id){
+            var self = this;
+            riot.compile(url, function(){
+                id ? riot.mount(id, tagName) : riot.mount(tagName);
+            });
+            return this;
+        }
+    });
+
     riot.mRoute.on("/a.html/:userId", function(param){
         // 进入了
         console.log("进入了a.html", param);
+        riot.compile("./index-todo.tag", function(){
+            var todo = riot.mount("#main", "todo")[0];
+            todo.update({
+                title: "介绍", age: 10, name: "da宗熊"
+            });
+        });
     });
     riot.mRoute.otherwise("/a.html/0");
 
