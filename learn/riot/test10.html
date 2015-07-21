@@ -1,0 +1,64 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Riot.js 事件测试</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="riot.js"></script>
+	<script type="text/javascript" src="compiler.js"></script>
+	<!--[if lt ie 9]>
+		<script type="text/javascript" src="es5-shim.min.js"></script>
+		<script type="text/javascript" src="html5shiv.min.js"></script>
+		<script>html5.addElements(['todo'])</script>
+	<![endif]-->
+</head>
+<body>
+	<todo></todo>
+	<timer></timer>
+	
+	<div id="tmp_row">
+		<row>
+			<p>{title}</p>
+			<style scoped>
+				:scope {}
+				p{color:#ddc;}
+			</style>
+			this.title = "110000";
+		</row>
+	</div>
+</body>
+
+<script type="riot/tag" src="timer.tag"></script>
+<script type="text/javascript">
+// 因为有时候，需要异步加载数据
+// 所以，并不能一开始，就生成好模版
+// SO，类似 var todo = riot.mount("todo"); 这种操作，在模版加载完前执行，会返回Null
+// 有异步时，最好 riot.compile(function(){/**这里写mount操作*/})
+
+
+var timer = riot.mount("timer");
+console.log(timer); // 如果在compile前调用，竟然会影响到compile里的回调取值，俺震惊了
+riot.compile(function(){var timer = riot.mount("timer"); console.log(timer);});
+
+// 这样做最保险
+riot.compile("todo.tag", function(){
+	var todo = riot.mount("todo");
+	console.log(todo);
+});
+
+// 这里好像不生效~
+var res = riot.compile(tmp_row.innerHTML, true);
+console.log(res); // 返回了定义的字符串~，诡异咧
+
+// riot.route.start(); 默认开启， 也可以 stop 停止
+// url#id/name 更变时，这里会收到通知
+riot.route(function(id, name){
+	console.log(id, name);
+});
+// 在浏览器加载的时候，立刻执行..
+riot.route.exec(function(id, name) {
+	console.log("立刻执行，不关更变:", id, name);
+});
+
+</script>
+</html>

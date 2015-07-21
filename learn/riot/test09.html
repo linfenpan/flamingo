@@ -1,0 +1,41 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Riot.js 事件测试</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="riot.js"></script>
+	<script type="text/javascript" src="compiler.js"></script>
+	<!--[if lt ie 9]>
+		<script type="text/javascript" src="es5-shim.min.js"></script>
+		<script type="text/javascript" src="html5shiv.min.js"></script>
+		<script>html5.addElements(['todo'])</script>
+	<![endif]-->
+</head>
+<body>
+	<todo>
+		<p>yield的内容: {title}</p>
+	</todo>
+</body>
+
+<script type="riot/tag">
+	<todo>
+		<yield />
+		<listx each={list}>
+			<span>{title}</span>
+		</listx>
+		
+		// yield 里表达式的值，永远指向当前的this对象
+		this.test = "看看~！";
+		
+		this.list = [{title: 123}, {title: 234}];
+	</todo>
+	<listx>
+		<h2>yield内容:<yield /></h2>
+		
+	</listx>
+</script>
+<script type="text/javascript">
+var todo = riot.mount("todo");
+</script>
+</html>

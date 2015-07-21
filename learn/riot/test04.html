@@ -1,0 +1,61 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Riot.js测试01</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="riot.js"></script>
+	<script type="text/javascript" src="compiler.js"></script>
+	<!--[if lt ie 9]>
+		<script type="text/javascript" src="es5-shim.min.js"></script>
+		<script type="text/javascript" src="html5shiv.min.js"></script>
+		<script>html5.addElements(['my-tag', 'login'])</script>
+	<![endif]-->
+</head>
+<body>
+	<my-tag>
+		<b>{html}/{text}</b>
+		<p>
+			这一part的内容，会放在 &lt;yield /&gt;  标签内
+		</p>
+	</my-tag>
+	
+	<br />
+	
+	<login></login>
+</body>
+<!-- html镶嵌测试 -->
+<script type="riot/tag">
+	<my-tag>
+		<p>你好 <yield /></p>
+		
+		this.html = "da宗熊";
+		this.text = "称号:hao人";
+	</my-tag>
+</script>
+
+<!-- 如果元素拥有 name 或 id，或自动绑定到当前 this 对象中 -->
+<script type="riot/tag">
+	<login>
+		<form id="login" onsubmit={submit}>
+			<input type="text" name="username" />
+			<input type="password" name="password" />
+			<!-- 按钮点击，默认会提交表单的说.. -->
+			<button name="submit">提交</button>
+		</form>
+		
+		// 获取上面的元素
+		// 所有on开头的属性，都会指定一个方法
+		submit(){
+			var name = this.username.value,
+				word = this.password.value;
+			console.log("表单点击了提交", name, word);
+			return false;
+		};
+	</login>
+</script>
+
+<script type="text/javascript">
+riot.mount("*");
+</script>
+</html>

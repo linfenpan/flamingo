@@ -1,0 +1,54 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Riot.js 事件测试</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="riot.js"></script>
+	<script type="text/javascript" src="compiler.js"></script>
+	<!--[if lt ie 9]>
+		<script type="text/javascript" src="es5-shim.min.js"></script>
+		<script type="text/javascript" src="html5shiv.min.js"></script>
+		<script>html5.addElements(['todo'])</script>
+	<![endif]-->
+</head>
+<body>
+	<todo title="测试" content="这是一段内容..."></todo>
+	
+	<!-- if 测试 -->
+	<ifyes show="yes"></ifyes>
+</body>
+<script type="riot/tag">
+	<todo>
+		<h1 class={foo: this.isFoo()}>{opts.title}</h1>
+		<p>{opts.content}</p>
+		
+		this.on("mount", function(e){
+			// 参数是没有内容的..
+			console.log("mount ...", e, arguments);
+		}).on("update", function(){
+			// 参数是没有内容的..
+			console.log("update ...", arguments);
+		}).on("unmount", function(){
+			console.log("unmount ...", arguments);
+		});
+		
+		isFoo(){
+			return opts.title == "测试";
+		}
+	</todo>
+</script>
+
+<script type="riot/tag">
+	<ifyes>
+		<div if={ opts.show == 'yes'}>
+			<p>这里的内容显示了</p>
+		</div>
+		<!-- 只有 if, show, hide 有这种简单的判定 -->
+	</ifyes>
+</script>
+
+<script type="text/javascript">
+riot.mount("todo, ifyes");
+</script>
+</html>

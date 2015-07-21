@@ -1,0 +1,71 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Riot.js 事件测试</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="riot.js"></script>
+	<script type="text/javascript" src="compiler.js"></script>
+	<!--[if lt ie 9]>
+		<script type="text/javascript" src="es5-shim.min.js"></script>
+		<script type="text/javascript" src="html5shiv.min.js"></script>
+		<script>html5.addElements(['todo'])</script>
+	<![endif]-->
+</head>
+<body>
+	<todo></todo>
+	<say1></say1>
+</body>
+
+<script type="riot/tag">
+	<todo>
+		<child name="child1"></child>
+		<child name="child2" title="2"></child>
+		// 有两个child就返回数组
+		// 1个child就返回当前实例
+		console.log(this.tags.child);
+		
+		// 也可以通过名字访问儿子
+		console.log(2, this.tags.child2);
+	</todo>
+	<child>
+		<p>{title + (opts.title || '')}</p>
+		this.title = "就是个儿子..";
+	</child>
+</script>
+<script type="text/javascript">
+var todo = riot.mount("todo");
+// 可以通过 unmount 接触自定义标签的绑定
+// todo.unmount() 删除自定义标签
+// todo.unmount(true) 删除儿子，保留自定义标签
+
+
+// 通过脚本，创建一个自定义标签
+// riot.tag(tagName, template html, css?, attr?, constructor function)
+// js自定义的tag，有几点要注意的：
+// 1. 必须带引号的表达式： value="{val}" 代替 value={val} 【好像无所谓】
+// 2. Boolean的属性：__checked="{isTrue}" 代替 check={isTrue}
+// 3. 不支持简洁的es6方法声明
+// 4. <img src={} /> 必须写成 <img riot-src={} >
+// 5. 不支持自闭和标签	【好像也无所谓】
+// 6. 用 roit-style="color: {color}" 代替 style="color:{color}"，为了兼容ie
+riot.tag("say1", '<p>Hello One {time}</p><img riot-src="{src}" />', function(opts){
+	var self = this;
+	this.time = opts.start || 0;
+	this.src = "123.jpg";
+	
+	this.tick = function(){
+		self.update({time: ++self.time});
+	};
+	
+	var timer = setInterval(this.tick, 1000);
+	
+	this.on("unmount", function(){
+		clearInterval(timer);
+	});
+	
+});
+riot.mount("say1");
+
+</script>
+</html>

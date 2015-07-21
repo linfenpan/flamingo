@@ -1,0 +1,70 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Riot.js测试01</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="riot.js"></script>
+	<script type="text/javascript" src="compiler.js"></script>
+</head>
+<body>
+
+
+<todo></todo>
+
+<timer start="0"></timer>
+<timer start="10"></timer>
+<timer start="20"></timer>
+
+<!-- mount point -->
+<my-tag></my-tag>
+	
+</body>
+
+
+<!-- 最前面一定要有空格.. -->
+<script type="riot/tag">
+ <my-tag>
+  <h3>Tag layout: {index || 0}</h3>
+  this.index = 1;
+
+  var self = this;
+  tick(){
+   this.index++;
+   this.update();
+  }
+  var timer = setInterval(this.tick, 1000);
+ </my-tag>
+</script>
+
+<script src="todo.tag" type="riot/tag"></script>
+<script type="riot/tag">
+	<timer>
+		<p>Seconds Elapsed: {time}</p>
+		this.time = opts.start || 0;
+		tick(){
+			this.time++;
+			this.update();
+		}
+		var timer = setInterval(this.tick, 1000);
+		
+		this.on("unmount", function(){
+			clearInterval(timer);
+		});
+	</timer>
+</script>
+
+<script type="text/javascript">
+riot.mount("timer", {start: 0});
+riot.mount('todo', {
+  title: 'I want to behave!',
+  items: [
+	{ title: 'Avoid excessive coffeine', done: true },
+	{ title: 'Hidden item', hidden: true },
+	{ title: 'Be less provocative' },
+	{ title: 'Be nice to people' }
+  ]
+});
+riot.mount("my-tag");
+</script>
+</html>

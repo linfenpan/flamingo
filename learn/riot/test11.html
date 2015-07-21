@@ -1,0 +1,44 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Riot.js 自定义路由</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="riot.js"></script>
+	<script type="text/javascript" src="compiler.js"></script>
+	<!--[if lt ie 9]>
+		<script type="text/javascript" src="es5-shim.min.js"></script>
+		<script type="text/javascript" src="html5shiv.min.js"></script>
+		<script>html5.addElements(['todo'])</script>
+	<![endif]-->
+</head>
+<body>
+	
+</body>
+
+<script type="text/javascript">
+// 定义一个这让的路由: #!/user/home?id=123&name=xxx
+riot.route.parser(function(path){
+	// path 是 hash【出去#的那部分】 => !/user/home?id=123&name=xxx
+	var raw = path.slice(1).split("?");
+	var uri = raw[0],
+		qs = raw[1],
+		params = {};
+	
+	// 有搜索参数的话
+	if(qs){
+		qs.replace(/([^=&]*)=([^&])*/g, function(str, key, value){
+			params[key] = value;
+			return str;
+		});
+	};
+	// 给下面riot.route.exec()和riot.route()的参数
+	return [uri, params];
+});
+
+riot.route.exec(function(uri, params){
+	console.log(uri, params);
+});
+
+</script>
+</html>

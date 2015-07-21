@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>自定义标签</title>
+    <script src="angular.min.js" charset="utf-8"></script>
+    <script src="jquery.js" charset="utf-8"></script>
+</head>
+<body ng-app="app">
+    <div ng-controller="ctrl">
+        <student name="x" click="clickFn"></student>
+        <student name="y" click="clickFn"></student>
+    </div>
+</body>
+<script type="text/javascript">
+
+$("body").append("<p>123123</p>");
+
+var app = angular.module("app", []);
+
+// 创建一个student标签
+// 有属性 name，存储着student标签所需要的信息
+app.directive("student", function(){
+
+    var directive = {};
+
+    // 限定指令是标签
+    // A 属性, E 元素, C 是样式, M 注释
+    directive.restrict = "E";
+
+    // 内容的模板
+    directive.template = 'Student: <b ng-click="click()">{{student}}</b>';
+    // templateUrl 是模板的链接
+
+    // scope 规定每个 stundent 元素的读取标准
+    // = 是双向绑定
+    // @ 单向绑定，只传入
+    // & 表但是，表示变量在父级中，起作用的表达式
+    directive.scope = {
+        student: "=name",    // sudent 的值，从 name 属性获取
+        click: "=click"
+    };
+
+    // complie 方法，会在application初始化的时候，
+    // 在html loaded后，被angular.js调用
+    // 有多少个标签，就运行多少次
+    directive.compile = function(element, attributes){
+        element.css("border", "1px solid #ccc");
+        var linkFunction = function($scope, element, attributes){
+            //element.html("Student: <b>"+$scope.student.name+"</b>");
+            // 这里可以对数据、元素，进行加工..
+            $scope.student += "-";
+            element.css("background-color", "#ff00ff")
+        }
+        return linkFunction;
+    };
+
+    // 在 标签 使用之后，也会进入这里
+    // 有点奇怪，跟 copile 有什么区别呢?
+    // 对 $scope 和 $attrs 的处理..
+    directive.controller = function($scope, $attrs){
+        console.log(123);
+        $scope.student = "<" + $scope.student + ">";
+    }
+
+    return directive;
+});
+
+/**
+ link, compile, controller 3者的关系
+ 先运行controller，然后是　compile 或  link
+ 如果有 compile 不运行 link
+ link 相当于
+ compile: function(element, attributes){
+    return {
+        pre: function($scope, element, attributes){},
+        post: function($scope, element, attributes){}
+    }
+ }
+ 中的 post 部分
+
+如果有 controllerAs 属性，则运行 link， 不运行 compile
+
+compile 改变 dom, link 事件的绑定 和 触发
+
+*/
+
+
+// 控制器
+var ctrl = app.controller("ctrl", ["$scope", "$timeout", function($scope, $timeout){
+    $scope.x =  'da宗熊';
+    $scope.y =  'da宗熊2';
+
+    $scope.clickFn = function(){
+        console.log("点击了..");
+    }
+
+    $timeout(function(){
+        console.log($scope.x);
+    }, 1000);
+}]);
+
+
+</script>
+</html>

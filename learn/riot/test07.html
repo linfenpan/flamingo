@@ -1,0 +1,57 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Riot.js 事件测试</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="riot.js"></script>
+	<script type="text/javascript" src="compiler.js"></script>
+	<!--[if lt ie 9]>
+		<script type="text/javascript" src="es5-shim.min.js"></script>
+		<script type="text/javascript" src="html5shiv.min.js"></script>
+		<script>html5.addElements(['todo'])</script>
+	<![endif]-->
+</head>
+<body>
+	<div id="container" riot-tag="todo"></div>
+	
+	<div id="container2"></div>
+</body>
+<script type="riot/tag">
+	<row>
+		<p>这是测试行</p>
+	</row>
+</script>
+<script type="riot/tag">
+	<todo>
+		<div each={ items }>
+			<h3>{ title }</h3>
+			<a href="javascript:;" onclick={ parent.remove }>Remove</a>
+		</div>
+		
+		this.items = [
+			{title: "第一个该死的列"},
+			{title: "第二个该死的列"},
+			{title: "第三个该死的列"}
+		];
+		
+		remove(e){
+			var item = e.item;
+			var index = this.items.indexOf(item);
+			// 把当前项删掉
+			this.items.splice(index, 1);
+		}
+	</todo>
+</script>
+<script type="text/javascript">
+//	riot.settings.brackets = '{ }'; 可改写读值的方式，空格代表插入的值
+
+// 1、含有riot-tag属性的元素，可以被当作自定义标签
+var todo1 = riot.mount("#container");
+
+// 2、也可以在第二个参数指定使用什么tag初始化
+// 		第一个参数，也可以是dom元素
+var row1 = riot.mount("#container2", "row");
+
+</script>
+</html>

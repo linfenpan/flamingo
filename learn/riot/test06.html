@@ -1,0 +1,76 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Riot.js 事件测试</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="riot.js"></script>
+	<script type="text/javascript" src="compiler.js"></script>
+	<!--[if lt ie 9]>
+		<script type="text/javascript" src="es5-shim.min.js"></script>
+		<script type="text/javascript" src="html5shiv.min.js"></script>
+		<script>html5.addElements(['todo'])</script>
+	<![endif]-->
+</head>
+<body>
+	<todo></todo>
+</body>
+<script type="riot/tag">
+	<todo>
+		<ul onclick={parentClick}>
+			<!-- each 里的 this，是items，要通过parent访问外层context -->
+			<li each={ items } class={completed: done}>
+				<input type="checkbox" checked={done} onclick={parent.remove} /> {title}
+			</li>
+		</ul>
+		<style scoped>
+			:scope {
+				display: block;
+				max-width: 400px;
+				margin: 5% auto;
+			}
+			input {
+				font-size: 100%;
+				padding: .6em;
+				border: 1px solid #ccc;
+				border-radius: 3px;
+			}
+			ul {
+				padding: 0;
+			}
+			li {
+				list-style-type: none;
+				padding: .2em 0;
+			}
+			.completed {
+				text-decoration: line-through;
+				color: #ccc;
+			}
+			label {
+				cursor: pointer;
+			}
+		</style>
+		
+		this.items = [
+			{title: "真爱万岁", done: true},
+			{title: "熊叔无敌"},
+			{title: "说句鸟话"}
+		];
+		
+		parentClick(){
+			console.log("父元素被点击");
+			return true;
+		}
+		remove(e){
+			var item = e.item; // e.item，指向items的当前的item
+			item.done = !item.done;
+			
+			//	e.preventUpdate = true; 不触发 this.update()，不会自动更新UI，整个人都不好了
+			return true;
+		}
+	</todo>
+</script>
+<script type="text/javascript">
+riot.mount("todo");
+</script>
+</html>

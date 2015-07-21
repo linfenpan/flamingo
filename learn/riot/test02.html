@@ -1,0 +1,83 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Riot.js测试02, Mixin</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="riot.js"></script>
+	<script type="text/javascript" src="compiler.js"></script>
+</head>
+<body>
+	<user></user>
+	<todo title="测试数据:"></todo>
+	<todo title="哇哈哈哈~"></todo>
+</body>
+<script type="riot/tag">
+ <todo>
+  <!-- 标签的读取内容，是不能镶嵌html内容的 -->
+  <h3>{opts.title}</h3>
+  <style scoped>
+   /**样式会自动提到最前面*/
+   :scope {display:inline-block;}
+   h3{color:#ccd;}
+  </style>
+ </todo>
+</script>
+<script type="riot/tag">
+	<user>
+		<h1>{getTitle(title)}</h1>
+		<ul>
+			<li>性别: {sex}</li>
+			<!-- {} 中，不能有其他双引号的字符串 -->
+			<li class={age + '123' + sex}>年龄: {this.getAge()}</li>
+		</ul>
+		// 可以有混合，拿到window级别的数据
+		// 调用混合后，OptsMixin的this，就是当前的this咯~
+		// 也可以多个混排
+		this.mixin(OptsMixin, id_mixin_instance);
+		// 注意覆盖顺序，如果mixin有和this冲突的字段
+		// 排在后面的字段，覆盖前面字段
+		this.title = opts.title || "da宗熊";
+	</user>
+</script>
+<script type="text/javascript">
+var OptsMixin = {
+	init: function(){
+		console.log("初始化user");
+		var self = this;
+		setInterval(function(){
+			// 竟然完全不影响Li绑定的点击事件...
+			self.age++;
+			self.update();
+		}, 1000);
+	},
+	getTitle: function(str){
+		return "测试.." + str;
+	},
+	title: null,
+	age: 10,
+	sex: "男"
+};
+// this.mixin(obj1, obj2); 处于后面的，能覆盖前面的
+var id_mixin_instance = {
+	getAge: function(){
+		return this.age;
+	},
+	getSex: function(){
+		return this.sex;
+	},
+	getTitle: function(str){
+		return "欢迎你:" + str
+	}
+};
+riot.mount("*");
+
+// 如果要跨项目共享 mixin，可以在riot里注册一个
+riot.mixin("defaultData", {
+	author: "da宗熊",
+	email: "1071093121@qq.com"
+});
+// 项目中，就可以这样引用: this.mixin("defaultData");
+
+</script>
+</html>

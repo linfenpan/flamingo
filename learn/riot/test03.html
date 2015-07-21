@@ -1,0 +1,60 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Riot.js测试03，html内容和标签镶嵌测试</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="riot.js"></script>
+	<script type="text/javascript" src="compiler.js"></script>
+</head>
+<body>
+	<marticle title="da宗熊"></marticle>
+	<raw content="哇咔咔咔~"></raw>
+	
+	<account></account>
+	<sub plan="123"><!-- 因为没有调用riot.mount("sub")，所以是没生效的 --></sub>
+</body>
+<script type="riot/tag">
+	<raw>
+		this.root.innerHTML = opts.content;
+	</raw>
+</script>
+<script type="riot/tag">
+	<marticle>
+		<p>这里测试内容:</p>
+		<raw content={html}></raw>
+		
+		this.html = "Hello, <strong>"+opts.title+"</strong>"
+	</marticle>
+</script>
+
+<!-- 定义父子标签 -->
+<script type="riot/tag">
+	<account>
+		<sub plan={opts.plan}></sub>
+	</account>
+	
+	<!-- 注意咯，这里也是可以被生成的.. -->
+	<sub>
+		<h1>你的名字: {opts.plan.name}</h1>
+		<p>是不是很神奇?</p>
+		// var parent = this.parent; 拿到父亲tag
+		this.mixin(testObj);
+	</sub>
+</script>
+
+<script type="text/javascript">
+var testObj = {
+	init: function(){
+		//var $pt = $(this.parent.root);
+		// 你会发现，被插入到最前面了..
+		//$pt.append("<p>应该插入到account的最后面才对...</p>");
+	}
+};
+
+riot.mount("marticle, raw");
+
+// sub也莫名其妙的存在了
+riot.mount("account", {plan: {name: "xxxyyy"}});
+</script>
+</html>

@@ -1,0 +1,49 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Riot.js 事件监听</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="riot.js"></script>
+	<script type="text/javascript" src="compiler.js"></script>
+	<!--[if lt ie 9]>
+		<script type="text/javascript" src="es5-shim.min.js"></script>
+		<script type="text/javascript" src="html5shiv.min.js"></script>
+		<script>html5.addElements(['todo'])</script>
+	<![endif]-->
+</head>
+<body>
+	<todo></todo>
+</body>
+<script type="riot/tag">
+	<todo>
+		<a href="javascript:;" onclick={click}>按钮点击</a>
+		<a href="javascript:;" onclick={opts.login}>按钮点击222</a>
+		
+		click(){
+			console.log(this);
+			this.trigger("aclick", 1, 2, 3)
+		}
+		
+		opts.on("outside", function(value){
+			console.log("outside value:" + value);
+		});
+	</todo>
+</script>
+<script type="text/javascript">
+var opts = riot.observable({
+	login: function(params){
+		// 这里的this被todo更改了..
+		opts.trigger("outside", 123123);
+	}
+});
+var todo = riot.mount("todo", opts);
+// 1. 找到自定义元素，进行绑定
+todo[0].on("aclick", function(a, b, c){
+	// 没有e的默认值
+	console.log(arguments);
+});
+
+
+</script>
+</html>
