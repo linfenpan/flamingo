@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>riot学习</title>
+    <script src="jquery.js" charset="utf-8"></script>
+    <script src="riot.js" charset="utf-8"></script>
+    <script src="compiler.js" charset="utf-8"></script>
+</head>
+<body>
+    <div id="timerMain"></div>
+    <div id="todoMain"></div>
+</body>
+<script type="riot/tag">
+    <timer>
+        <h3>Times: {index}</h3>
+
+        this.index = opts.start || 0;
+        tick(){
+            this.index++;
+            this.update();
+        }
+        var timer = setInterval(this.tick, 1000);
+    </timer>
+</script>
+<script>
+    // 第3个参数设置的，都是opts的值..
+    // riot.mount("#timerMain", "timer", {start: 20});
+
+    riot.compile("./index-todo.tag", function(){
+        // 把todoMain元素，编译为 todo 标签
+        var tag = riot.mount("#todoMain", "todo")[0];
+        // 只有通过update传入的，才是 this 的值
+        tag.update({title: "介绍", age: 11, name: "da宗熊"});
+
+        // 下面竟然走得通...
+        // setTimeout(function(){
+        //     riot.mount("#todoMain", "timer", {start: 11});
+        // }, 3000);
+    });
+
+    // 重写路由规则
+    // 定义一个这让的路由: #/user/home/:userId/:appId
+    riot.route.parser(function(path){
+    	return [path];
+    });
+
+    // 需要将 riot.route 和 riot.route.exec 两个方法，整合为1个
+    riot.mRoute = function(fn){
+        // 应该在 window.onload 之后执行
+        setTimeout(function(){
+            riot.route.exec(fn);
+            riot.route(fn);
+        }, 1);
+    };
+    // 路由配置
+    riot.mRoute._map_ = {};
+    riot.mRoute._otherwise_ = null;
+    // mRoute成为发布中心
+    riot.observable(riot.mRoute);
+    riot.mRoute._on = riot.mRoute.on;
+    riot.mRoute.on = function(url, fnc){
+        // 1. /user/:id/:appId => 转为正则，保存
+        riot.mRoute._map_[url] = new RegExp("^" + url.replace(/:[^/]+/g, "([^/]+)") + "$", "g");
+        // 2. 对事件进行加工 url + 参数数目，url删除最后一个 /
+        riot.mRoute._on(url, fnc);
+    }
+
+    // 根据路由，加载对应的模板
+    riot.mRoute(function(url){
+        // 如果有路由，分配事件出去，会怎样呢？
+        var args = arguments;
+        // 1. 判定是否存在 _map_ 中
+        var map = riot.mRoute._map_, reg;
+        for( var i in map ){
+            reg = map[i];
+            if( reg.test( url )){
+                // /a.html/:userId
+                // 正则匹配: [a.html, userId]
+                var params = {}, list = i.split("/:");
+                url.replace(reg, function(){
+                    var args = arguments;
+                    // 给参数赋值
+                    for(var j = 1, max = list.length; j < max; j++){
+                        params[list[j]] = args[j];
+                    }
+                });
+                riot.mRoute.trigger(i, params);
+                return;
+            }
+        }
+
+        // 否则..，进入 otherwise 逻辑
+        // 找到 _otherwise_ 的页面，更改hash
+        riot.mRoute._otherwise_ && (window.location.hash = riot.mRoute._otherwise_);
+    });
+    riot.mRoute.otherwise = function(url){
+        riot.mRoute._otherwise_ = url;
+    };
+
+    riot.mRoute.on("/a.html/:userId", function(param){
+        // 进入了
+        console.log("进入了a.html", param);
+    });
+    riot.mRoute.otherwise("/a.html/0");
+
+
+
+
+</script>
+</html>
