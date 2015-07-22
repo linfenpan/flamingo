@@ -230,8 +230,8 @@
                         return {res: false, error: item[item.length - 1]};
                     }
                 }
-                return {res: true, error: ""};
             }
+            return {res: true, error: ""};
         }
     };
 
