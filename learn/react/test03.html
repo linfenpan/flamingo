@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>jsx延伸属性</title>
+    <script src="react.min.js"></script>
+    <script src="JSXTransformer.js"></script>
+</head>
+<body>
+    <div id="example"></div>
+</body>
+<script type="text/jsx" charset="utf-8">
+    // 属性，可以这样注入
+    var props = {
+        foo: 123,
+        bar: 456
+    };
+
+    var Component = React.createClass({
+        render: function(){
+            var obj = this.props;
+            var datas = [];
+            // 遍历所有属性，并输出
+            for(var i in obj){
+                datas.push(<li>{i} : {obj[i]}</li>);
+            }
+            return (
+                <ul>
+                    {datas}
+                </ul>
+            );
+        }
+    });
+
+
+    React.render(
+        <Component {...props} />,
+        document.getElementById("example")
+    );
+</script>
+</html>

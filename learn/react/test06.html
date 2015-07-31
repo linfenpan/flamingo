@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>从属关系测试</title>
+    <script src="react.min.js" charset="utf-8"></script>
+    <script src="JSXTransformer.js" charset="utf-8"></script>
+</head>
+<body>
+    <div id="container"></dvi>
+</body>
+<script type="text/jsx">
+    var Avater = React.createClass({
+        handleClick: function(e){
+            console.log(123);
+            // 他喵的，props里的属性，修改后，是不会生效的...
+            this.props.username += 1;
+            // children  是特殊的属性，获取的是标签内的内容
+            console.log(this.props.children);
+        },
+        render: function(){
+            return (
+                <p onClick={this.handleClick}>
+                    用户名: {this.props.username}
+                </p>
+            );
+        }
+    });
+    React.render(
+        <Avater username="xxx">这是children的内容</Avater>,
+        document.getElementById("container")
+    );
+</script>
+</html>

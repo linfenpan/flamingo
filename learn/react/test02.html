@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>javascript表达式</title>
+    <script src="react.min.js"></script>
+    <script src="JSXTransformer.js"></script>
+</head>
+<body>
+    <div id="example"></div>
+</body>
+<script type="text/jsx">
+    var Nav = React.createClass({
+        render: function(){
+            return (
+                <div>这是没登录的导航..</div>
+            );
+        }
+    });
+    var Login = React.createClass({
+        render: function(){
+            return (
+                <div>这是登录后的..</div>
+            );
+        }
+    });
+    var Container = React.createClass({
+        render: function(){
+            return (
+                <div>
+                    {/* 表达式里，可以使用 变量 或 标签 */}
+                    {window.isLogin ? <Login /> : <Nav />}
+                </div>
+            );
+        }
+    });
+
+    React.render(
+        <Container />,
+        document.getElementById("example")
+    );
+</script>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>html转义</title>
+    <script src="react.min.js" charset="utf-8"></script>
+    <script src="JSXTransformer.js" charset="utf-8"></script>
+</head>
+<body>
+    <div id="container"></div>
+    <div id="container2"></div>
+</body>
+<script type="text/jsx">
+// style接受一个驼峰式命名的对象，来初始化
+var Hello = React.createClass({
+    render: function(){
+        var style = {
+            color: "#f00"
+        };
+        // 看下面的样式设置：
+        return (
+            <h1 style={style}>Hello</h1>
+        );
+    }
+});
+
+// 所有html代码，插入到元素前，都会被转义
+var Hello2 = React.createClass({
+    render: function(){
+        var text = "First &middot; Second";
+        // 可以用 unicode 编码，或者 String.fromCharCode 来弄出特殊符号
+        var text3 = "First \u00b7 Second";
+        // 会发现，上下实现的不一样
+        // 第1行，会正常
+        // 第二行，会显示 不正常，因为 & 符号被转义了
+        // 如果要镶嵌 html 内容，可以使用属性: dangerouslySetInnerHTML={{__html: 内容}}
+        // dangerslySetInnerHTML 里的内容，是不会被转义的，使用的时候，小心 XSS 攻击
+        // 在react中，所有w3c规范中，不存在的属性，都会被忽略
+        // 如果一定要用自定义属性，需要用 "data-" 开头
+        return (
+            <div>
+                <h1>First &middot; Second</h1>
+                <h1>{text}</h1>
+                <h1>{text3}</h1>
+            </div>
+        );
+    }
+});
+
+React.render(
+    <Hello></Hello>,
+    document.getElementById("container")
+);
+React.render(
+    <Hello2></Hello2>,
+    document.getElementById("container2")
+);
+</script>
+</html>

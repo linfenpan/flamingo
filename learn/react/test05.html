@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>事件绑定测试</title>
+    <script src="react.min.js" charset="utf-8"></script>
+    <script src="JSXTransformer.js" charset="utf-8"></script>
+</head>
+<body>
+    <div id="container"></dvi>
+</body>
+<script type="text/jsx">
+// 注意了: 如果是移动端，需要开启出没事件处理，需要调用 React.initializeTouchEvents(true);
+    var LinkButton = React.createClass({
+        // 设置初始化状态:
+        getInitialState: function(){
+            return {like: false};
+        },
+        handleClick: function(e){
+            this.setState({like: !this.state.like}, function(a, b, c){
+                // 这个callback不知道有什么用，反正，参数也是空的，难道是有异步操作吗？
+                console.log(arguments);
+            });
+            // 他丫的，setState原来真是异步的，这一行，比callback要先运行!!!!!!!!
+            console.log(11);
+        },
+        render: function(){
+            var text = this.state.like ? "like" : 'don\'t like';
+            return (
+                <p onClick={this.handleClick}>
+                    You {text} this. Click to toggle;
+                </p>
+            );
+        }
+    });
+    React.render(
+        <LinkButton />,
+        document.getElementById("container")
+    );
+</script>
+</html>

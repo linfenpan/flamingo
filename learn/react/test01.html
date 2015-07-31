@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>第1个测试</title>
+    <script src="react.min.js"></script>
+    <script src="JSXTransformer.js"></script>
+</head>
+<body>
+    <div id="example"></div>
+</body>
+<<script type="text/jsx">
+    // React 的组件，名字首字母必须大写
+    // 如果首字母小写，则是一般的html标签
+    var HelloWorld = React.createClass({
+        render: function(){
+            return (
+                <p>
+                    {/* 注释最好这样写.. */}
+                    Hello, <input type="text" placehoder="Your name here" />!<br/>
+                    Time: {this.props.date.toTimeString()}
+                </p>
+            );
+        }
+    });
+    setInterval(function(){
+        React.render(
+            <HelloWorld date={new Date()} />,
+            document.getElementById("example")
+        );
+    }, 1000);
+
+</script>
+</html>
