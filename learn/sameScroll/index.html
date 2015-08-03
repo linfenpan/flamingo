@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>左右同步滚动测试</title>
+    <style>
+        *{padding:0;margin:0;}
+        #container{
+            margin:130px 0;
+        }
+        #container::after{
+            content: "";
+            clear:both;
+            display:table;
+            width:0;height:0;
+            visibility: hidden;
+        }
+        #left{
+            float:left;
+            width:60%;
+        }
+        #left li{
+            background: #DEF6FF;
+        }
+        #right{
+            float:left;
+            width:20%;
+        }
+        #right li{
+            background:#efefef;
+        }
+        #center{
+            float:left;
+            width:20%;
+			/**中间滚动不流畅，添加动画屏蔽之*/
+			-webkit-transition: top .3s linear;
+			-moz-transition: top .3s linear;
+			-ms-transition: top .3s linear;
+			-o-transition: top .3s linear;
+			transition: top .3s linear;
+        }
+        #center li{
+            background:#ccc;
+        }
+        li{
+            height:200px;
+            border:1px solid #ccc;
+            font-size:26px;
+            text-align: center;
+            list-style:none;
+        }
+    </style>
+</head>
+<body>
+
+<div id=container>
+    <ul id="left">
+        <li>101</li>
+        <li>102</li>
+        <li>103</li>
+        <li>104</li>
+        <li>105</li>
+        <li>106</li>
+        <li>107</li>
+        <li>108</li>
+        <li>109</li>
+        <li>1010</li>
+        <li>1011</li>
+    </ul>
+    <ul id="center">
+        <li>301</li>
+    </ul>
+    <ul id="right">
+        <li>201</li>
+        <li>202</li>
+        <li>203</li>
+        <li>204</li>
+        <li>205</li>
+        <li>206</li>
+    </ul>
+</div>
+
+</body>
+<script src="../jquery.js" charset="utf-8"></script>
+<script type="text/javascript">
+// 子元素同步滚动
+// undefined用于装逼
+;(function($, window, undefined){
+
+    var EVENT_ID = new Date/1;  // 滚动事件ID
+    var $dom = $(window.document), $win = $(window);
+
+    // 计算最大的高度
+    function caclulateMaxHeight($children){
+        return Math.max.apply(null, [].slice.call($children.map(function(i, v){return v.clientHeight;}), 0));
+    }
+
+    // this 对象是 jquery 对象
+    function syncScroll(){
+        var $container = this;
+        var $children = $container.children();
+        var eventId = EVENT_ID++, event = "scroll." + eventId;  // 当然咯, Zepto 是不支持 事件的 . 表达式的说~
+        this.data("sync-event", event);
+
+        // 计算 $container 的offsetTop，只有超过offsetTop，才开始滚动
+        var offsetTop = $container.offset().top;
+        // 遍历children，找出最大高度
+        var maxHeight = 0;
+        // window的窗口高度
+        var winHeight = 0;
+
+        // 给children添加相对定位
+        $children.css({position: "relative"});
+
+        // 是否滚动过的标志
+        var hasScroll = false;
+        // offsetTop 是不会变的
+        // 但是，maxHeight，则可能因为ajax等原因，而变化
+        // 两种方案：
+        // 1. scroll 的时候，动态计算maxHeight[这次选择这个!!]
+        // 2. 让外部通知插件的高度变化
+        $win.on(event, function(){
+            var scrollTop = $win.scrollTop();
+            // 已经滚动超过 offsetTop，则开始处理
+            if( scrollTop >= offsetTop){
+                // 最大高度
+                maxHeight = caclulateMaxHeight($children);
+                winHeight = $win.height();
+                // 剩余能滚动的距离 = maxHeight - winHeight
+                var totalCanScrollDistance = maxHeight - winHeight;
+
+                // 需要计算的滚动距离 = scrollTop - offsetTop
+                var realScrollDistance = scrollTop - offsetTop;
+                // 滚动的百分比，因为realScrollDistance可能大于totalCanScrollDistance
+                var percent = Math.min(1, realScrollDistance / totalCanScrollDistance);
+
+                // 修正所有子元素
+                $children.each(function(i, v){
+                    var clientHeight = v.clientHeight;
+                    if( v.clientHeight < maxHeight ){
+                        // 能往上挪动的距离 = maxHeight - clientHeight
+                        if( clientHeight > winHeight ){
+                            v.style.top = (maxHeight - clientHeight) * percent + "px";
+                        }else{
+                            v.style.top = realScrollDistance + "px";
+                        }
+                    }
+                });
+
+                // 滚动过的标志
+                hasScroll = true;
+            }else if( scrollTop < offsetTop && hasScroll ){
+                // 清空滚动过的标志
+                hasScroll = false;
+
+                // 滚动到顶部，就应该停止
+                $children.each(function(i, v){
+                    v.style.top = 0 + "px";
+                });
+            }
+        });
+        // 更新同步滚动的信息..
+        // 不过应该用不上..
+        // this.on("updateSyncScroll", function(){
+        //     $children = $container.children();
+        //     $win.trigger(event);
+        // });
+        return this;
+    };
+
+    $.fn.extend({
+        "syncScroll": syncScroll
+    });
+
+})(jQuery, window);
+
+$("#container").syncScroll();
+</script>
+</html>
