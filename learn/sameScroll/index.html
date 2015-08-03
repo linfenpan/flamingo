@@ -25,6 +25,12 @@
         #right{
             float:left;
             width:20%;
+            /**中间滚动不流畅，添加动画屏蔽之*/
+			/*-webkit-transition: top .0s linear;
+			-moz-transition: top .0s linear;
+			-ms-transition: top .0s linear;
+			-o-transition: top .0s linear;
+			transition: top .0s linear;*/
         }
         #right li{
             background:#efefef;
@@ -175,5 +181,55 @@
 })(jQuery, window);
 
 $("#container").syncScroll();
+
+// function syncScroll($container){
+// 	console.log('sync scroll');
+// 	$container.css("position","relative");
+// 	$(window).bind('load',function(){
+// 		//var parent=$('#warpbox');
+// 		var parent = $container;
+// 		if(parent.length>0){
+// 			var parTop=parent.offset().top;
+// 			var tar=[],tarHeight=[],hightest=0,sign=-1;
+// 			parent.children().each(function(i){
+// 				tar[i]=$(this);
+// 				tarHeight[i]=tar[i].height();
+// 				if(tarHeight[i] > hightest){
+// 					hightest=tarHeight[i];
+// 					sign=i;
+// 				}
+// 			});
+// 			if(hightest>$(window).height() && tarHeight[1] >$(window).height() ){
+// 				tar.splice(sign,1);
+// 				tarHeight.splice(sign,1);
+// 				$(window).scroll(function(){
+// 					var top=$(this).scrollTop();
+// 					var height=$(this).height();
+// 					for(var i=0;i<tar.length;i++){
+// 						var move=0;
+// 						if(top>parTop){
+//
+// 							move=(top - parTop) /  (hightest - height);
+// 							move= move  > 1 ? (hightest - tarHeight[i]) : move * (hightest - tarHeight[i]);
+// 							if(tarHeight[i]<height){
+// 								move=top - parTop;
+// 								if(top+tarHeight[i]  > parTop+ hightest){
+// 									var hh=hightest-tarHeight[i];
+// 									tar[i].css({'top':hh+'px',"position":"absolute"});
+// 									return ;
+// 								}
+// 								tar[i].css({'top':0+'px',"position":"fixed"});
+// 								return ;
+// 							}
+// 						}
+//
+// 						tar[i].css({'top':move+'px',"position":"relative"});
+// 					}
+// 				});
+// 			}
+// 		}
+// 	});
+// }
+// syncScroll($("#container"));
 </script>
 </html>
