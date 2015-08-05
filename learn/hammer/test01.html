@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>hammer.js测试--移动端手势识别</title>
+    <meta name="viewport" content="user-scalable=no, width=device-width, maximum-scale=1" >
+    <script src="hammer.js"></script>
+    <style>
+        #box{
+            width:100px;height:100px;
+            background:#eee;
+        }
+        #box2{
+            width:100px;height:100px;
+            background:#ddd;
+        }
+    </style>
+</head>
+<body>
+
+<div id="box"></div>
+<div id="box2"></div>
+
+</body>
+<script>
+    var elem = new Hammer(document.getElementById("box"));
+    // 平移事件
+    // 默认垂直的平移，是不启动的，因为可能跟滚动相冲突
+    elem.on("pan", function(ev){
+        console.log(ev);
+    });
+    // 启动，所有方向的检测
+    elem.get("pan").set({direction: Hammer.DIRECTION_ALL});
+    // 禁用 swipe 操作
+    elem.get("swipe").set({enable: false});
+
+    // 也可以定义属于自己的识别器
+    var elem2 = new Hammer(document.getElementById("box2"));
+    // threshold: 是手势的检测距离
+    elem2.add(new Hammer.Pan({direction: Hammer.DIRECTION_ALL, threshold: 0}));
+    elem2.add(new Hammer.Tap({ event: 'quadrupletap', taps: 4 }));
+
+    elem2.on("pan", function(e){
+        console.log(e);
+    });
+    // 这个玩意，好像什么卵用都没有
+    elem2.on("quadrupletap", function(e){
+        console.log("tap:", e);
+    });
+
+/**
+Hammer 所有事件:
+
+pan 平移
+tap 点击
+doubletap 双击
+press 长按
+swipe 快速滑动
+pinch 多点缩放  [默认关闭]
+rotate 旋转     [默认关闭]
+
+建议加上:
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+防止doubletap、pinch时，屏幕缩放
+*/
+
+</script>
+</html>

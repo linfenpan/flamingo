@@ -189,17 +189,17 @@
             for(var i = 0, max = list.length; i < max; i++){
                 var item = list[i], val = data[item.name];
                 // 有数据，则验证
-                if( val ){
+                if( item.name in data ){
                     var obj = this._cf[item.name], ls = obj.vls;
                     // then 中没有数据，则忽略, 有 if 条件，则if条件全部成立，在进行 then 判定
                     // vls: [{then:[max|1|错误], if:[]}, {then: []}]
                     for(var j = 0, jmax = ls.length; j < jmax; j++){
                         var jitem = ls[j], res;
                         // 如果验证不通过，则没必要往下执行了
-                        if( jitem["if"].length > 0 && !this._executeCompileList(jitem["if"], val).res){
+                        if( jitem["if"].length > 0 && !this._executeCompileList(jitem["if"], val, data).res){
                             continue;
                         }
-                        res = this._executeCompileList(jitem["then"], val);
+                        res = this._executeCompileList(jitem["then"], val, data);
                         if( !res.res ){
                             if( isAll ){
                                 errorList.push({attr: item.name, error: res.error});
@@ -219,13 +219,13 @@
         },
         // 执行需要编译的 错误配置列表
         // {then:[max|1|错误], if:[]}
-        _executeCompileList: function(list, val){
+        _executeCompileList: function(list, val, context){
             for(var i = 0, max = list.length; i < max; i++){
                 var item = list[i];
                 item = item.split("|");
                 var fn = this._valid[item[0]];
                 if( fn ){
-                    var res = fn.apply( this._valid, [val].concat(item.slice(1, -1)) );
+                    var res = fn.apply( context || this._valid, [val].concat(item.slice(1, -1)) );
                     if( !res ){
                         return {res: false, error: item[item.length - 1]};
                     }
