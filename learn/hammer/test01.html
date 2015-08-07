@@ -62,6 +62,14 @@ rotate 旋转     [默认关闭]
 建议加上:
 <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
 防止doubletap、pinch时，屏幕缩放
+
+// 去掉 tap 时的小小高亮效果
+<meta name="msapplication-tap-highlight" content="no" />
+
+// hamer 默认是禁止文本的选择
+// 如果要开启，可以在创建实例前，删除掉这个属性，
+delete Hammer.defaults.cssProps.userSelect
+
 */
 
 </script>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, maximun-scale=1.0, width = device-width">
+    <title>自定义tap事件</title>
+    <script src="hammer.js" charset="utf-8"></script>
+    <style>
+        #box{
+            min-height:30px;
+            padding:30px;
+            background:#ddd;
+            font:30px/30px arial;
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+</body>
+<script type="text/javascript">
+// Hammer 的事件触发机制，导致了，
+// 当一个事件触发之后，后面的事件，就不会触发了
+// 所以，需要手动使用 recognizeWith ，将两个事件绑定到一起
+    var elem = document.getElementById("box");
+    // Hammer.Manager 和 Hammer 一样
+    // 不过 Manager 没有绑定识别器
+    var mc = new Hammer.Manager(elem);
+
+    mc.add(new Hammer.Tap());
+    // 自定义一个tap事件，必须连续点击3次，才触发这个事件
+    mc.add(new Hammer.Tap({
+        event: "tap3", taps: 3
+    }));
+
+    // 如果mc 不 add Tap 识别器，下面的绑定，是失效的
+    // 因为add了tap识别器，所以tap触发了，所以tap3是不会触发的
+    // 需要把 tap3 跟 tap绑定到一起，让两者可以同时触发
+    mc.get("tap3").recognizeWith("tap");
+    mc.on("tap tap3", function(e){
+        elem.textContent += e.type + " ";
+    });
+</script>
+</html>
