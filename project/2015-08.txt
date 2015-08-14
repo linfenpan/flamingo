@@ -1,0 +1,45 @@
+﻿2015年08学习计划
+
+(OK)1、css3动画，尝试更多效果
+这次的css3动画，主要是利用:after和:before，插入新的元素，进行遮罩、简单动画
+视觉差方面，其实就是两个动画，相同方向，但运动的速度、距离不一致，导致的。
+
+比较有趣的是，滑动门的动画实现。
+一般，我的实现，只能是从左侧或右侧，改变宽度，做出滑动一样的效果。
+但是，发现，通过 left:50%; 和 transform: translateX(-50%); 然后在修改 with，就能达到从中间往两侧滑动的效果
+
+(OK)2、css3 3D动画
+主要有4个新属性，需要注意的:
+	a) perspective	观察点的位置
+	b) perspective-origin	观察的中心点
+	c) transform-style: preserve-3d;  	以3d效果，执行transform
+	d) backface-visibility: hidden;		是否可以看到元素背面？
+
+其中,perspective和perspective-origin不建议设置在将要执行动画的元素中。
+因为执行动画的元素，它的观察点和观察中心，可能会随着元素变化而变化。
+所以，一般设置在执行动画的元素的父亲元素上面。
+
+而transform-style: perserve-3d; 和 backface-visibility:hidden;则是设置在需要执行动画的元素上面的。
+
+收perserve-3d影响的属性，有所有transform属性，不过也正常，transform-style嘛~。
+
+
+
+(X)3、scrollReveal.js 滚屏动画的剖析
+这东西，就是找到所有 data-sr 属性的元素，然后split(/[, ]+/)拿到所有值，
+之后，就通过 switch case 进行编译，然后，拼接为 css3 相关的样式。
+而且，效果并不怎么好
+
+这个玩意，挺OK的，之后，试试重写一个~
+就是需要考虑 屏幕进入、图片加载之类的问题。
+
+(OK)3.1 编写自己的 scrollRevel.js
+css3的效果是挺不错的，但是，滚动加载动画，在移动端的性能，并不怎么样，推荐放弃之
+
+(50%)4、css 的自动前缀
+atom 编辑器的 apm install autoprefixer，然后，就可以给全文件，添加浏览器前缀了
+
+5、svg学习
+
+
+6、学习 http://cn.vuejs.org/
