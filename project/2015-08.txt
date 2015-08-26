@@ -43,3 +43,48 @@ atom 编辑器的 apm install autoprefixer，然后，就可以给全文件，�
 
 
 6、学习 http://cn.vuejs.org/
+
+
+7、使用 ProtoBuffer 协议，进行请求:
+<!-- 使用协议进行请求 -->
+<script src="http://www.guopan.cn/guopanh5/dev/lib/protoBuf/Long.min.js"></script>
+<script src="http://www.guopan.cn/guopanh5/dev/lib/protoBuf/ByteBufferAB.min.js"></script>
+<script src="http://www.guopan.cn/guopanh5/dev/lib/protoBuf/ProtoBuf.min.js"></script>
+<script type="text/javascript">
+var builder = dcodeIO.ProtoBuf.loadProtoFile("http://www.guopan.cn/dede/gpmobile/pb_inc/XXGAMECENTER.proto").build("XXProto");
+
+$.post("http://www.guopan.cn/dede/gpmobile/mobile_api.php",
+    new builder.XXUnityCSPkg({
+        "result" : 0,
+        "head" : new builder.XXUnityCSPkgHead({
+            cmd:builder.XXGAMECENTER_CMD.CMD_XXGAMECENTER,
+            uin : 0
+        }),
+        "body": new builder.XXGAMECENTERProto({
+            result: 0,
+            subcmd: builder.XXGAMECENTER_SUBCMD.SUBCMD_XXGAMECENTER_NEWSLISTSREQ,
+            new_list_req: new builder.XXGAMECENTERNewListReq({
+                engName: "blct",
+                pageNum: 1
+            })
+        }).encode().toArrayBuffer()
+    	// "body" : new builder.XXGAMECENTERProto({
+    	// 	"result" :0,
+    	// 	"subcmd" :builder.XXGAMECENTER_SUBCMD.SUBCMD_XXGAMECENTER_NEWSLISTSREQ,
+    	// 	"new_list_req" :new builder.XXGAMECENTERNewListReq({
+    	// 		"engName":obj.gameName,
+    	// 		"pageNum":obj.pageNum
+    	// 	})
+    	// }).encode().toArrayBuffer()
+    }).encode64()
+, function(data){
+    console.log(data);
+	// 返回的数据，是经过协议加密的话:
+    console.log(builder.XXGAMECENTERProto.decode(builder.XXUnityCSPkg.decode64(data).body));
+});
+</script>
+<!-- END 使用协议进行请求 -->
+
+
+8、jquery-emojiarea.js 的编辑器好有趣，应该去看看
+

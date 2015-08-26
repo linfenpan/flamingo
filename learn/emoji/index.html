@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="../jquery.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <div id="cnt">
+        就是一张 😄 的好图!!!😃😀
+        <br/>
+        <div>
+            看看这里!!!<span data-key="😄">这是一个纯粹的标签</span>
+        </div>
+        <br/>
+        <div class="text">
+            <p>1-10</p>
+            <div class="code" from="1" end="10">😄 😃 😀 😊 ☺ 😉 😍 😘 😚 😗 </div>
+            <p>11-20</p>
+            <div class="code" from="11" end="20">😙 😜 😝 😛 😳 😁 😔 😌 😒 😞 </div>
+            <p>21-30</p>
+            <div class="code" from="21" end="30">😣 😢 😂 😭 😪 😥 😰 😅 😓 😩 </div>
+            <p>31-40</p>
+            <div class="code" from="31" end="40">😫 😨 😱 😠 😡 😤 😖 😆 😋 😷 </div>
+            <p>41-50</p>
+            <div class="code" from="41" end="50">😎 😴 😵 😲 😟 😦 😧 😈 👿 😮 </div>
+            <p>51-60</p>
+            <div class="code" from="51" end="60">😬 😐 😕 😯 😶 😇 😏 😑 👲🏿 👳🏿 </div>
+            <p>61-70</p>
+            <div class="code" from="61" end="70">👮🏿 👷🏿 💂🏿 👶🏿 👦🏿 👧🏿 👨🏿 👩🏿 👴🏿 👵🏿 </div>
+            <p>71-80</p>
+            <div class="code" from="71" end="80">👱🏿 👼🏿 👸🏿 😺 😸 😻 😽 😼 🙀 😿 </div>
+            <p>81-90</p>
+            <div class="code" from="81" end="90">😹 😾 👹 👺 🙈 🙉 🙊 💀 👽 💩 </div>
+            <p>91-100</p>
+            <div class="code" from="91" end="100">🔥 ✨ 🌟 💫 💥 💢 💦 💧 💤 💨 </div>
+            <p>101-110</p>
+            <div class="code" from="101" end="110">👂🏿 👀 👃🏿 👅 👄 👍🏿 👎🏿 👌🏿 👊🏿 ✊🏿 </div>
+            <p>111-120</p>
+            <div class="code" from="111" end="120">✌🏿 👋🏿 ✋🏿 👐🏿 👆🏿 👇🏿 👉🏿 👈🏿 🙌🏿 🙏🏿 </div>
+            <p>121-130</p>
+            <div class="code" from="121" end="130">☝🏿 👏🏿 💪🏿 🚶🏿 🏃🏿 💃🏿 👫 👪 👬 👭 </div>
+            <p>131-140</p>
+            <div class="code" from="131" end="140">💏 💑 👯 🙆🏿 🙅🏿 💁🏿 🙋🏿 💆🏿 💇🏿 💅🏿 </div>
+            <p>141-150</p>
+            <div class="code" from="141" end="150">👰🏿 🙎🏿 🙍🏿 🙇🏿 🎩 👑 👒 👟 👞 👡 </div>
+            <p>151-160</p>
+            <div class="code" from="151" end="160">👠 👢 👕 👔 👚 👗 🎽 👖 👘 👙 </div>
+            <p>161-170</p>
+            <div class="code" from="161" end="170">💼 👜 👝 👛 👓 🎀 🌂 💄 💛 💙 </div>
+            <p>171-180</p>
+            <div class="code" from="171" end="180">💜 💚 ❤ 💔 💗 💓 💕 💖 💞 💘 </div>
+            <p>181-189</p>
+            <div class="code" from="181" end="189">💌 💋 💍 💎 👤 👥 💬 👣 💭 </div>
+        </div>
+    </div>
+</body>
+
+<script src="emoji.js" charset="utf-8"></script>
+
+<script>
+    ToEmoji.init();
+
+    $("#cnt").each(function(i, v){
+        ToEmoji.emoji(v);
+    });
+
+    // ToEmoji.destroy();
+</script>
+
+<script type="text/javascript">
+    // ;
+    // (function($, map, max, per) {
+    //
+    //     var index = 1;
+    //     var html = "";
+    //     while (index <= max) {
+    //         var ten = index + 9 > max ? max : index + 9;
+    //         if (index % per === 1) {
+    //             html += '<p>' + index + "-" + ten + '</p>';
+    //         }
+    //         html += '<div class="code" from="' + index + '" end="' + ten + '">';
+    //         for (; index <= ten; index++) {
+    //             html += map[index].key + " ";
+    //         }
+    //         html += "</div>";
+    //     };
+    //
+    //     // $("#cnt .text").html(html);
+    //
+    //     console.log(html);
+    // })($, emoji, 189, 10);
+</script>
+
+<script>
+    // // emoji配置转换
+    // var $pt = $("#cnt");
+    // var cf = {};
+    // $pt.find(".code").each(function(index, elem){
+    //     var $elem = $(elem);
+    //     var str = $.trim($elem.html());
+    //     var arr = str.split(" ");
+    //
+    //     var index = +$elem.attr("from"),
+    //         max = +$elem.attr("end");
+    //     // 当只有from时，就只有一个元素了
+    //     max = isNaN(max) || !max ? index : max;
+    //
+    //     for(var i = 0; index <= max; index++, i++){
+    //         cf[index] = {key: arr[i]};
+    //     }
+    //
+    // });
+    // console.log(JSON.stringify(cf));
+</script>
+
+
+
+
+<script type="text/javascript">
+    // function turn(html) {
+    //     var key = "";
+    //     for (var i in emoji) {
+    //         if (emoji.hasOwnProperty(i)) {
+    //             key = emoji[i].key;
+    //             if (html.indexOf(key) > -1) {
+    //                 html = html.replace(new RegExp(key, "g"), image(+i, key));
+    //             }
+    //         }
+    //     }
+    //     return html;
+    // };
+    // var path = "./bak/emoji-sprite_";
+    //
+    // function image(index, name) {
+    //     return '<img class="" src="' + path + (index < 10 ? "0" + index : index) + '.png" alt="' + name + '" />';
+    // };
+    // $("#cnt").each(function(i, v) {
+    //     $(v).html(function(i, html) {
+    //         return turn(html);
+    //     });
+    // });
+</script>
+
+
+
+
+</html>

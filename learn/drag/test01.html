@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>支持缩放的拖动 -- 只支持chrome</title>
+    <style>
+        *{padding:0;margin:0;}
+        body{cursor:auto;}
+        #content{position:relative;padding:40px;}
+        #container{
+            width:500px;
+            height:500px;
+            background:#ddd;
+        }
+        #box{
+            width:50px;
+            height:50px;
+            background:#ff0;
+            margin:20px;
+        }
+    </style>
+    <script src="../jquery.js" charset="utf-8"></script>
+</head>
+<body>
+    <div id="content" style="zoom:.6;-webkit-user-select:none;">
+        <div id="box"></div>
+
+    </div>
+    <div id="container">
+</div>
+
+</body>
+<script src="zdraggable-jquery.js" charset="utf-8"></script>
+<script type="text/javascript">
+
+$("#box").zdraggable({
+    zoom: .6,
+    zIndex: 10,
+    clone: true,
+    connectTo: "#container"
+});
+$("#box").zdraggable("zoom", .5);
+// $("#box").zdraggable("destroy");
+
+</script>
+
+<script type="text/javascript">
+// 元素放入
+
+$("#container").zdroppable({
+    accept: "#box",
+    zoom: 1,
+    drop: function($elem){
+        console.log($elem);
+        $("#container").append($elem);
+        $elem.zdraggable();
+    }
+});
+// $("#container").zdroppable("zoom", .5);
+// $("#container").zdroppable("destroy");
+
+</script>
+
+
+</html>
