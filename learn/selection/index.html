@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>自己编写的编辑器</title>
+    <style>
+        #editor{width:80%;height:200px;border:1px solid #ddd;padding:10px;}
+    </style>
+</head>
+<body>
+    <div id="editor">呵呵呵呵呵</div>
+</body>
+<script type="text/javascript">
+var $editor = document.getElementById("editor");
+$editor.setAttribute("contenteditable", true);
+
+
+// js 中的 selection 对象
+// IE中，使用 document.selection 获取
+// 其它，使用 window.getSelection() 获取
+// 它们两者，都不是标准的语法
+
+var util = {};
+
+// 替换选区
+util.replace = (function(){
+    if(window.getSelection){
+        return function(content){
+            var range, sel = window.getSelection();
+            var node = typeof content === "string" ? document.createTextNode(content) : content;
+
+            if(sel.getRangeAt && sel.rangeCount){
+                range = sel.getRangeAt(0);
+                range.deleteContents();
+                // 可以拓展为插入多个node哦~
+                range.insertNode(node);
+                // 将焦点，挪到node的前面
+                range.setStart(node, 0);
+
+                // 重新设置选中区域
+                // 让光标移动到插入内容的后面
+                window.setTimeout(function(){
+                    range = document.createRange();
+                    range.setStartAfter(node);
+                    range.collapse(true);
+                    // 清空选中
+                    sel.removeAllRanges();
+                    // 重新选中节点
+                    sel.addRange(range);
+                }, 0);
+            }
+
+        }
+    }else if(document.selection && document.selection.createRange){
+        return function(content){
+            var range = document.selection.createRange();
+            if(typeof content === "string"){
+                range.text = content;
+            }else{
+                range.pasteHTML(content.outerHTML);
+            }
+        }
+    }
+})();
+
+// 在光标位置插入
+// 只有在 textarea 或 input 中，才会生效哦~
+util.insertAtCursor = function(text, el){
+    var val = el.value, startIndex, endIndex, range;
+    if(typeof el.selectionStart != "undefined" && typeof el.selectionEnd != "undefined"){
+        startIndex  = el.selectionStart;
+        endIndex    = el.selectionEnd;
+        el.value = val.substring(0, startIndex) + text + val.substring(endIndex);
+        el.selectionEnd = el.selectionStart = startIndex + text.length;
+    }else if(document.selection && document.selection.createRange){
+        el.focus();
+        range = document.selection.createRange();
+        range.text = text;
+        range.select();
+    }
+};
+
+// 保存选区
+util.save = (function(){
+    if(window.getSelection){
+        return function(){
+            var sel = window.getSelection(), ranges = [];
+            for(var i = 0, len = sel.rangeCount; i < len; i++){
+                ranges.push(sel.getRangeAt(i));
+            }
+            return ranges;
+        }
+    }else if(document.selection && document.selection.createRange){
+        return function(){
+            var sel = document.selection;
+            return (sel.type.toLowerCase() != "none") ? sel.createRange() : null;
+        }
+    }
+})();
+
+// 回复选取
+util.restore = (function(){
+    if(window.getSelection){
+        return function(saveSelection){
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            for(var i = 0, len = saveSelection.length; i < len; i++){
+                sel.addRange(saveSelection[i]);
+            }
+        }
+    }else if(document.selection && document.selection.createRange){
+        return function(saveSelection){
+            if(saveSelection){
+                saveSelection.select();
+            }
+        }
+    }
+})();
+
+setTimeout(function(){
+    // util.replace("xxxxxx");
+}, 3000);
+
+
+</script>
+</html>
