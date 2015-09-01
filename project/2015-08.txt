@@ -36,16 +36,14 @@
 (OK)3.1 编写自己的 scrollRevel.js
 css3的效果是挺不错的，但是，滚动加载动画，在移动端的性能，并不怎么样，推荐放弃之
 
-(50%)4、css 的自动前缀
+(OK)4、css 的自动前缀
 atom 编辑器的 apm install autoprefixer，然后，就可以给全文件，添加浏览器前缀了
 
-5、svg学习
+(next)5、svg学习
+(next)6、学习 http://cn.vuejs.org/
 
 
-6、学习 http://cn.vuejs.org/
-
-
-7、使用 ProtoBuffer 协议，进行请求:
+(OK)7、使用 ProtoBuffer 协议，进行请求:
 <!-- 使用协议进行请求 -->
 <script src="http://www.guopan.cn/guopanh5/dev/lib/protoBuf/Long.min.js"></script>
 <script src="http://www.guopan.cn/guopanh5/dev/lib/protoBuf/ByteBufferAB.min.js"></script>
@@ -86,5 +84,6 @@ $.post("http://www.guopan.cn/dede/gpmobile/mobile_api.php",
 <!-- END 使用协议进行请求 -->
 
 
-8、jquery-emojiarea.js 的编辑器好有趣，应该去看看
+(OK)8、jquery-emojiarea.js 的编辑器好有趣，应该去看看
+看了下它选区部分的内容，主要ie的，使用document.selection获取，而chrome使用window.getSelection()获取
 
