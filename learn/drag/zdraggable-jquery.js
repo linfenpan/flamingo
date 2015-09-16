@@ -29,7 +29,17 @@
          var clone = opts.clone;
          // 是否与某一个板块链接
          var connectTo = opts.connectTo;
-
+		 
+		
+		 // 直属父亲元素
+		 // zdroppable 元素，可能不是它的offsetParent
+		 var $listPt = $list.closest(".zdrop-container");
+		 if($listPt.length <= 0){
+			 $listPt = $list.offsetParent();
+		 }
+		 // 修正缩放
+		 typeof zoom === "number" && $listPt.css("zoom", zoom);
+		 
          // 被复制的元素
          var $new;
          // 鼠标按下
@@ -48,8 +58,8 @@
                  "z-index": zIndex
              };
 
-             elemTop = pos.top;
-             elemLeft = pos.left;
+             elemTop = $that[0].offsetTop;
+             elemLeft = $that[0].offsetLeft;
 
              // 复制元素?
              if(clone){
@@ -68,10 +78,13 @@
 
              // 开始劫持 dom
              capture();
+
+			 return false;
          };
 
          // 开始检测dom的鼠标移动
          function capture(){
+			 zoom = +$listPt.css("zoom") || 1;
              // 拖动中
              $dom.on("mousemove.zdrag", function(e){
                  // 当前鼠标，在页面中的坐标
@@ -104,11 +117,11 @@
 
          // 监听鼠标按下
          $list.on("mousedown.zdrag", mousedonw);
+		 
 
          return {
              setZoom: function(z){
-                 zoom = z;
-                 $list.offsetParent().css("zoom", z);
+                 $listPt.css("zoom", z);
              }
          };
      }
@@ -134,7 +147,7 @@
                          break;
                  }
              }else{
-                 var data = zdrag(this, $.extend({zoom:1, zIndex:100, clone: false}, options || {}));
+                 var data = zdrag(this, $.extend({zIndex:100, clone: false}, options || {}));
                  this.data(dataKey, data);
              }
 
@@ -163,6 +176,8 @@
      var zList = [];
      // data的参数key
      var dataKey = "zdrop-opts";
+	 // 统一的className
+	 var className = "zdrop-container";
 
      // 自增id
      var ID = 1000, ID_KEY = "zdrop_key_";
@@ -214,9 +229,12 @@
 
          // 修正列表的 position 属性
          // 因为加入的元素，往往是 absolute 类型的
-         $list.data(dataKey, opts).css("position", function(i, v){
-             return v == "static" ? "relative" : v;
-         });
+         $list.data(dataKey, opts).css({
+			 "position": function(i, v){
+				 return v == "static" ? "relative" : v;
+			 },
+			 "zoom": zoom
+		 }).addClass(className);
 
          // 加入检测列表
          $list.data(ID_KEY, id());

@@ -1,0 +1,4 @@
+在web app开发过程中经常会遇到IPhone在横屏的时候，字体突然放大。而在Android上到是没有这样的问题。
+解决的方法，可以通过-webkit-text-size-adjust来设置。很多网站包括京东，搜狐的手机版都是这样设置的：-webkit-text-size-adjust：none。这样设置在手机横屏时不会导致字体突然变大，尤其是在iPhone上。不过这样设置有隐患，所以建议大家 -webkit-text-size-adjust：none   改成  -webkit-text-size-adjust：100%
+-webkit-text-size-adjust：none 的时候会导致pc 版的chrome和safari缩放的时候出现问题（ps：在chrome下测试没有出现此类问题，Safari没测试），不过还是建议大家使用-webkit-text-size-adjust：100%
+相关文档链接：http://xxxxxly.in/posts/text-size-adjust/

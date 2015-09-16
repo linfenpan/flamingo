@@ -3,3 +3,7 @@
 1、svg学习
 
 2、学习 http://cn.vuejs.org/
+
+
+3、fis的路径引入[__inline功能]，当有子文件夹的时候，不好使。
+试着重写自己的 __inline 功能

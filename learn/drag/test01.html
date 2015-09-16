@@ -17,12 +17,13 @@
             height:50px;
             background:#ff0;
             margin:20px;
+            transform: scale(.9);
         }
     </style>
     <script src="../jquery.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="content" style="zoom:.6;-webkit-user-select:none;">
+    <div id="content">
         <div id="box"></div>
 
     </div>
@@ -34,12 +35,12 @@
 <script type="text/javascript">
 
 $("#box").zdraggable({
-    zoom: .6,
+    // zoom: .6,
     zIndex: 10,
     clone: true,
     connectTo: "#container"
 });
-$("#box").zdraggable("zoom", .5);
+// $("#box").zdraggable("zoom", .5);
 // $("#box").zdraggable("destroy");
 
 </script>
@@ -49,14 +50,14 @@ $("#box").zdraggable("zoom", .5);
 
 $("#container").zdroppable({
     accept: "#box",
-    zoom: 1,
+    // zoom: .5,
     drop: function($elem){
         console.log($elem);
         $("#container").append($elem);
         $elem.zdraggable();
     }
 });
-// $("#container").zdroppable("zoom", .5);
+$("#container").zdroppable("zoom", .5);
 // $("#container").zdroppable("destroy");
 
 </script>
