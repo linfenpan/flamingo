@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>vue.js filter 测试</title>
+</head>
+<body>
+    <div id="demo">
+        <h1>{{name | reverse}}</h1>
+        <input type="text" v-model="money | twoWay" />
+        <br/>
+        {{money}}
+    </div>
+</body>
+<script src="vue.js" charset="utf-8"></script>
+<script type="text/javascript">
+
+Vue.filter("reverse", function(value){
+    return value.split("").reverse().join("");
+});
+
+// 双向过滤
+// 在读取和写入的时候，都过滤一次
+Vue.filter("twoWay", {
+    read: function(val){
+        return "$" + val.toFixed(2);
+    },
+    write: function(val, old){
+        var number = +val.replace(/[^\d.]/g, "");
+        return isNaN(number) ? +old.replace(/[^\d.]/g, "") : number;
+    }
+});
+
+
+var vm = new Vue({
+    el: "#demo",
+    data: {
+        name: "熊宗ad",
+        money: 200
+    }
+});
+
+</script>
+</html>

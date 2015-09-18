@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>第二个测试，双向绑定</title>
+</head>
+<body>
+    <form id="demo">
+        <!-- text -->
+        <p>
+            <input type="text" v-model="msg">
+            {{msg}}
+        </p>
+        <!-- checkbox -->
+        <p>
+            <input type="checkbox" v-model="checked" />
+            {{checked ? 'yes' : 'no'}}
+            <!-- 多选，是没把法很好玩耍的
+                <input type="checkbox" name="fruit" value="apple" v-model="checked">
+                <input type="checkbox" name="fruit" value="orange" v-model="checked">
+                {{checked}}
+             -->
+        </p>
+        <!-- radio buttons -->
+        <p>
+            <input type="radio" name="picked" value="one" v-model="picked">
+            <input type="radio" name="picked" value="two" v-model="picked">
+            {{picked}}
+        </p>
+        <!-- select -->
+        <p>
+            <select v-model="selected">
+                <option>one</option>
+                <option>two</option>
+            </select>
+            {{selected}}
+        </p>
+        <!-- multiple select -->
+        <p>
+            <select v-model="multiSelect" multiple>
+                <option>one</option>
+                <option>two</option>
+                <option>three</option>
+            </select>
+            {{multiSelect}}
+        </p>
+        <p>
+            <!-- 自增radio测试 -->
+            <!-- 取的值，只会是当前 exp 的值 -->
+            <input type="radio" v-model="testR" exp="testRV" />
+            {{testR}}:{{testRV}}
+            <br/>
+            这里的选中，效果很诡异哦!: <input type="checkbox" v-model="testC" true-exp="testCT" false-exp="testCF" /> {{testC}}
+        </p>
+        <p>
+            <pre>data: {{$data | json 2}}</pre>
+        </p>
+    </form>
+</body>
+<script src="vue.js" charset="utf-8"></script>
+<script type="text/javascript">
+var vm = new Vue({
+    el: "#demo",
+    data: {
+        msg     : "hi!",
+        checked : true,
+        picked  : "one",
+        selected: "two",
+        multiSelect: ["one", "three"],
+        testRV: 1,
+        testCF: "选中了false",
+        testCT: "选中了True",
+        testC: true
+    }
+});
+setInterval(function(){
+    vm.testRV++;
+}, 1000);
+</script>
+</html>

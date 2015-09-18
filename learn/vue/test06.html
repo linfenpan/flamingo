@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>vue.js 自定义组件</title>
+</head>
+<body>
+    <div id="demo">
+        <!-- 组件必须依赖 vm 而存在 -->
+        <introduce></introduce>
+        <parent>
+            进来了这里:<br/>
+            <child msg="{{name + '!!'}}" on-load="{{onChildLoaded}}"></child>
+        </parent>
+    </div>
+
+</body>
+<script src="vue.js" charset="utf-8"></script>
+<script type="text/javascript">
+// 生成一个 Vue的子类构造函数
+// 除了 data 和 el， extend中，能接受 new Vue 中的所有其他参数
+var MyComponent = Vue.extend({
+    template: "<p>这是一个自定义组件: {{title}}</p>",
+    // 如果要定义组件初始化默认的数据和元素，应该传入一个函数，代替对象
+    data: function(){
+        return {
+            title: "da宗熊"
+        }
+    }
+});
+
+// 然后，就可以使用 Vue.component() 来注册这个构造函数
+Vue.component("introduce", MyComponent);
+
+
+
+// 父级组件
+Vue.component("parent", {
+    data: function(){
+        return {};
+    },
+    methods: {
+        onChildLoaded: function(msg){
+            console.log(msg);
+        }
+    },
+    ready: function(){
+        console.log("进入了parent");
+    }
+});
+
+
+// 向组件传递参数
+Vue.component("child", {
+    // 参数列表
+    props: ['msg', 'onLoad'],
+    template: "<span>{{msg}}</span>",
+    ready: function(){
+        this.onLoad && this.onLoad("从child发出的信息");
+    }
+});
+
+
+
+
+var vm = new Vue({
+    el: "#demo",
+    data: {
+        say: "Hi",
+        name: "Bear"
+    }
+});
+
+</script>
+</html>

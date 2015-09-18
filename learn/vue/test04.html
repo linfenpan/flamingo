@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>vue.js自定义指令</title>
+</head>
+<body>
+    <div id="demo">
+        <!-- 因为有两个表达式，所以，update会执行两次 -->
+        <h1 v-my="author: name, author2: name">{{name}}</h1>
+        <!-- 字面指令 -->
+        <h2 v-age="age">年龄: {{age}}</h2>
+        <!-- 双向绑定指令 -->
+        <p v-two="time">
+            {{time}}
+        </p>
+        <!-- 参数支持表达式 -->
+        <p v-mexp="res = say + ':' + name">{{res}}</p>
+        <!-- 对象属性深度检测 -->
+        <p v-deep="data"></p>
+        <!-- 自定义元素 -->
+        <my-el x="123" pp="name">
+            <p>{{name}}</p>
+        </my-el>
+    </div>
+</body>
+<script src="vue.js" charset="utf-8"></script>
+<script type="text/javascript">
+Vue.directive("my", function(now, old){
+    // this.el -> 绑定的元素
+    // this.vm -> 绑定的 vm 对象
+    // this.arg -> 指令参数, author
+    // this.expression -> 对应的表达式，字符串咧
+    // now -> 是　vm.data[this.expression] 的值
+    console.log(now, old);
+});
+
+Vue.directive("age", {
+    isLiteral: true,    // 表达式不会读取 $data 的值，而是纯字符串
+    bind: function(){
+        console.log(arguments);
+    },
+    // 有 isLiteral，则不会执行 update
+    update: function(now){
+        console.log(now, this);
+    }
+});
+
+Vue.directive("two", {
+    twoWay: true,   // 双向绑定
+    bind: function(now, old){
+        setInterval(function(){
+            this.set(this.vm[this.expression] + 1);
+        }.bind(this), 1000);
+    },
+    update: function(){
+        // console.log(123);
+    }
+});
+
+
+Vue.directive("mexp", {
+    acceptStatement: true,      // 会把 mexp 声明为一个函数，调用这个函数，可执行声明的操作
+    update: function(fn){
+        setTimeout(function(){
+            fn();
+        }, 2000);
+    }
+});
+
+
+Vue.directive("deep", {
+    deep: true,         // 对象的属性发生改变，也会触发update的
+    update: function(obj){
+        console.log(obj, arguments);
+    }
+});
+
+
+// 自定义标签，不能传入任何参数
+// 而且，操作好像也不怎么方便的样子...
+// 不过，用来配合模板引擎使用，应该有不错的效果
+Vue.elementDirective("my-el", {
+    bind: function(){
+        // 对 this.el 进行操作
+        console.log("竟然没有参数");
+    },
+    update: function(){
+        console.log("这里有啥呢?", arguments);
+    }
+});
+
+
+
+// 指令必须先定义，然后再调用
+var vm = new Vue({
+    el: "#demo",
+    data: {
+        name: "da宗熊",
+        say: "Hi",
+        age: 26,
+        time: 0,
+        res: "",
+        data: {
+            name: 123
+        }
+    }
+});
+
+</script>
+</html>

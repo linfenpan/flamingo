@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>vue.js计算属性</title>
+</head>
+<body>
+    <div id="demo">
+        <input type="text" v-model="fullName" />
+        <br/>
+        {{now}}: {{fullName}}
+        <br/>
+        <br/>
+        {{$data | json}}
+    </div>
+</body>
+<script src="vue.js" charset="utf-8"></script>
+<script type="text/javascript">
+var vm = new Vue({
+    el: "#demo",
+    data: {
+        // fullName: "Foo Bar",
+        firstName: "Foo",
+        lastName: "Bar"
+    },
+    // 计算属性
+    computed: {
+        fullName: {
+            //  cache: false,   // 是否开启缓存，开始的话，无论有没有依赖，都会更新哦~
+            get: function(){
+                // this 指向了 $data 属性
+                return this.firstName + " " + this.lastName;
+            },
+            set: function(now){
+                // now 是新的值, this.fullName 是旧的值
+                console.log(now, this.fullName)
+                var names = now.split(" ");
+                this.firstName = names[0];
+                this.lastName = names[1];
+            }
+        },
+        now: {
+            cache: false,
+            get: Date.now
+        }
+    }
+});
+</script>
+</html>
