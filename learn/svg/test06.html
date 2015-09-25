@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>svg测试06 polygon</title>
+    <style>
+        svg{
+            display:block;
+            outline:1px solid #ddd;
+            outline-offset:2px;
+            margin:10px;
+        }
+    </style>
+</head>
+<body>
+    <!--
+        polygon 标签创建的图形，不得小于3边
+        小于 3 个点就是一条线
+
+        左边以空格 或 逗号相隔
+        如果数目不是偶数，则最后一个坐标，会被无视
+    -->
+    <svg width="500" height="500" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="10,10 490,490 490,10 10,400" style="fill:#ccc;stroke:#000;stroke-width:1;"></polygon>
+    </svg>
+</body>
+</html>

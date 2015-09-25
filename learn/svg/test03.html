@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>svg测试03 circle</title>
+    <style>
+        svg{
+            display:block;
+            margin:20px;
+            outline:1px solid #ddd;
+            outline-offset:2px;
+        }
+    </style>
+</head>
+<body>
+    <!--
+        cx 和 cy 是原点左边
+        r 是圆的半径，果然，circle画出来的，比 rect 模拟的圆，要好看很多诶..
+        如果没有设置 cx 和 cy，则默认是 0 0
+        AND x 和 y 设置，对圆是不生效的
+    -->
+    <svg width="200" height="200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <circle style="cx:100;cy:100;r:50;stroke:#ddd;stroke-width:2;fill:#defeaa;"></circle>
+    </svg>
+</body>
+</html>

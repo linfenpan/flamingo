@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>svg测试02 rect</title>
+    <style>
+        svg{
+            display:block;
+            margin:20px;
+            outline:1px solid #ddd;
+            outline-offset:2px;
+        }
+    </style>
+</head>
+<body>
+    <!--
+        svg 有一些预定形状元素
+        1、矩形 rect
+        2、圆形 circle
+        3、椭圆 ellipse
+        4、线条 line
+        5、折线 polyline
+        6、多边形 polygon
+        7、路径 path
+    -->
+
+    <!-- 矩形 -->
+    <!--
+        fill 是填充颜色
+        stroke-width 边框宽度
+        stroke 边框颜色
+    -->
+    <svg width="50" height="50" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <rect width="50" height="50%" style="fill:rgb(0, 0, 255);stroke-width:1;stroke:rgb(0, 0, 0);" />
+    </svg>
+
+    <!--
+        fill-opacity: 填充透明度
+        stroke-opacity: 边框透明度
+    -->
+    <svg width="100" height="100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+         <rect x="25" y="25" width="50" height="50" style="fill:blue;stroke:pink;fill-opacity:0.1;stroke-opacity:.9;"></rect>
+    </svg>
+
+    <!--
+        opacity: 整个元素的透明度
+     -->
+     <svg width="100" height="100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+         <rect width="50%" height="50%" x="25%" y="25%" style="fill:#000;"></rect>
+         <rect width="50%" height="50%" style="fill:rgba(0, 0, 255, 1);opacity:.5;"></rect>
+     </svg>
+
+    <!--
+        rx 和 ry 属性可以使矩形产生圆角 [对了，简写就是　r　]
+        AND，如果 r = 50%，就会变成圆诶...，不过好丑
+    -->
+    <svg width="100" height="100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <rect rx="5" ry="5" x="25%" y="25%" style="width:50%;height:50%;fill:#ddd;stroke:#f00;stroke-width:2;"></rect>
+    </svg>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>svg05测试 line</title>
+    <style>
+        svg{
+            display:block;
+            outline:1px solid #ddd;
+            outline-offset:2px;
+            margin:10px;
+        }
+    </style>
+</head>
+<body>
+    <!--
+        x1/y1 起始点
+        x2/y2 结束点
+        它们 4 个值，都不能设置在 style 中
+    -->
+    <svg width="300" height="300" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <line x1="10" y1="10" x2="10" y2="290" style="stroke:rgb(99, 99, 99);stroke-width:2;"></line>
+        <ellipse cx="150" cy="150" rx="50" ry="40" style="fill:#aaeedd;"></ellipse>
+    </svg>
+</body>
+</html>

@@ -9,3 +9,5 @@
 试着重写自己的 __inline 功能
 
 4、css3渐变
+
+5、swipe.js
