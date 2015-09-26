@@ -11,3 +11,8 @@
 4、css3渐变
 
 5、swipe.js
+
+6、Blob 对象
+https://developer.mozilla.org/en-US/docs/Web/API/Blob
+
+URL.createObjectURL(blob);	// 创建一个指向 blob 对象的链接

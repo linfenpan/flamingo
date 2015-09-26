@@ -7,6 +7,17 @@
     <style>
         body,html{padding:0;margin:0;width:100%;height:100%;}
     </style>
+    <style>
+        /*.m-input-select{display:inline-block;position:relative;-webkit-user-select:none;}
+        .m-input-select ul, .m-input-select li{padding:0;margin:0;}
+        .m-input-select .m-input{padding-right:22px;}
+        .m-input-select .m-input-ico{position:absolute;right:0;top:0;width:22px;height:100%;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAATElEQVQoU2NkIBEwkqiegTwNcXFx/4m1CW4DMZoWLVrEiOIkfJpAikGuwPADNk0wxVg1gASRNSErxqkBpgldMV4NuEKNvHggNg5A6gBo4xYmyyXcLAAAAABJRU5ErkJggg==) no-repeat 50% 50%;}
+        .m-input-select .m-list-wrapper{display:none;position:absolute;top:100%;left:0;min-width:100%;max-height:250px;overflow:auto;}
+        .m-input-select .m-list{border:1px solid #ddd;border-bottom:none;}
+        .m-input-select .m-list-item{padding:5px;list-style:none;background:#fff;border-bottom:1px solid #ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .m-input-select .m-list-item:hover{background:#2D95FF;}
+        .m-input-select .m-list-item-active{background:#2D95FF;}*/
+    </style>
 </head>
 <body>
     <div style="height:500px;margin:20px;">
@@ -31,7 +42,7 @@
 
 <!-- 下面这段代码，就是可编辑select，嗯，那个丑陋的样式，被我也写在里面了 -->
 <script type="text/javascript">
-$.fn.filterSelect = (function(){
+$.fn.editSelect = (function(){
     // 我就 很 纠结的，把样式内嵌在这里了，让你怎么改!!!!
     var isInit = false;
     function initCss(){
@@ -41,13 +52,12 @@ $.fn.filterSelect = (function(){
                         \n.m-input-select ul, .m-input-select li{padding:0;margin:0;}\
                         \n.m-input-select .m-input{padding-right:22px;}\
                         \n.m-input-select .m-input-ico{position:absolute;right:0;top:0;width:22px;height:100%;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAATElEQVQoU2NkIBEwkqiegTwNcXFx/4m1CW4DMZoWLVrEiOIkfJpAikGuwPADNk0wxVg1gASRNSErxqkBpgldMV4NuEKNvHggNg5A6gBo4xYmyyXcLAAAAABJRU5ErkJggg==) no-repeat 50% 50%;}\
-                        \n.m-input-select .m-list-wrapper{}\
-                        \n.m-input-select .m-list{display:none;position:absolute;z-index:1;top:100%;left:0;right:0;max-width:100%;max-height:250px;overflow:auto;border-bottom:1px solid #ddd;}\
+                        \n.m-input-select .m-list-wrapper{display:none;position:absolute;z-index:1;top:100%;left:0;right:0;max-width:100%;max-height:250px;overflow:auto;border-bottom:1px solid #ddd;}\
+                        \n.m-input-select .m-list{}\
                         \n.m-input-select .m-list-item{cursor:default;padding:5px;margin-top:-1px;list-style:none;background:#fff;border:1px solid #ddd;border-bottom:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}\
                         \n.m-input-select .m-list-item:hover{background:#2D95FF;}\
                         \n.m-input-select .m-list-item-active{background:#2D95FF;}';
         style = $("<style>"+ csstext +"</style>")[0];
-		// ie 竟然坑了...
         // if(style.styleSheet) {
         //     style.styleSheet.cssText = csstext;
         // }else{
@@ -70,10 +80,10 @@ $.fn.filterSelect = (function(){
         this.each(function(i, v){
             var $sel = $(v), $div = $('<div class="m-input-select"></div>');
             var $input = $("<input type='text' class='m-input' />");
-            // var $wrapper = $("<div class='m-list-wrapper'><ul class='m-list'></ul></div>");
-			var $wrapper = $("<ul class='m-list'></ul>");
+            var $wrapper = $("<div class='m-list-wrapper'><ul class='m-list'></ul></div>");
             $div = $sel.wrap($div).hide().addClass("m-select").parent();
             $div.append($input).append("<span class='m-input-ico'></span>").append($wrapper);
+            var $list = $wrapper.find(".m-list");
 
             // 遮罩层显示 + 隐藏
             var wrapper = {
@@ -92,7 +102,7 @@ $.fn.filterSelect = (function(){
                 prev: function(){
                     return this.setActive(this.index - 1);
                 },
-                $list: $wrapper.find(".m-list-item"),
+                $list: $list.find(".m-list-item"),
                 index: 0,
                 $cur: [],
                 setActive: function(i){
@@ -141,7 +151,7 @@ $.fn.filterSelect = (function(){
                 // 文字更变了，更新 li, 最低效率的一种
                 textChange: function(){
                     val = $.trim($input.val());
-                    $wrapper.find(".m-list-item").each(function(i, v){
+                    $list.find(".m-list-item").each(function(i, v){
                         if(v.innerHTML.indexOf(val) >= 0){
                             $(v).show();
                         }else{
@@ -195,12 +205,12 @@ $.fn.filterSelect = (function(){
                     html += '<li class="m-list-item'+ (v.selected ? " m-list-item-active" : "") +'" data-value="'+ v.value +'">'+ v.text +'</li>';
                 });
                 $input.val(val);
-                $wrapper.html(html);
+                $list.html(html);
             };
             $sel.on("optionChange", resetOption).trigger("optionChange");
             $sel.on("setEditSelectValue", function(e, val){
                 // console.log(val);
-                var $all = $wrapper.find(".m-list-item"), $item;
+                var $all = $list.find(".m-list-item"), $item;
                 for(var i = 0, max = $all.size(); i < max; i++){
                     $item = $all.eq(i);
                     if($item.attr("data-value") == val){
@@ -240,7 +250,7 @@ $.fn.filterSelect = (function(){
             });
 
             // 选中
-            $wrapper.on("click", ".m-list-item", function(){
+            $list.on("click", ".m-list-item", function(){
                 operation.setValue($(this));
                 return false;
             });
@@ -263,7 +273,7 @@ $.fn.filterSelect = (function(){
 // 使用了这个插件，select该怎么用就怎么用
 // 任何选择，同样会触发 select 的 更变的说【即select的值会同步更新】
 //
-var $select = $("select[data-edit-select]").filterSelect();
+var $select = $("select[data-edit-select]").editSelect();
 // --> 这时候的  $select === $("#magicsuggest");
 // 也可以 用 $("#magicsuggest").on("change")，两者等价
 $select.on("change", function(){
