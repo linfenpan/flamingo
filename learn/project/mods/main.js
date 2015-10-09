@@ -160,5 +160,5 @@ function concatFilePath(p, base){
 
 window.require = loader.require;
 window.require.ajax = ajax;
-window.require.Callback = Callback;
+window.require.Callbacks = Callbacks;
 window.define = loader.define;

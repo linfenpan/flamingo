@@ -3,14 +3,26 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        clean: {
+            dist: ["<%= pkg.dist %>*"]
+        },
         concat: {
             options: {
-                banner: '/*! By da宗熊 <%= grunt.template.today("yyyy-mm-dd") %> */\n;(function(window){\n',
+                banner: '/*! By <%= pkg.author %> <%= grunt.template.today("yyyy-mm-dd") %> */\n;(function(window){\n',
                 footer: '\n})(window);'
             },
             build: {
-                src: 'mods/*.js',
-                dest: 'dist/project.js',
+                src: ['mods/*.js', '!mods/main.js', 'mods/main.js'],
+                dest: '<%= pkg.dist %><%= pkg.scriptName %>.js',
+            }
+        },
+        uglify: {
+            options: {
+                banner: '/*! By <%= pkg.author %> <%= grunt.template.today("yyyy-mm-dd") %> */\n;'
+            },
+            build: {
+                src: "<%= pkg.dist %><%= pkg.scriptName %>.js",
+                dest: "<%= pkg.dist %><%= pkg.scriptName %>.min.js"
             }
         }
     });
@@ -21,6 +33,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
     // 默认被执行的任务列表。
-    grunt.registerTask('default', ['concat']);
+    grunt.registerTask('default', ['clean', 'concat', 'uglify']);
 
 };
