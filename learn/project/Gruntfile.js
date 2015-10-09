@@ -18,7 +18,11 @@ module.exports = function(grunt) {
         },
         uglify: {
             options: {
-                banner: '/*! By <%= pkg.author %> <%= grunt.template.today("yyyy-mm-dd") %> */\n;'
+                banner: '/*! By <%= pkg.author %> <%= grunt.template.today("yyyy-mm-dd") %> */\n;',
+                compress: {
+                    // 删除所有 console
+                    drop_console: true
+                }
             },
             build: {
                 src: "<%= pkg.dist %><%= pkg.scriptName %>.js",
