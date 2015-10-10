@@ -44,9 +44,11 @@ var requireMap = {
         });
     },
     "default": function(p, next, ext){
-        ajax(p).done(function(url, text){
-            next(ext == "json" ? toJSON(text) : text);
-        }).fail(function(){});
+        ajax(p, function(error, url, text){
+            if(error !== true){
+                next(ext == "json" ? toJSON(text) : text);
+            }
+        });
     }
 };
 
@@ -69,7 +71,7 @@ loader.require = function(filePath, callback){
 
 // 添加文件 处理器
 loader.addTypeProcesser = function(type, fn){
-    requireMap[type] = fn;
+    requireMap[type] = queryType(fn) === "function" ? fn : (requireMap[fn] || requireMap["default"]);
 };
 
 // 加入 脚本盏中
@@ -84,21 +86,24 @@ loader.define = function(name, fn){
 
 // 把脚本地址 和 对应的函数，接纳起来
 function joinScriptAndPath(url, callback){
-    loaded[url] = loadingScripts.pop();
-    var type = queryType(loaded[url]), dir = path.dir(url);
+    var fn = loaded[url] = loadingScripts.pop();
+    var dir = path.dir(url);
     // 对文件进行解析
-    parseBeforeExecute(dir, loaded[url], function(){
-        var innerModule = {exports: {}};
-        loaded[url](createInnerRequire(url), innerModule, innerModule.exports);
-        loaded[url] = innerModule.exports;
+    if(fn.length < 3){
+        loaded[url] = queryFnInnerText(fn);
         callback && callback();
-    });
-
+    }else{
+        parseBeforeExecute(dir, fn, function(){
+            var innerModule = {exports: {}};
+            loaded[url](createInnerRequire(url), innerModule, innerModule.exports);
+            loaded[url] = innerModule.exports;
+            callback && callback();
+        });
+    }
 };
 
 // 文件执行前，对路径进行预解析
 function parseBeforeExecute(dir, fn, callback){
-    console.log(fn.toString())
     var str = fn.toString(), reg = /\brequire\s*\(([^)]*)\)/g;
     var res, readyCount = 0;
     while(res = reg.exec(str), res){
@@ -113,7 +118,7 @@ function parseBeforeExecute(dir, fn, callback){
             url = url.replace(/"|'/g, "");
             if(!loaded[url]){
                 readyCount++;
-                require(concatFilePath(url, dir), function(){
+                loader.require(concatFilePath(url, dir), function(){
                     readyCount--;
                     ready();
                 });
@@ -140,7 +145,7 @@ function createInnerRequire(url){
             callback && callback(cnt);
             return cnt;
         }else{
-            require(url, callback);
+            loader.require(url, callback);
         }
     };
 };
@@ -159,6 +164,6 @@ function concatFilePath(p, base){
 };
 
 window.require = loader.require;
-window.require.ajax = ajax;
-window.require.Callbacks = Callbacks;
 window.define = loader.define;
+window.require.addTypeProcesser = loader.addTypeProcesser;
+window.require.ajax = ajax;

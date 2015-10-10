@@ -10,4 +10,6 @@ define(function(require, module, exports){
         console.log(data);
     });
     exports.age = 11;
+    exports.style = require("user.css.js");
+    console.log(exports.style);
 });

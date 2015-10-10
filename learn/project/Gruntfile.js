@@ -12,13 +12,14 @@ module.exports = function(grunt) {
                 footer: '\n})(window);'
             },
             build: {
-                src: ['mods/*.js', '!mods/main.js', 'mods/main.js'],
+                src: ['mods/loadScript.js', 'mods/pXMLHttpRequest.js', 'mods/path.js', 'mods/utils.js', 'mods/main.js'],
                 dest: '<%= pkg.dist %><%= pkg.scriptName %>.js',
             }
         },
         uglify: {
             options: {
-                banner: '/*! By <%= pkg.author %> <%= grunt.template.today("yyyy-mm-dd") %> */\n;',
+                // banner: '/*! By <%= pkg.author %> <%= grunt.template.today("yyyy-mm-dd") %> */\n;',
+                preserveComments: 'some',
                 compress: {
                     // 删除所有 console
                     drop_console: true

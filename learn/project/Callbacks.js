@@ -1,5 +1,5 @@
 // 带有信号的 回调
-/**
+/*
     var cb = new Callbacks({}, false);
     cb.add(function(){
         console.log("有执行 fire:1 的时候");

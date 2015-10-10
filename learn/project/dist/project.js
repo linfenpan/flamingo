@@ -1,67 +1,5 @@
-/*! By da宗熊 2015-10-09 */
+/*! By da宗熊 2015-10-10 */
 ;(function(window){
-// 带有信号的 回调
-/**
-    var cb = new Callbacks({}, false);
-    cb.add(function(){
-        console.log("有执行 fire:1 的时候");
-    }, 1);
-    cb.fire(1, 参数1， 参数2);
-
-    cb.add(fn); // 则无论遇到什么信号，都会执行
-*/
-function Callbacks(params, isMemory){
-    var item, key;
-    // 打包字符串
-    function packupString(str){
-        return queryType(str) == "string" ? "\"" + str + "\"" : str;
-    };
-    for(var i in params){
-        if(params.hasOwnProperty(i)){
-            item = key = params[i];
-            if(queryType(item) == "array"){
-                key = item[0];
-                if(item = item[1], item){
-                    this[item] = new Function("this.fire.apply(this, ["+ packupString(key) +"].concat([].slice.call(arguments, 0)))");
-                }
-            }
-
-            this[i] = new Function("fn", "this.add(fn, "+ packupString(key) +");return this;");
-        }
-    };
-    // 记忆模式？
-    this.isMemory = isMemory || false;
-    this._sign_ = -1;
-    this._args_ = [];
-
-    this._fnList_ = [];
-};
-Callbacks.prototype = {
-    // 信号
-    // 参数列表
-    fire: function(sign){
-        var list = this._fnList_, args = [].slice.call(arguments, 1), item;
-        this._args_ = args;
-        this._sign_ = sign;
-
-        for(var i = 0, max = list.length; i < max; i++){
-            item = list[i];
-            // 不用恒等于了，因为 undefined 比较难拼
-            if(sign == item["sign"] || !item["sign"]){
-                item.fn.apply(this, args);
-            }
-        };
-    },
-    // 回调
-    // 信号
-    add: function(fn, sign){
-        this._fnList_.push({fn: fn, sign: sign});
-        if(this.isMemory && (sign == this._sign_ || !sign)){
-            fn.apply(this, this._args_);
-        }
-    }
-};
-
 var head = document.documentElement || document.getElementsByTagName("head")[0];
 function loadScript(src, callback){
     var script = document.createElement("script");
@@ -108,8 +46,7 @@ if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 };
 
 // 只发送 get 请求
-ajax = function(url){
-    var cb = new Callbacks({done: [1, "resolve"], fail: [2, "reject"], always: 0});
+ajax = function(url, callback){
     var xmlHttp = newAjax();
     xmlHttp.onreadystatechange = function(){
         // 4 = "loaded"
@@ -118,10 +55,10 @@ ajax = function(url){
             xmlHttp.onreadystatechange = null;
             if(xmlHttp.status == 200 || xmlHttp.status == 302){
                 console.log("加载成功");
-                cb.resolve(url, this.responseText, this);
+                callback && callback(false, url, this.responseText, this);
             }else{
                 console.log("加载失败..");
-                cb.reject(url);
+                callback && callback(true);
             }
         }
     };
@@ -129,8 +66,6 @@ ajax = function(url){
     xmlHttp.open("GET", url, true);
     // 发送数据
     xmlHttp.send(null);
-
-    return cb;
 };
 
 // 路径解析
@@ -170,10 +105,18 @@ path.ext = function(p){
     return p.replace(/.*\.(.*)$/, "$1");
 };
 
+// 类型查询
 var typeToString = Object.prototype.toString;
 function queryType(o){
     return typeToString.call(o).slice(1, -1).split(" ")[1].toLowerCase();
-}
+};
+
+// 获取函数内的字符串
+function queryFnInnerText(fn){
+    var str = fn.toString();
+    // 为什么 是 /*! */ 这种注释呢? 因为压缩的时候，可以剔除
+    return str.slice(str.indexOf("/*!") + 3, str.lastIndexOf("*/")).replace(/^[\n\r]*|[\n\r]*$/g, "");
+};
 
 // 数据的复制
 function extend(){
@@ -252,9 +195,11 @@ var requireMap = {
         });
     },
     "default": function(p, next, ext){
-        ajax(p).done(function(url, text){
-            next(ext == "json" ? toJSON(text) : text);
-        }).fail(function(){});
+        ajax(p, function(error, url, text){
+            if(error !== true){
+                next(ext == "json" ? toJSON(text) : text);
+            }
+        });
     }
 };
 
@@ -277,7 +222,7 @@ loader.require = function(filePath, callback){
 
 // 添加文件 处理器
 loader.addTypeProcesser = function(type, fn){
-    requireMap[type] = fn;
+    requireMap[type] = queryType(fn) === "function" ? fn : (requireMap[fn] || requireMap["default"]);
 };
 
 // 加入 脚本盏中
@@ -292,21 +237,24 @@ loader.define = function(name, fn){
 
 // 把脚本地址 和 对应的函数，接纳起来
 function joinScriptAndPath(url, callback){
-    loaded[url] = loadingScripts.pop();
-    var type = queryType(loaded[url]), dir = path.dir(url);
+    var fn = loaded[url] = loadingScripts.pop();
+    var dir = path.dir(url);
     // 对文件进行解析
-    parseBeforeExecute(dir, loaded[url], function(){
-        var innerModule = {exports: {}};
-        loaded[url](createInnerRequire(url), innerModule, innerModule.exports);
-        loaded[url] = innerModule.exports;
+    if(fn.length < 3){
+        loaded[url] = queryFnInnerText(fn);
         callback && callback();
-    });
-
+    }else{
+        parseBeforeExecute(dir, fn, function(){
+            var innerModule = {exports: {}};
+            loaded[url](createInnerRequire(url), innerModule, innerModule.exports);
+            loaded[url] = innerModule.exports;
+            callback && callback();
+        });
+    }
 };
 
 // 文件执行前，对路径进行预解析
 function parseBeforeExecute(dir, fn, callback){
-    console.log(fn.toString())
     var str = fn.toString(), reg = /\brequire\s*\(([^)]*)\)/g;
     var res, readyCount = 0;
     while(res = reg.exec(str), res){
@@ -321,7 +269,7 @@ function parseBeforeExecute(dir, fn, callback){
             url = url.replace(/"|'/g, "");
             if(!loaded[url]){
                 readyCount++;
-                require(concatFilePath(url, dir), function(){
+                loader.require(concatFilePath(url, dir), function(){
                     readyCount--;
                     ready();
                 });
@@ -348,7 +296,7 @@ function createInnerRequire(url){
             callback && callback(cnt);
             return cnt;
         }else{
-            require(url, callback);
+            loader.require(url, callback);
         }
     };
 };
@@ -367,8 +315,8 @@ function concatFilePath(p, base){
 };
 
 window.require = loader.require;
-window.require.ajax = ajax;
-window.require.Callbacks = Callbacks;
 window.define = loader.define;
+window.require.addTypeProcesser = loader.addTypeProcesser;
+window.require.ajax = ajax;
 
 })(window);

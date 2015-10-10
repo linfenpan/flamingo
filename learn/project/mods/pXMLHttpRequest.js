@@ -11,8 +11,7 @@ if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 };
 
 // 只发送 get 请求
-ajax = function(url){
-    var cb = new Callbacks({done: [1, "resolve"], fail: [2, "reject"], always: 0});
+ajax = function(url, callback){
     var xmlHttp = newAjax();
     xmlHttp.onreadystatechange = function(){
         // 4 = "loaded"
@@ -21,10 +20,10 @@ ajax = function(url){
             xmlHttp.onreadystatechange = null;
             if(xmlHttp.status == 200 || xmlHttp.status == 302){
                 console.log("加载成功");
-                cb.resolve(url, this.responseText, this);
+                callback && callback(false, url, this.responseText, this);
             }else{
                 console.log("加载失败..");
-                cb.reject(url);
+                callback && callback(true);
             }
         }
     };
@@ -32,6 +31,4 @@ ajax = function(url){
     xmlHttp.open("GET", url, true);
     // 发送数据
     xmlHttp.send(null);
-
-    return cb;
 };
