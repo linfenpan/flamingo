@@ -4,6 +4,10 @@ define(function(require, module, exports){
         style: require("../css/user.css")
     };
     var user = require("user.js");
-    console.log(user);
+    
     console.log(require("$"));
+    console.log(require("data"));
+    console.log(require("./data2.js"));
 });
+
+define("data", "这是个数据");

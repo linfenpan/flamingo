@@ -227,10 +227,11 @@ loader.addTypeProcesser = function(type, fn){
 
 // 加入 脚本盏中
 // 一个被 require 的脚本中，必须、仅且有一个 没有 名字的 define，作为程序的入口
+// 只有脚本运行完毕，才会触发 onload 事件
 loader.define = function(name, fn){
-    if(queryType(name) === "function"){
+    if(queryType(name) === "function" || !fn){
         loadingScripts.push(name);
-    }else{
+    }else if(fn){
         loaded[name] = fn;
     }
 };
@@ -240,9 +241,10 @@ function joinScriptAndPath(url, callback){
     var fn = loaded[url] = loadingScripts.pop();
     var dir = path.dir(url);
     // 对文件进行解析
-    if(fn.length < 3){
+    if(queryType(fn) !== "function"){
+        loaded[url] = fn;
+    }else if(fn.length < 3){
         loaded[url] = queryFnInnerText(fn);
-        callback && callback();
     }else{
         parseBeforeExecute(dir, fn, function(){
             var innerModule = {exports: {}};
@@ -250,12 +252,17 @@ function joinScriptAndPath(url, callback){
             loaded[url] = innerModule.exports;
             callback && callback();
         });
+        return;
     }
+    callback && callback();
 };
 
 // 文件执行前，对路径进行预解析
 function parseBeforeExecute(dir, fn, callback){
-    var str = fn.toString(), reg = /\brequire\s*\(([^)]*)\)/g;
+    // 把注视删除
+    var str = fn.toString().replace(/\/\*[^*]*\*\/|\/\/[^\n\r]*/g, "");
+    // 检测的正则
+    var reg = /\brequire\s*\(([^)]*)\)/g;
     var res, readyCount = 0;
     while(res = reg.exec(str), res){
         // console.log(res[0], res[1]);
