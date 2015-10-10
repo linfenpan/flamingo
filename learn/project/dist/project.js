@@ -136,7 +136,7 @@ function extend(){
 
 // 字符串转 json
 function toJSON(str){
-    return JSON ? JSON.parse(str) : (new Function("return "+ str))();
+    return window.JSON ? JSON.parse(str) : (new Function("return "+ str))();
 };
 
 // 简单的模板方法

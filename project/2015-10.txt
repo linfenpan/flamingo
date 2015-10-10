@@ -1,15 +1,53 @@
 ﻿2015年10月学习计划
 
-1、写一套 sea.js
+(OK)1、写一套 sea.js
 
 模仿 node.js 
 不需要 define，一个文件，就是一个class，就像node.js一样
+---> 最后，为了方便调试，还是需要 define 的
+功能也只是支持 浏览器 而已，不考虑什么后端啊之类的。
+兼容至 ie7
 
+1、使用上，统一只有 require 和 define 两个关键字。
+   require 支持第二个参数回调
+   define 每个文件，必须有一个 没指定 名字的模块[即define]，作为文件程序的入口
 
+2、支持“类跨域”的请求
+   define(function(require, module, exports){/** 这是普通板块的定义 **/})
+   define(function(){/*! 这是跨域资源的定义，获取到的，是这注释之间的内容，最前面的!不能省略 */})
 
+3、支持引入路径的 模板 方法
+	require("${basePath}/data/data.js");
 
+4、支持同域下，资源的ajax获取
+	var style = require("./css/data.css");	// 获取到字符串
+	var html = require("./html/data.html");
 
+5、支持不同后缀，可拓展的获取内容方式
+	// 如果遇到 less 后缀，获取到的，都是“这是less的内容” + 内容
+	require.addTypeProcesser("less", function(url, next){
+		// 发送ajax请求，只支持 get 请求
+		require.ajax(url, function(error, url, text){
+			next("这是less的内容" + text);
+		});
+	});
 
+6、支持项目配置
+	在引用 project.js 前，定义全局变量 Project，可对项目进行配置
+    var Project = {
+        path: {
+			// 配置require引入路径的模板变量
+			// basePath 是项目加载内容的基础路径，默认是页面第1个脚本所在的目录，如果指定了id="projectnode"的脚本，就指向改脚本的目录
+			// 如果有 设置 basePath，则会根据 basePath来设置基础路径，支持绝对路径和相对路径
+            basePath: "./"
+        },
+        other: {
+			// 指定 已经 加载的 require 列表
+			// var str = require("$"); ==> 这个是$符号
+			// 可用户注入 jquery 等外部插件
+            "$": "这是个$符号"
+        }
+    };
 
 
 ===================== 上月遗留 ===========================
