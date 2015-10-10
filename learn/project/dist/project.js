@@ -260,7 +260,8 @@ function joinScriptAndPath(url, callback){
 // 文件执行前，对路径进行预解析
 function parseBeforeExecute(dir, fn, callback){
     // 把注视删除
-    var str = fn.toString().replace(/\/\*[^*]*\*\/|\/\/[^\n\r]*/g, "");
+    // 这里的效率应该不高，我决定，还是干掉它了
+    var str = fn.toString();// .replace(/\/\*[^*]*\*\/|\/\/[^\n\r]*/g, "");
     // 检测的正则
     var reg = /\brequire\s*\(([^)]*)\)/g;
     var res, readyCount = 0;
