@@ -3,8 +3,34 @@
 <head>
     <meta charset="utf-8">
     <title></title>
+    <script src="react.min.js" charset="utf-8"></script>
+    <script src="JSXTransformer.js" charset="utf-8"></script>
 </head>
 <body>
-    
+    <div id="demo"></div>
 </body>
+<script type="text/jsx">
+    var SayHi = React.createClass({
+        getInitialState: function(){
+            return {like: true};
+        },
+        render: function(){
+            var text = this.state.like ? `Great to meet you~` : `I hate you~`;
+            return (
+                <div>
+                    <p>{'Hi '}{this.props.name}</p>
+                    <p>{text}</p>
+                    <a href="javascript:;" onClick={this.changeState}>change state</a>
+                </div>
+            );
+        },
+        changeState: function(){
+            this.setState({like: !this.state.like});
+        }
+    });
+    React.render(
+        <SayHi name="da宗熊" />,
+        document.getElementById("demo")
+    )
+</script>
 </html>

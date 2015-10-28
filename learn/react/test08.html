@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>props测试</title>
+    <script src="react.min.js" charset="utf-8"></script>
+    <script src="JSXTransformer.js" charset="utf-8"></script>
+</head>
+<body>
+    <div id="demo"></div>
+</body>
+<script type="text/jsx">
+    var FC = React.createClass({
+        render: function(){
+            console.log(this.props);
+            // var {mm, ...other} = this.props;
+            // console.log(mm, other);
+            return (
+                <div ref="wrapper" onClick={this.handleClick}>
+                    就是个测试
+                </div>
+            );
+        },
+        handleClick: function(e){
+            console.log(this, e);
+        }
+    });
+    React.render(
+        <FC title="呵呵" alt="xxxx" data-tool="123" mm="xyz"></FC>,
+        document.getElementById("demo")
+    )
+</script>
+</html>

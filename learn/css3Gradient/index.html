@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <style>
+            .btn{
+                max-width:200px;
+                padding:10px 20px;
+                display:block;
+                margin:10px;
+            }
+            .btn1{
+                background:linear-gradient(45deg, red, blue);
+            }
+            .btn2{
+                background: repeating-linear-gradient(red, yellow 20%, green);
+                /* 意思是 从 red 开始，到 20% 变为 yellow，到 100% 变为 green */
+            }
+            .btn3{
+                width:150px;
+                height:150px;
+                background: -webkit-radial-gradient(50% 50%,closest-corner,blue,green,yellow,black);
+                /* 圆心位置，circle|ellipse，颜色... */
+            }
+			.rect{
+				margin:20px;
+				width:200px;height:200px;
+				border-radius:100px;
+				box-shadow:0 0 0 10px rgba(255, 255, 255, .4) inset;
+				
+				background-image: 
+					linear-gradient(-45deg, black 25%, transparent 25%, transparent 75%, black 75%, black), 
+					linear-gradient(-45deg, black 25%, transparent 25%, transparent 75%, black 75%, black);
+				background-size: 50px 50px;
+				/* size 的一半 */
+				background-position: 0 0, 25px 25px;
+			}
+        </style>
+    </head>
+    <body>
+        <span class="btn btn1">按钮哦</span>
+        <span class="btn btn2">按钮2</span>
+        <span class="btn btn3">放射</span>
+		<div class="rect">
+			
+		</div>
+    </body>
+</html>

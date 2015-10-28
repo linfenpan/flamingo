@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>裁剪属性</title>
+    <style>
+        /* 只有绝对定位 和 fixed 定位，可以使用 clip 属性 */
+        /* 剪切，并不是指剪切图片，而是剪切了整个元素的可见区域 */
+        .gallery{
+            position: absolute;
+            top:10px;left:10px;
+            width:300px;height:300px;
+            clip: rect(25px, 280px, 290px, 95px);
+            background:url(pic.jpg) no-repeat;
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery">
+        <!-- 会很诡异的，只看到一部分 -->
+        这段文字，看不见了
+    </div>
+</body>
+</html>
