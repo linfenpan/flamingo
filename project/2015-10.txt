@@ -119,7 +119,7 @@ node 的 watch 板块，好像就可以满足这个需求，不过，速度挺�
 (OK)9、重新整理 project.js
 删除了 Callback 对象，把 define 两个参数时的BUG，修复了一次，把路径模板修正数序调整了一次
 
-10、重新整理 project.js 打包程序
+(OK)10、重新整理 project.js 打包程序
 md5打包吧!
 
 
