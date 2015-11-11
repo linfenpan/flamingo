@@ -9,6 +9,26 @@
 3、emmet语法 编写 html 的脚本还没编写
 #id ---> <div id="id"></div>
 
+4、博客 hexo 
+
+
+===================== 微信的一些scheme ===================
+
+weixin://dl/scan 扫一扫
+weixin://dl/feedback 反馈
+weixin://dl/moments 朋友圈
+weixin://dl/settings 设置
+weixin://dl/notifications 消息通知设置
+weixin://dl/chat 聊天设置
+weixin://dl/general 通用设置
+weixin://dl/officialaccounts 公众号
+weixin://dl/games 游戏
+weixin://dl/help 帮助
+weixin://dl/feedback 反馈
+weixin://dl/profile 个人信息
+weixin://dl/features 功能插件
+
+weixin://dl/privacy/链接base64加密
 
 
 
