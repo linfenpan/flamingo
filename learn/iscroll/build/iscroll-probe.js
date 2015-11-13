@@ -48,7 +48,7 @@ var utils = (function () {
 	};
 
 	me.prefixPointerEvent = function (pointerEvent) {
-		return window.MSPointerEvent ? 
+		return window.MSPointerEvent ?
 			'MSPointer' + pointerEvent.charAt(9).toUpperCase() + pointerEvent.substr(10):
 			pointerEvent;
 	};
@@ -258,7 +258,7 @@ function IScroll (el, options) {
 
 		snapThreshold: 0.334,
 
-// INSERT POINT: OPTIONS 
+// INSERT POINT: OPTIONS
 
 		startX: 0,
 		startY: 0,
@@ -318,7 +318,7 @@ function IScroll (el, options) {
 
 // INSERT POINT: NORMALIZATION
 
-	// Some defaults	
+	// Some defaults
 	this.x = 0;
 	this.y = 0;
 	this.directionX = 0;
@@ -531,7 +531,19 @@ IScroll.prototype = {
 /* REPLACE END: _move */
 
 	},
-
+	_checkSlideDirection: function(){
+		var y = this.y, x = this.x;
+		if(y > 0){
+			this._execEvent('slideDown');
+		}else if(y < this.maxScrollY){
+			this._execEvent('slideUp');
+		}
+		if(x > 0){
+			this._execEvent('slideRight');
+		}else if(x < this.maxScrollX){
+			this._execEvent('slideLeft');
+		}
+	},
 	_end: function (e) {
 		if ( !this.enabled || utils.eventType[e.type] !== this.initiated ) {
 			return;
@@ -558,6 +570,7 @@ IScroll.prototype = {
 
 		// reset if we are outside of the boundaries
 		if ( this.resetPosition(this.options.bounceTime) ) {
+			this._checkSlideDirection();
 			return;
 		}
 
@@ -652,6 +665,10 @@ IScroll.prototype = {
 			y = this.maxScrollY;
 		}
 
+		// 修正 y 可移动的范围
+        y = y || this.overTopY;
+        y = y <= this.maxScrollY ? this.maxScrollY - this.overBottomY : y;
+
 		if ( x == this.x && y == this.y ) {
 			return false;
 		}
@@ -669,7 +686,7 @@ IScroll.prototype = {
 		this.enabled = true;
 	},
 
-	refresh: function () {
+	refresh: function (time) {
 		var rf = this.wrapper.offsetHeight;		// Force reflow
 
 		this.wrapperWidth	= this.wrapper.clientWidth;
@@ -706,7 +723,7 @@ IScroll.prototype = {
 
 		this._execEvent('refresh');
 
-		this.resetPosition();
+		this.resetPosition(time);
 
 // INSERT POINT: _refresh
 
@@ -761,6 +778,9 @@ IScroll.prototype = {
 		easing = easing || utils.ease.circular;
 
 		this.isInTransition = this.options.useTransition && time > 0;
+		// 修正 y 可移动的范围
+        y = y || this.overTopY;
+        y = y <= this.maxScrollY ? this.maxScrollY - this.overBottomY : y;
 
 		if ( !time || (this.options.useTransition && easing.style) ) {
 			this._transitionTimingFunction(easing.style);
@@ -770,6 +790,10 @@ IScroll.prototype = {
 			this._animate(x, y, time, easing.fn);
 		}
 	},
+
+	// 可超出的 最小、最大Y周距离
+    overTopY: 0,
+    overBottomY: 0,
 
 	scrollToElement: function (el, time, offsetX, offsetY, easing) {
 		el = el.nodeType ? el : this.scroller.querySelector(el);
@@ -1519,7 +1543,7 @@ IScroll.prototype = {
 			if ( now >= destTime ) {
 				that.isAnimating = false;
 				that._translate(destX, destY);
-				
+
 				if ( !that.resetPosition(that.options.bounceTime) ) {
 					that._execEvent('scrollEnd');
 				}
@@ -1902,7 +1926,7 @@ Indicator.prototype = {
 				this.maxBoundaryX = this.maxPosX;
 			}
 
-			this.sizeRatioX = this.options.speedRatioX || (this.scroller.maxScrollX && (this.maxPosX / this.scroller.maxScrollX));	
+			this.sizeRatioX = this.options.speedRatioX || (this.scroller.maxScrollX && (this.maxPosX / this.scroller.maxScrollX));
 		}
 
 		if ( this.options.listenY ) {

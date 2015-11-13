@@ -3,6 +3,14 @@
 拓展任务：去观看 css3 的酷炫效果，开拓眼界
 
 1、移动端的下拉刷新
+[OK] 1.1 IScroll 版本的下拉刷新功能完成
+	
+	改写了IScroll的源码，添加了下拉和上拉的检测及方法："slideUp" 和 "slideDown" 事件
+	添加了超出y轴的可超出范围: overTopY 和 overBottomY 属性
+
+[  ] 1.2 自己编写下拉刷新
+	
+	
 
 2、aow插件改版
 

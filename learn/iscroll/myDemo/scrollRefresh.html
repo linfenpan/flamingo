@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>两个滚动对比</title>
+    <script type="text/javascript" src="/flamingo/learn/jquery.js"></script>
+    <!-- 更改这个脚本，添加 slideUp 和 slideDown 事件 -->
+    <script type="text/javascript" src="../build/iscroll-probe.js"></script>
+    <style>
+        *{padding:0;margin:0;}
+        html,body,#wrapper{height:100%;}
+        #wrapper{position:relative;width:100%;height:100%;overflow:hidden;}
+        #scroller{position:absolute;top:0;left:0;width:100%;}
+        #scroll-top{position:absolute;width:100%;top:-40px;text-align:center;}
+        #scroll-bottom{position:absolute;width:100%;bottom:-40px;text-align:center;}
+        .wrap2{overflow:hidden;}
+        .indecate, .text{display:inline-block;vertical-align:middle;}
+        li{padding:10px 0;text-align:center;list-style:none;}
+    </style>
+    <style>
+        /*#wrapper .pull-up-active{position:static;}
+        #wrapper .pull-down-active{position:static;}*/
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="scroller">
+            <div id="scroll-top">
+                <span class="indecate">↓</span>
+                <span class="text">上拉刷新</span>
+            </div>
+            <!-- <div id="scroll-bottom">
+                <span class="indecate">↑</span>
+                <span class="text">下拉加载更多</span>
+            </div> -->
+            <ul class="">
+                <li>元素1</li>
+                <li>元素2</li>
+                <li>元素3</li>
+                <li>元素4</li>
+                <li>元素5</li>
+                <li>元素6</li>
+                <li>元素7</li>
+                <li>元素8</li>
+                <li>元素9</li>
+                <li>元素0</li>
+                <li>元素a</li>
+                <li>元素b</li>
+                <li>元素c</li>
+                <li>元素d</li>
+                <li>元素e</li>
+                <li>元素f</li>
+                <li>元素g</li>
+                <li>元素h</li>
+                <li>元素i</li>
+                <li>元素j</li>
+                <li>元素1</li>
+                <li>元素2</li>
+                <li>元素3</li>
+                <li>元素4</li>
+                <li>元素5</li>
+                <li>元素6</li>
+                <li>元素7</li>
+                <li>元素8</li>
+                <li>元素9</li>
+                <li>元素0</li>
+                <li>元素a</li>
+                <li>元素b</li>
+                <li>元素c</li>
+                <li>元素d</li>
+                <li>元素e</li>
+                <li>元素f</li>
+                <li>元素g</li>
+                <li>元素h</li>
+                <li>元素i</li>
+                <li>元素j</li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+;(function($){
+    function PullDownRefresh(){
+        this.init.apply(this, arguments);
+    };
+    PullDownRefresh.prototype = {
+        init: function($el, options){
+            this.$dom = $el;
+            // 参数
+            this.options = $.extend({
+                down: ".pull-down-wrap",
+                // 滚动到 100% 的高度，就触发事件
+                downRate: 1,
+                up: ".pull-up-wrap",
+                // 上拉 到 100% 高度时，就触发事件
+                upRate: 1,
+                // restart 动画的时间
+                restartTime: 300
+            }, options || {});
+            // iscroll 参数
+            this.iscrollOptions = $.extend({
+                click: true,
+                scrollbars: true,
+                fadeScrollbars: true,
+                probeType: 2
+            }, options ? options.iscroll : {});
+
+            this.iscroll = new IScroll($el[0], this.iscrollOptions);
+            this.$up = $el.find(this.options.up);
+            this.$down = $el.find(this.options.down);
+
+            // 操作是否锁定
+            this.isLock = false;
+
+            this.bindUI();
+        },
+        bindUI: function(){
+            var self = this;
+            var iscroll = this.iscroll;
+            var $up = this.$up, $down = this.$down;
+            var upRate = this.options.upRate, downRate = this.options.downRate;
+            var upHeight, downHeight;
+
+            function realDistance(height, rate){
+                return rate > 1 ? rate : height * rate;
+            }
+            function downPercent(){
+                return  iscroll.y / realDistance(downHeight, downRate);
+            }
+            function upPercent(){
+                return  (iscroll.maxScrollY - iscroll.y) / realDistance(upHeight, upRate);
+            }
+            function checkLockFn(fn){
+                return function(){
+                    if(self.isLock){
+                        return;
+                    }
+                    fn.apply(this, arguments);
+                };
+            }
+
+            iscroll.on("scrollStart", checkLockFn(function(){
+                upHeight = $up.outerHeight();
+                downHeight = $down.outerHeight();
+                $up.css({
+                    bottom: -upHeight
+                });
+                $down.css({
+                    top: -downHeight
+                });
+            }));
+            // 检查是否滚动到设置的距离
+            // 如果到了 设置的 距离，因为是 absolute 定位，所以，需要修正 iscroll 的 overTopY 或 overBottomY 的值
+            iscroll.on("scroll", checkLockFn(function(){
+                var y = iscroll.y, percent;
+                if(y > 0){
+                    percent = downPercent();
+                    self.fire("pullingDown", $down, percent, iscroll);
+                    if(percent >= 1){
+                        iscroll.overTopY = downHeight;
+                    }else{
+                        iscroll.overTopY = 0;
+                    }
+                }else if(y < iscroll.maxScrollY){
+                    percent = upPercent();
+                    self.fire("pullingUp", $up, percent, iscroll);
+                    if(percent >= 1){
+                        iscroll.overBottomY = upHeight;
+                    }else{
+                        iscroll.overBottomY = 0;
+                    }
+                }
+            }));
+
+            if($up.size() > 0){
+                iscroll.on("slideUp", checkLockFn(function(){
+                    if(iscroll.overBottomY){
+                        self.isLock = true;
+                        self.fire("pulledUp", $up);
+                    }
+                }));
+            }
+            if($down.size() > 0){
+                iscroll.on("slideDown", checkLockFn(function(){
+                    if(iscroll.overTopY){
+                        self.isLock = true;
+                        self.fire("pulledDown", $down);
+                    }
+                }));
+            }
+        },
+        restart: function(){
+            var self = this;
+            var iscroll = this.iscroll, time = this.options.restartTime;
+            var y = iscroll.overBottomY ? iscroll.maxScrollY : 0;
+
+            iscroll.overBottomY = iscroll.overTopY = 0;
+            iscroll.refresh(time);
+            setTimeout(function(){
+                self.isLock = false;
+            }, time);
+        },
+        __: {},
+        fire: function(ev){
+            var self = this;
+            var args = [].slice.call(arguments, 1);
+            var list = this.__[ev];
+            $(list).each(function(i, fn){
+                fn.apply(self, args);
+            });
+        },
+        on: function(ev, fn){
+            var map = this.__;
+            map[ev] = map[ev] || [];
+            map[ev].push(fn);
+        }
+    };
+    $.fn.extend({
+        "pullUpAndDown": function(options){
+            return new PullDownRefresh(this, options);;
+        }
+    });
+})($);
+var myScroll = $("#wrapper").pullUpAndDown({
+    // up: "#scroll-bottom",
+    down: "#scroll-top"
+});
+myScroll.on("pullingDown", function($el, percent){
+    // console.log(percent);
+    percent = Math.min(1, percent);
+    if(percent == 1){
+        $el.find(".text").text("松手进行加载");
+    }else{
+        $el.find(".text").text("上拉刷新");
+    }
+    $el.find(".indecate").css({
+        "transform": "rotate("+ 180 * percent +"deg)"
+    });
+});
+myScroll.on("pulledDown", function($el){
+
+    setTimeout(function(){
+        $el.find(".indecate").css({
+            "transform": "rotate("+ 0 +"deg)"
+        });
+        $el.find(".text").text("上拉刷新");
+        setTimeout(function(){
+            myScroll.restart();
+        }, 500);
+    }, 2000);
+});
+// var myScroll = new IScroll(document.querySelector('#wrapper'), {
+//     click: true, // 允许点击
+//     // eventPassthrough: true, // 允许 水平，不影响页面正常的垂直滚动， ‘horizontal’则相反
+//     scrollbars: true, // 是否需要滚动轴
+//     fadeScrollbars: true, // 停止滚动时，滚动轴消失
+//     scrollX: false, // x轴不能滚动
+//     scrollY: true,  // y轴可以滚动
+//     startX: 0,  //
+//     startY: 0,  // y轴起始滚动距离
+//     tap: false, // 是否点击的时候，发起 tap 事件
+//     //snap: true, // 分页，当前容器的高度为划分，每一份高度的元素集，为1页
+//     probeType: 3 // 1 当scroller不忙的时候，才会发出 scroll事件， 2 除了反弹和弹力效果外，都会发布 scroll 事件，3 总是发出 scroll 事件
+// });
+// myScroll.on("scroll", function(){
+//     // 超过元素的一半高度，就触发 下拉刷新效果
+// });
+// myScroll.on("slideDown", function(){
+//     console.log("d");
+//     console.log(this.y);
+// });
+// myScroll.on("slideUp", function(){
+//     console.log("u");
+//     console.log(this.y);
+// });
+</script>
+</html>
