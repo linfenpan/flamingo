@@ -7,17 +7,38 @@
 	
 	改写了IScroll的源码，添加了下拉和上拉的检测及方法："slideUp" 和 "slideDown" 事件
 	添加了超出y轴的可超出范围: overTopY 和 overBottomY 属性
-
-[  ] 1.2 自己编写下拉刷新
 	
+	https://github.com/linfenpan/collection/tree/master/plugins/pulldownRefresh
+
+[OK] 1.2 自己编写下拉刷新
+	
+	依赖 overflow-y 的特性，在 touchmove 的时候，改写 "下拉刷新提醒" 元素的高度，
+	实现下拉慢慢显示的效果
+	给下拉提醒的元素，设置 overflow:hidden; position:relative; height:0;
+	其内部第1个子元素，设置 position:absolute; bottom:0;
+	则可改变 提醒元素 的高度，达到慢慢显示 第 1 个子元素的效果.
+	
+	https://github.com/linfenpan/collection/tree/master/plugins/pulldownRefresh2
 	
 
-2、aow插件改版
+2、aow插件改版构思
 
-3、emmet语法 编写 html 的脚本还没编写
-#id ---> <div id="id"></div>
+
+(OK)3、emmet语法 编写 html 的脚本还没编写
+
+	依赖 while 循环，逐个字符遍历，感觉效率并不高。
+	主要挑战，在于 “操作延后执行”，
+	如 #parent ，首先，知道操作是 setId，然后，只有遍历到 其它操作符，或结束的时候，才调用 setId 操作
+	
+	编写过程中，更加熟悉了 emmet 的语法，原来 emmet 可以设置 内容，重复内容的索引等等..
+	
+	https://github.com/linfenpan/simple-emmet.js
 
 4、博客 hexo 
+
+
+5、node.js文件实现下载进度
+
 
 
 ===================== 微信的一些scheme ===================
@@ -46,3 +67,5 @@ weixin://dl/privacy/链接base64加密
 试着重写自己的 __inline 功能
 
 5、swipe.js
+
+http://cssload.net/en/horizontal-bars/6
