@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>yaml测试</title>
+</head>
+<body>
+
+</body>
+<script type="text/html" id="yamlFile">
+Persion:
+    age: 23
+    name: da宗熊
+Animal:
+    weight: 110 # 注释
+    description: :date/:mark
+List:
+    - one
+    - tow
+    - name:
+        - 1
+        - 2
+Text: > # > 标志段落有换行，所有换行符，会被替换为空格
+       一段很长的文字，分行诶
+       不知道能解析否
+mText: ~ # ~ 或 null，都代表空值
+mText2: | # | 代表下面内容，保留换行符，是同一个字符的说~
+    文本诶
+    文本诶2
+    文本诶3
+    文本诶4
+</script>
+<script type="text/html" id="testt">
+merge:
+  # 声明两个可引用的数据，这两个数据，也会输出
+  - &CENTER {x: 1, y: 1}
+  - &LEFT {x: 5, y: 1}
+  - # 定义对象1
+    <<: *CENTER
+    label: 引入CENTER数据，与当前数据合并
+  - # 定义对象2
+    <<: [*CENTER, *LEFT]
+    label: 可引入多个数据
+  - # 定义对象3
+    center: *CENTER
+    left:   *LEFT
+    label:  也可以纯粹的引入，而不合并
+</script>
+<script src="yaml.js"></script>
+<script type="text/javascript">
+    // var text = yamlFile.innerHTML;
+    var text = testt.innerHTML;
+    console.log(
+        YAML.parse(text)
+    );
+</script>
+</html>
