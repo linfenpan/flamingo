@@ -1,0 +1,10 @@
+/*
+* @description: 自适应功能测试
+* @author: da宗熊
+* @update: 2015-11-19 14:46
+*/
+
+.main { color:blue; }
+@media only screen and (max-width:900px), only print and (max-width:500px) {
+	.main { color:red; margin:0 auto; }
+}

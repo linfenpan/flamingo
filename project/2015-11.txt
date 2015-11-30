@@ -2,7 +2,8 @@
 
 拓展任务：去观看 css3 的酷炫效果，开拓眼界
 
-1、移动端的下拉刷新
+[OK]1、移动端的下拉刷新
+
 [OK] 1.1 IScroll 版本的下拉刷新功能完成
 	
 	改写了IScroll的源码，添加了下拉和上拉的检测及方法："slideUp" 和 "slideDown" 事件
@@ -61,16 +62,75 @@
 	
 	https://github.com/linfenpan/simple-emmet.js
 
-4、博客 hexo 
+[FAIL]4、博客 hexo 
 
+	其中的 yaml 格式，还是不错的，但是，其它的部分，完全就是怎么写一个网页
+	不怎么值得学习了
 
 [放弃，没意义]5、node.js文件实现下载进度
 
 
 6、emmet.js 第2版
 
+(OK)7、github上，部署自己的博客
+   
+   只要创建一个这样子的仓库：用户名.github.io
+   github 就会自动将访问 https://用户名.github.io/ 的链接，重定向到你对应的仓库，从而进行访问
+   
+(OK)8、响应时布局
+	
+	重新学习了 媒体查询，媒体查询，实际上，分两部分，一个叫 media type，另一部分就 media query。
+	一般的媒体查询，指的是 media query。
+	而 media type 的出现，避免的不同设备，样式相互覆盖的尴尬。
+	
+	很漂亮的一个站点：http://www.zerotheme.com/demo/r531/zStartUp/
+	http://andersnoren.se/themes/lasseter/
+	http://andersnoren.se/themes/lingonberry/
 
+[FAIL]9、cufon-canvas
+	
+	一款文字转图形的工具
 
+[OK]10、visibilitychange 页面是否可见
+	
+	注意浏览器前缀，与之对应的，还是 document.hidden
+
+[OK]11、代码快着色
+	
+	https://highlightjs.org/ 这款，可以和 remarkable 配合，而且，可以加工字符 和 元素，比较灵活
+	https://github.com/google/code-prettify 这款，是 google 退出的着色脚本，限制就是只能着色指定 class 的元素
+	
+	markdown 语法，还是 remarkable 比较好用
+	
+[OK]12、模板引擎选择
+	
+	ejs[ejs-mate], jade[html2jade], doT, html-aware, handlebars, Swig， Nunjucks[传说功能非常丰富，而且大型的模板引擎]
+	
+	nunjucks 是功能最为强大，让人满意的，不过压缩之后，也有20多K。如果实在想用，也是可以的。
+	
+	http://mozilla.github.io/nunjucks/
+	
+[OK]13、yaml 编译
+
+	https://www.npmjs.com/package/yamljs	[采用了这个]
+	https://www.npmjs.com/package/js-yaml
+
+	
+14、免费数据库
+	
+	http://www.freesqldatabase.com/login/
+	
+15、h5页面制作网站
+	
+	http://www.weplus.me/
+	http://www.rabbitpre.com
+	http://www.maka.im/home/index.html
+	
+16、收集很酷的 h5 效果
+	
+	http://down.admin5.com/demo/code_pop/19/1176/
+
+	
 ===================== 微信的一些scheme ===================
 
 weixin://dl/scan 扫一扫
