@@ -120,15 +120,23 @@
 	
 	http://www.freesqldatabase.com/login/
 	
-15、h5页面制作网站
+[OK]15、h5页面制作网站
 	
 	http://www.weplus.me/
-	http://www.rabbitpre.com
+	http://www.rabbitpre.com  [这个最好了]
 	http://www.maka.im/home/index.html
 	
 16、收集很酷的 h5 效果
 	
 	http://down.admin5.com/demo/code_pop/19/1176/
+	
+17、评论组件
+	
+	友言、多说
+
+18、搜索引擎
+
+	https://swiftype.com/
 
 	
 ===================== 微信的一些scheme ===================

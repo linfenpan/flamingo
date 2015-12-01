@@ -1,0 +1,68 @@
+﻿2015年12月学习计划
+
+拓展任务：去看看 h5 页面制作 的网站，如兔展
+
+
+1、emmet.js 第二版本
+
+	https://github.com/linfenpan/simple-emmet.js
+	
+	依赖 while 循环，逐个字符遍历，感觉效率并不高。
+	主要挑战，在于 “操作延后执行”，
+	如 #parent ，首先，知道操作是 setId，然后，只有遍历到 其它操作符，或结束的时候，才调用 setId 操作
+	
+	编写过程中，更加熟悉了 emmet 的语法，原来 emmet 可以设置 内容，重复内容的索引等等..
+	
+	// TODO 下个月任务吧
+	改进：可以引入模板功能 `模板变量`, "`"里的内容，是不会被 emmet 编译
+	如: 
+	`<%for(var i in obj){%>`
+		#parent > (
+			`<%if(true){%>`
+				.child.child`<%= i %>`{内容是:`<%= obj[i] %>`}
+			`<%}else{%>`
+				^.none{没有内容}
+			`<%}%>`
+		)
+	`<%}%>`
+	====>
+	<%for(var i in obj){%>
+		<div id="parent">
+			<%if(true){%>
+				<div class="child child<%= i%>">
+					内容是:<%= obj[i]%>
+				</div>
+			<%}else{%>
+
+			<%}%>
+		</div>
+		<div class="none">
+			没有内容
+		</div>
+	<%}%>
+	
+	https://github.com/linfenpan/simple-emmet.js
+
+	
+2、搜索引擎接入
+
+	https://swiftype.com/
+
+3、Css3Transition.js 并不试用，再进行修改
+
+	
+
+
+
+===================== 遗留任务 ===========================
+
+3、fis的路径引入[__inline功能]，当有子文件夹的时候，不好使。
+试着重写自己的 __inline 功能
+
+5、swipe.js
+
+http://cssload.net/en/horizontal-bars/6
+
+6、aow 改版
+
+
