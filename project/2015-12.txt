@@ -44,11 +44,13 @@
 	https://github.com/linfenpan/simple-emmet.js
 
 	
-2、搜索引擎接入
+(OK)2、搜索引擎接入
 
 	https://swiftype.com/
+	注册个网站，弄个外观配置，然后贴代码到页面，就完成了。
+	
 
-3、Css3Transition.js 并不试用，再进行修改
+3、Css3Transition.js 并不实用，再进行修改
 
 
 4、python 3.5  学习

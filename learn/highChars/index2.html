@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>画图</title>
+    <script src="./jquery.js" charset="utf-8"></script>
+    <script src="./js/highcharts.js" charset="utf-8"></script>
+    <!-- <script src="./js/themes/sand-signika.js" charset="utf-8"></script> -->
+</head>
+<body>
+    <div id="container"></div>
+
+<script type="text/javascript">
+$(function(){
+    // 这玩意，高度默认 400px
+    $("#container").highcharts({
+        chart: {
+            type: "bar"
+        },
+        xAxis: {
+            categories: ["A", "B", "C", "D"]
+        },
+        yAxis: {
+            title: {
+                text: "成绩"
+            }
+        },
+        tooltip: {
+            formatter: function(){
+                return '<b>' + this.series.name + '</b>-' +
+                    this.x + ":" + this.y;
+            }
+        },
+        series: [{
+            data: [{y: 10, color: "#000"}, 20, 30, 40]
+        }],
+        legend: {
+            enabled: false
+        }
+    });
+});
+</script>
+</body>
+</html>

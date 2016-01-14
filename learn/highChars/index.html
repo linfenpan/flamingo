@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>画图</title>
+    <script src="./jquery.js" charset="utf-8"></script>
+    <script src="./js/highcharts.js" charset="utf-8"></script>
+    <!-- <script src="./js/themes/sand-signika.js" charset="utf-8"></script> -->
+</head>
+<body>
+    <div id="container"></div>
+
+<script type="text/javascript">
+$(function(){
+    // 这玩意，高度默认 400px
+    $("#container").highcharts({
+        chart: {
+            type: 'column',     // 制定绘制图表的类型，默认是折线图 line
+        },
+        // 可以有 title 和 subtitle 两个
+        title: {
+            text: '体重统计'
+        },
+        subtitle: {
+            text: '子标题哦'
+        },
+        // xAxis 和 yAxis 没有数据时，不显示
+        xAxis: {
+            // 指定 x 轴分组
+            categories: ['0-10', '11-20', '21-30'],
+            title: {
+                text: '年龄段'
+            }
+        },
+        yAxis: {
+            // 指定 y轴标题
+            title: {
+                text: '体重/kg'
+            }
+        },
+        // 数据
+        series: [
+            // 有两组数据，一组叫 Jane 一组叫 John，他们分别对应的数据为 data 字段
+            {
+                color: "#008",   // 更换显示颜色
+                name: 'Jane',
+                data: [1, 2, 6]
+            },
+            {
+                name: 'John',
+                data: [5, 7, 6]
+            }
+        ],
+        // 右下角的链接
+        credits: {
+            enabled: true,
+            text: 'da宗熊的统计',
+            href: 'http://www.baidu.com/?2',
+        },
+        // 最底下的 John 和 Jane
+        // legend: {
+        //     enabled: false
+        // }
+    });
+});
+</script>
+</body>
+</html>
