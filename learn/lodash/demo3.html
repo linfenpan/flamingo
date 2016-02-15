@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html>
+<head><!--2016-01-13 10:56:09--><meta name="generator" content="Noah~~@FISP" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta name="format-detection" content="telephone=no">
+<title>donate</title>
+<meta name="keywords" content="donate">
+<meta name="description" content="donate">
+<link rel="stylesheet" type="text/css" href="http://m.xmodgames.com/templates/mobile/static/xmgMobile/css/layout_79c5e82.css"/>
+<link rel="stylesheet" type="text/css" href="demo3.css?v=2"/></head>
+<body>
+<script id="recData" type="text/html">
+	  	{%each list as item%}
+		<li class="rec-item row">
+			<div class="thumb-wrap"><img class="thumbnail" src="{%item.icon_url%}"></div>
+			<div class="col">
+				<h4 class="rec-title">{%item.title%}</h4>
+				<a href="{%item.install_url%}" class="rec-download">Download</a>
+				<p class="rec-desc">{%item.detail%}</p>
+			</div>
+		</li>
+		{%/each%}
+	  </script>
+
+<input type="hidden" id="product" value="">
+<input type="hidden" id="donateAmount" value="10">
+<div class="donate-wrap">
+<img src="http://7xnjqo.com2.z0.glb.qiniucdn.com/o_1a8fdoare18nu19dl1nks1gocl36e.png"  />
+<div class="donate-inner">
+<div class="support-title">Will you support me?</div>
+<p class="support-desc">
+Xmodgames needs<br>better equipments, team members to develop<br>MORE MODS!</p>
+<p class="support-num">We've Got<a href="/donateRank/" class="nums">324</a>Supporters!</p>
+<button id="donateBtn" class="btn-block btn-positive">Donate Now!</button>
+</div>
+<img class="mascot" src="http://7xnjqo.com2.z0.glb.qiniucdn.com/o_1a8fdofm61a4c1eb0n0b21812k2j.png"  />
+</div>
+<div class="pop-mask">
+<div class="pop">
+<div class="pop-header">
+Choose the amount of donation<span class="close">&times;</span>
+</div>
+<div class="pop-body">
+<div class="amount-wrap">
+<ul class="row">
+<li class="col col-25">
+<span data-amount="2">$<em>2</em></span>
+</li>
+<li class="col col-25">
+<span data-amount="5">$<em>5</em></span>
+</li>
+<li class="col col-25">
+<span data-amount="10" class="active">$<em>10</em></span>
+</li>
+<li class="col col-25">
+<span data-amount="20">$<em>20</em></span>
+</li>
+</ul>
+<ul class="row">
+<li class="col col-25">
+<span data-amount="50">$<em>50</em></span>
+</li>
+<li class="col col-25">
+<span data-amount="100">$<em>100</em></span>
+</li>
+<li class="col col-50">
+<input id="inputNumber" type="tel" placeholder="Other amount($1-500)" />
+</li>
+</ul>
+</div>
+<div class="amount-info hide">Please input an integer from 1 to 500.  e.g: 30, 40.</div>
+<div class="email-wrap">
+<span class="star" id="emailStar">*</span>
+<input type="email" id="email" placeholder="Enter your email for donate confirmation"  />
+</div>
+<button href="#" class="btn-block btn-disable" id="continue" data-continue="http://m.xmodgames.com/pw/prePay.php" data-donate="http://m.xmodgames.com/pw/pay.php">Continue</button>
+<div class="privacy-wrap"><span class="check-box on"></span>I agree to Terms of &nbsp;<a href="http://m.xmodgames.com/donate_license_agreement/">Xmodgames Donation Agreement</a></div>
+</div>
+</div>
+</div>
+</body><script type="text/javascript" src="http://m.xmodgames.com/templates/mobile/static/xmgMobile/lib/mod_fef4836.js"></script>
+<script type="text/javascript" src="http://m.xmodgames.com/templates/mobile/static/xmgMobile/lib/jquery_44f7138.js"></script>
+<script type="text/javascript" src="http://m.xmodgames.com/templates/mobile/static/xmgMobile/js/base_a927182.js"></script>
+<script type="text/javascript" src="http://m.xmodgames.com/templates/mobile/static/xmgMobile/js/donate_41dfc65.js"></script>
+</html>

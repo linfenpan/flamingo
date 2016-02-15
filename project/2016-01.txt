@@ -1,0 +1,63 @@
+﻿2016年01月学习计划
+
+
+(OK)1、lodash.js是什么鬼？
+	
+	https://lodash.com/
+	就是一个工具库，常用的 数组去重，对象合并之类的工具库。挺多重复方法的。
+	使用这个，会比较友好: http://sugarjs.com/
+	sugar 拓展了 native 的功能，兼容到 IE6，非常友好的 api
+
+(OK)2、ZRender 一款酷炫的 canvas 画图库
+	
+	http://ecomfe.github.io/zrender/index.html
+	提供了高效的canvas绘制图形、图形事件响应 api 的一款前端类库。
+	适合制作图标类，动画不多的内容。
+	用于制作游戏，就别想了。
+
+
+===================== 长期任务 ===========================
+
+1、搭建 html 模板站点工具
+
+基于nunjuck，搭建模板站点支持服务，必要功能:
+	文件更变，刷新浏览器
+	指定资源域名，资源合并等操作
+	
+2、给予 electron 的移动端页面开发工具
+
+目标：简单拖拉工具，就能拼接处页面
+	
+
+===================== 完成上月 ===========================
+
+(OK)3、Css3Transition.js 并不实用，再进行修改
+	
+	在1月中完成，重新构设了更容易拓展的方式，对特殊属性，如transfrom，transition等进行拓展。
+	抛弃掉上一版本，重写了所有代码，重新命名为 CssParser.js
+	
+	不再动态生成 className，功能面向更加底层，只完成 style 的生成。方便以后的拓展。
+	
+	https://github.com/linfenpan/Css3Transition
+
+
+
+===================== 遗留任务 ===========================
+
+3、fis的路径引入[__inline功能]，当有子文件夹的时候，不好使。
+试着重写自己的 __inline 功能
+
+5、swipe.js
+
+http://cssload.net/en/horizontal-bars/6
+
+6、aow 改版
+
+
+(OK) 3、Css3Transition.js 并不实用，再进行修改
+
+
+4、python 3.5  学习
+
+http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386818214042e9c46552422e42d8a00f019e088506ce000
+
