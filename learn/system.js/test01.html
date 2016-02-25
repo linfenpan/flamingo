@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>system.js学习</title>
+    <script src="./lib/system.js" charset="utf-8"></script>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+    System.config({
+        baseURL: "./test01",
+        map: {
+            jquery: "../../jquery.js",
+            json: "./json.js",    // 如果不配置 meta，得 !json 这样子使用，配置了，就不用
+            image: "./image.js"
+        },
+        meta: {
+            '*.json': {
+                loader: "json"
+            }
+        }
+    });
+    System.traceurOptions = { asyncFunctions: true };
+	System.paths.traceur = './traceur.min.js';
+
+    System.import("main.js").then(function(m){
+        console.log(new m.q().es6);
+    });
+    System.import("main.json").then(function(txt){
+        console.log(txt);
+    });
+    System.import("./test.png!image").then(function(image){
+        console.log(image);
+    });
+</script>
+</html>
