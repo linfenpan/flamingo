@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>虚拟dom学习</title>
+</head>
+<body>
+网上学习的半吊子:<br/>
+<div id="realDom"></div>
+
+<script type="text/javascript">
+// 虚拟 dom 构造函数
+function VirturalDOM(type, props, children) {
+    this.type = type;
+    this.props = props;
+    this.children = children || [];
+
+    this.rootId = null; // 节点 id
+    this.mountId = null; // 挂载节点id
+};
+
+var textDOM = new VirturalDOM("span", {id: "txt"}, "i am some text");
+var wrapDOM = new VirturalDOM("div", {id: "wrap"}, [textDOM]);
+
+
+// 构建元素
+var rootIdx = 0;    // 标志每一个DOM的id，用"."区分层级
+function mountElement(ele){
+    ele.rootId = rootIdx++;
+    var tagOpen = '<' + ele.type + ' v-id="' + ele.rootId + '">';
+    var tagClose = '</' + ele.type + '>';
+    var type;
+
+    // 遍历拼接虚拟DOM的innerHTML
+    if (Array.isArray(ele.children)) {
+        ele.children.forEach(function(item, index){
+            item.rootId = ele.rootId + "." + index; // 区分层级
+            item.mountId = ele.rootId;  // 需要知道挂载到哪个对象上
+
+            if (Array.isArray(item.children)) {
+                tagOpen += mountElement(item);
+            } else {
+                type = item.type;
+                tagOpen += '<' + type + ' v-id="' + item.rootId + '">';
+                tagOpen += item.children;
+                tagOpen += '</' + type + '>';
+            }
+        });
+    } else {
+        tagOpen += ele.children;
+    }
+
+    tagOpen += tagClose;
+
+    return tagOpen;
+};
+
+var virturalHTML = mountElement(wrapDOM);
+document.querySelector("#realDom").innerHTML = virturalHTML;
+
+
+// 模拟视图更新
+var newTextDom = new VirturalDOM("span", {id: "txt"}, "look,i am change!");
+var newDom = new VirturalDOM("div", {id: "wrap"}, [newTextDom]);
+
+
+
+/// 比较差异
+var diffQueue = []; // 记录差异的数组
+var diffDepth = 0;  // 每下去一层节点，就+1
+function updateDom(oldDom, newDom) {
+    diffDepth++;
+    diff(oldDom, newDom, diffQueue);
+    diffDepth--;
+
+    if (diffDepth == 0) {
+        patch(oldDom, diffQueue);
+        diffQueue = [];
+    }
+};
+
+// 扁平化
+function flat(children) {
+    var key;
+    var result = {};
+    children.forEach(function(item, index){
+        key = item.props.key ? item.props.key : index.toString(36);
+        result[key] = item;
+    });
+    return result;
+};
+
+// 差异类型
+var UPDATE_TYPES = {
+    MOVE: 1,    // 移动节点
+    REMOVE: 2,  // 删除节点
+    INSERT: 3,  // 插入节点
+    TEXT: 4     // 节点内容更新
+}
+
+// diff 比较
+function diff(oldDom, newDom, diffQueue) {
+    var oldFlat = flat(oldDom.children);
+    var newFlat = flat(newDom.children);
+
+    var nextIndex = 0;   // 作为记录map遍历的顺序
+
+    // 遍历新的虚拟DOM
+    for (key in newFlat) {
+        var oldItem = oldFlat[key];
+        var newItem = newFlat[key];
+
+        // 差异1: 移动
+        if (oldItem === newItem) {
+            // 对象完全相等，则有可能会是纯粹移动了位置
+            diffQueue.push({
+                type: UPDATE_TYPES.MOVE,
+                wrapId: oldItem.mountId,    // 之前挂载的对象
+                fromIndex: oldItem.rootId,   // 本身的位置
+                toIndex: nextIndex
+            });
+        } else {
+            // 差异2，oldItem 已经不在原来位置了，需要删掉
+            if (oldItem) {
+                diffQueue.push({
+                    type: UPDATE_TYPES.REMOVE,
+                    wrapId: oldItem.mountId,
+                    fromIndex: oldItem.rootId,
+                    toIndex: null
+                });
+            }
+
+            // 差异3，因为删掉了原本的元素，所以现在插入新的元素
+            diffQueue.push({
+                type: UPDATE_TYPES.INSERT,
+                wrapId: oldItem.mountId,
+                fromIndex: null,
+                toIndex: nextIndex,
+                ele: newItem    // 用户后边渲染 innerHTML
+            });
+        }
+
+        nextIndex++;
+    }
+
+    // 遍历老的 MAP，如果新的节点不存在，也删除掉
+    for (var key in oldFlat) {
+        var oldItem = oldFlat[key];
+        var newItem = newFlat[key];
+
+        if (!newItem) {
+            diffQueue.push({
+                type: UPDATE_TYPES.REMOVE,
+                wrapId: oldItem.mountId,
+                fromIndex: oldItem.rootId,
+                toIndex: null
+            });
+        }
+    }
+};
+
+
+// 响应队列里的更变
+function patch(sourceDOM, diffQueue){
+    var removeSpec = {};
+
+    diffQueue.forEach(function(update, item){
+        // 删除和移动，都记录在删除数组中
+        if (update.type == UPDATE_TYPES.MOVE || update.type == UPDATE_TYPES.REMOVE) {
+            var updateIndex = update.fromIndex;
+            var updateTarget = document.querySelector('[v-id="' + updateIndex + '"]');
+            var wrapId = update.wrapId;
+
+            // 记录删除
+            removeSpec[wrapId] = removeSpec[wrapId] || {
+                root: document.querySelector('[v-id="' + wrapId + '"]'),
+                garbages: []
+            };
+            removeSpec[wrapId].garbages.push(updateTarget);
+        }
+    });
+
+    // 删除节点
+    for (var key in removeSpec) {
+        var removeItem = removeSpec[key];
+        var root = removeItem.root;
+        var garbages = removeItem.garbages;
+        garbages.forEach(function(ele){
+            root.removeChild(ele);
+        });
+    }
+
+    // 再次遍历，插入节点
+    diffQueue.forEach(function(update){
+        var target = document.querySelector('[v-id="'+ update.wrapId +'"]');
+
+        switch (update.type) {
+            case UPDATE_TYPES.INSERT:
+                var source = mountEle(update.ele);
+                insertChildAt(target, source, update.toIndex);
+                break;
+            case UPDATE_TYPES.TEXT:
+                break;
+        }
+    });
+};
+
+// 构建元素
+var eDiv = document.createElement("div");
+function mountEle(virturalDOM){
+    // TODO 没做 props.key 的判定
+    var ele = document.querySelector('[v-id="'+ virturalDOM.rootId +'"]');
+    if (!ele) {
+        eDiv.innerHTML = mountElement(virturalDOM);
+        ele = eDiv.children[0];
+    };
+    return ele;
+};
+
+//
+function insertChildAt(parent, source, index){
+    var oldDom = parent.children[index];
+    if (oldDom) {
+        parent.insertBefore(source, oldDom);
+    } else {
+        parent.appendChild(source);
+    }
+};
+
+// 这个 generateNewMap 不知有什么用...
+function generateNewMap(oldChildren, newDom, diffQueue){
+    newDom.children.forEach(function(newItem, index){
+        var oldItem = oldChildren[index];
+        if (shouldUpdate(oldItem, newItem)) {
+            diff(oldItem, newItem, diffQueue);
+        }
+    });
+};
+
+// 判断两个节点，是否有差异
+function shouldUpdate(oldItem, newItem){
+    if (!isObjectEqual(oldItem, newItem)) {
+        return true;
+    }
+};
+
+// 对象是否相等
+function isObjectEqual(oldProps, newProps){
+    var isEqual = true;
+    for (var i in oldProps) {
+        if (oldProps.hasOwnProperty(i)) {
+            var oldProp = oldProps[i];
+            var newProp = newProps[i];
+            var oldType = typeof oldProp;
+            var newType = typeof newProp;
+            if (oldType != newType) {
+                isEqual = false;
+                break;
+            } else if (oldType == "object") {
+                isEqual = isObjectEqual(oldProp, newProp);
+            } else if(oldProp !== newProp){
+                isEqual = false;
+                break;
+            }
+        }
+    }
+    for (var i in newProps) {
+        if (newProps.hasOwnProperty(i)) {
+            if (!oldProps.hasOwnProperty(i)) {
+                isEqual = false;
+                break;
+            }
+        }
+    }
+    return isEqual;
+};
+
+setTimeout(function(){
+    updateDom(wrapDOM, newDom);
+}, 2000)
+</script>
+</body>
+</html>
