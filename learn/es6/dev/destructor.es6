@@ -1,8 +1,9 @@
 console.log("解构赋值:");
 
 var [a, b] = [1, 2];
-console.log("a == 1:" + (a == 1));
-console.log("b == 2:" + (b == 2));
+[a, b] = [b, a];
+console.log("a == 2:" + (a == 2));
+console.log("b == 1:" + (b == 1));
 
 var {bar, foo} = { bar: "bar", foo: "foo" };
 console.log("bar:" + bar);
@@ -46,3 +47,15 @@ function getRectArea(width, height = 10){
 };
 getRectArea();
 getRectArea(10);
+
+
+function getCircleData({x = 0, y = 0}, r = 50){
+    console.log("中心是:" + x + " " + y + " 半径:" + r);
+};
+getCircleData({}, 40);
+
+// 默认第 3 个参数，是个对象，其中，对象里有 option 的默认值，为false
+function divide(a, b, { option = false } = {}) {
+    console.log(arguments, option);
+}
+divide(1, 2, {});

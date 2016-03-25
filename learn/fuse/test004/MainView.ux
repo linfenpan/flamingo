@@ -1,0 +1,58 @@
+<App Theme="Basic" Background="#eee">
+	<Font ux:Global="msyh" File="../test001/msyh.ttf" />
+	<ScrollView>
+		<StackPanel>
+			<!-- 方形 -->
+			<Rectangle Fill="#f00" Height="20" Opacity="0.5" CornerRadius="10" />
+
+			<!-- 圆形 -->
+			<Circle X="50" Margin="10" Fill="#1e9ff8" Width="50" Height="50">
+				<Stroke Width="5" Brush="#fff" />
+				<Text Font="msyh" Value="心" Alignment="Center" TextColor="#fff" />
+			</Circle>
+
+			<!-- 圆的开始角度、结束角度 -->
+			<Circle StartAngleDegrees="40" EndAngleDegrees="330" Alignment="Center" Margin="10" Fill="#1f9565" Width="50" Height="50">
+				<Circle X="28" Y="8" Width="8" Height="8" Fill="#fff"></Circle>
+			</Circle>
+
+			<!-- 多边形 -->
+			<RegularPolygon Margin="10" Sides="6" Fill="#000" Width="80" Height="80"></RegularPolygon>
+
+			<!-- 椭圆 -->
+			<Ellipse Width="100" Height="50" Margin="10" Fill="#f00">
+				<Stroke Width="2" Color="#000" />
+			</Ellipse>
+
+			<!-- 镶嵌图片 -->
+			<Circle Width="150" Height="150">
+				<Stroke Width="10" Brush="#fff"></Stroke>
+				<ImageFill File="Images/Image1.jpg" />
+			</Circle>
+
+			<!-- 线性渐变 -->
+			<Rectangle Height="150">
+				<!-- StartPoint对应是起点百分比 -->
+				<!-- EndPoint 对应是结束点百分比 -->
+				<!-- <Stroke Width="5"> -->
+					<LinearGradient StartPoint="0,0" EndPoint="1,0.5">
+						<GradientStop Offset="0" Color="#fc3c47"></GradientStop>
+						<GradientStop Offset="1" Color="#b73070"></GradientStop>
+					</LinearGradient>
+				<!-- </Stroke> -->
+			</Rectangle>
+
+			<!-- Stroke -->
+			<Rectangle Height="40" />
+			<Rectangle CornerRadius="20" Width="200" Height="200">
+				<Draggable />
+				<SolidColor Color="#fff" /><!-- 中间填充颜色 -->
+				<!-- Offset 是容许内容超出的距离 -->
+				<Stroke Alignment="Center" Width="20" Offset="10">
+					<ImageFill File="Images/Image2.jpg" />
+				</Stroke>
+			</Rectangle>
+
+		</StackPanel>
+	</ScrollView>
+</App>

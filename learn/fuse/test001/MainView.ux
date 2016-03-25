@@ -1,0 +1,21 @@
+<!-- App下，仅且只可拥有1个节点 -->
+<App Background="#436eee" Theme="Basic">
+	<Font ux:Global="msyh" File="msyh.ttf" />
+	<!-- 默认都是根据左上角定位的，StackPanel 可让内置的元素，队列排序 -->
+	<StackPanel>
+		<Panel ux:Name="panel1">
+			<Text>panel1</Text>
+		</Panel>
+
+		<!-- AutoBind:false 等于不渲染，界面上，看不见，但实际，是存在的 -->
+		<Panel ux:AutoBind="false" ux:Name="panel2">
+			<Text>Hello, world!</Text>
+		</Panel>
+
+		<Image File="assert/personal.jpg" />
+		<!-- 就画一个矩形 -->
+		<Rectangle Width="50" Height="50" Fill="#888" />
+		<!-- 默认 TextWrapping: NoWrap 不换行 -->
+		<Text Font="msyh" TextWrapping="Wrap">文字过长，默认是不会换行的，需要设置TextWrapping:Wrap，才能看到换行效果</Text>
+	</StackPanel>
+</App>

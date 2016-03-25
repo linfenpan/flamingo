@@ -1,0 +1,61 @@
+<App Theme="Basic" Background="#eeeeeeff">
+<ScrollView>
+<StackPanel>
+	<!-- 很多 Panel，都是原始的 Panel + Layout rules 实现的 -->
+	<!-- 如 StackPanel = Panel + StackLayout -->
+	<Panel>
+		<StackLayout />
+		<Text Value="Simulate Panel as StackPanel" />
+		<Text Value="Here the second line" />
+	</Panel>
+
+
+	<!-- Grid = Panle + ColumnLayout ? 结果是不等的 -->
+	<!-- Panel + ColumnLayout 是瀑布流布局啊 -->
+	<Panel>
+		<Panel ux:Class="MyPanel" Background="#2c3e50" Margin="5" />
+	    <Text ux:Class="MyText" TextColor="#fff" Alignment="Center" FontSize="20" />
+
+		<!-- ColumnCount 指定了有多少列 -->
+	    <ColumnLayout ColumnCount="3" />
+
+	    <MyPanel Height="200">
+	        <MyText>1</MyText>
+	    </MyPanel>
+
+	    <MyPanel Height="100">
+	        <MyText>2</MyText>
+	    </MyPanel>
+
+	    <MyPanel Height="300" ux:Name="clumn3">
+	        <MyText>3</MyText>
+			<Clicked>
+				<Set clumn3.Height="50" />
+			</Clicked>
+	    </MyPanel>
+
+	    <MyPanel Height="150">
+	        <MyText>4</MyText>
+	    </MyPanel>
+
+	    <MyPanel Height="200">
+	        <MyText>5</MyText>
+	    </MyPanel>
+	</Panel>
+
+
+	<!-- 圆弧布局，当然，如果 Panel 没有设置高度，那就呵呵吧 -->
+	<Panel Margin="20" Width="150" Height="150">
+		<CircleLayout StartAngleDegrees="0" EndAngleDegrees="360" Radius="1" ItemSpacingDegrees="0" />
+		<!-- 来个7龙珠布局哈 -->
+		<Circle Width="25" Height="25" Color="#f00" />
+		<Circle Width="25" Height="25" Color="Blue" />
+		<Circle Width="25" Height="25" Color="Yellow" />
+		<Circle Width="25" Height="25" Color="#333" />
+		<Circle Width="25" Height="25" Color="#aaa" />
+		<Circle Width="25" Height="25" Color="#d65232" />
+		<Circle Width="25" Height="25" Color="#bacd98" />
+	</Panel>
+</StackPanel>
+</ScrollView>
+</App>

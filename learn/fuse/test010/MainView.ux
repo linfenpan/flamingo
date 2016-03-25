@@ -1,0 +1,45 @@
+<App Theme="Basic" Background="#eeeeeeff">
+<ScrollView>
+
+	<StackPanel>
+		<!-- 阴影 -->
+		<Rectangle Width="50" Height="50" Fill="#808">
+			<DropShadow Angle="135" Distance="5" Size="20" Spread="0.1" Color="#ff06" />
+		</Rectangle>
+
+		<!-- 模糊 -->
+		<Panel Margin="0,20,0,0" Width="200" Height="200" Alignment="Left" ClipToBounds="true">
+			<Image File="Assets/background1.png" StretchMode="UniformToFill" StretchDirection="Both">
+				<Blur ux:Name="imageBlur" Radius="0.1" />
+			</Image>
+			<Slider Layer="Overlay">
+				<ProgressAnimation>
+					<Change imageBlur.Radius="2" />
+				</ProgressAnimation>
+			</Slider>
+		</Panel>
+
+		<!-- 去色 -->
+		<Image Margin="0,20,0,0" File="Assets/background2.png" Width="200" Height="200" StretchMode="UniformToFill">
+			<!-- Amount = 1 就是黑白照了 -->
+			<Desaturate Amount="0.5" />
+		</Image>
+
+		<!-- 半色调 -->
+		<Image Margin="0,20,0,0" File="Assets/background3.png" Width="200" Height="200" StretchMode="UniformToFill">
+			<!-- Spacing 点和点的间距，越大，点也越大 -->
+			<!-- Smoothness 点边缘的平滑度 -->
+			<!-- Intensity 实际是点的缩放比 -->
+			<!-- PaperTint 找色深度，越大，越旧，圈圈越透明 -->
+			<Halftone Spacing="50" Smoothness="10" Intensity="1" PaperTint="0.5" />
+		</Image>
+
+		<!-- Fuse 容许元素相互遮罩 -->
+		<Rectangle Margin="0,20,0,0" Width="50" Height="50" Fill="#ff0">
+			<Mask File="Assets/Image1.jpg" /> <!-- Mask 可当作背景使用，能与当前颜色，相合并 -->
+			<Text Value="C" TextColor="#000" />
+		</Rectangle>
+	</StackPanel>
+
+</ScrollView>
+</App>

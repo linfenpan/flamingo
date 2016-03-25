@@ -1,0 +1,25 @@
+<App Theme="Basic" Background="#eee">
+	<Font ux:Global="msyh" File="../test001/msyh.ttf" />
+	<StackPanel>
+		<!-- 文字属性 -->
+		<Text TextColor="#999">Left</Text>
+		<Text TextAlignment="Center">Center</Text>
+		<Text FontSize="24" TextAlignment="Right">Right</Text>
+
+		<!-- LineSpacing 是行间距，换行有 tab 键入，是比较坑爹的 -->
+		<Text LineSpacing="20">
+			Multiple
+			Lines
+		</Text>
+
+		<!-- 数字: 保留3位小数 -->
+		<Number Value="3.14159265359" Format="F03" />
+
+		<!-- 图片 -->
+		<!-- 本地图片 -->
+		<Image Width="220" Height="220" File="../test001/assert/personal.jpg" />
+		<!-- 绝对路径图片 -->
+		<Image Width="120" Height="120" Url="http://linfenpan.github.io/assert/personal.jpg" />
+
+	</StackPanel>
+</App>

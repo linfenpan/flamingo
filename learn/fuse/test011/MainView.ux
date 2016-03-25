@@ -1,0 +1,89 @@
+<App Theme="Basic" Background="#eeeeeeff">
+<ScrollView>
+<!-- StackPanel 元素的由上到下，顺序排列 -->
+<StackPanel>
+	<!-- 各种布局研究 -->
+	<Text Margin="0,20,0,5" Value="Panel:" FontSize="18" TextColor="#1e9ff8" />
+	<Panel Height="50">
+		<!-- 基本布局，通过 alignment 和 margin/padding来控制位置 -->
+		<!-- Top/Bottom/Left/Right 4个基础值 -->
+		<!-- Top和Bottom 可以组成: TopLeft/TopRight/TopCenter 等值 -->
+		<Text>This...</Text>
+		<Text Alignment="Center">..will be on center of panel</Text>
+		<Rectangle Alignment="BottomRight" Width="20" Height="20" Color="#678" />
+	</Panel>
+
+
+	<!-- 网格布局 -->
+	<Text Margin="0,20,0,5" Value="Gird:" FontSize="18" TextColor="#1e9ff8" />
+	<Grid RowCount="2" ColumnCount="2">
+		<Text Value="four cell1" />
+		<Text Value="four cell2" />
+		<Text Value="four cell3" />
+		<Text Value="four cell4" />
+	</Grid>
+	<!-- 3 行，高度分别是50，50，100 -->
+	<Grid Rows="50,50,100">
+		<Text Alignment="Center" Value="Row 1" />
+		<Text Alignment="Center" Value="Row 2" />
+		<Text Alignment="Center" Value="Row 3" />
+	</Grid>
+	<!-- 3 列，宽度分别为 20%,20%,60% -->
+	<Grid Columns="1*,1*,3*">
+		<Text Value="column 1" />
+		<Text Value="column 2" />
+		<Text Value="column 3" />
+	</Grid>
+	<!-- 前两列，按自身大小放置，最后一列，用光所有位置 -->
+	<Grid Columns="auto,auto,1*">
+		<Text Value="column 1" Padding="10" />
+		<Text Value="column 2" Padding="10" />
+		<Text Value="column 3" Padding="10" />
+	</Grid>
+
+
+	<!-- 横向布局 -->
+	<Text Margin="0,20,0,5" Value="WrapPanel:" FontSize="18" TextColor="#1e9ff8" />
+	<WrapPanel>
+		<Text Value="wrap panel test~, " />
+		<Text Value="we're in same line!" />
+	</WrapPanel>
+	<!-- 从右到左，等同于所有子元素，float:right -->
+	<WrapPanel FlowDirection="RightToLeft">
+		<Rectangle Margin="5" Width="50" Height="50" Color="Blue" />
+		<Rectangle Margin="5" Width="50" Height="50" Color="Red" />
+	</WrapPanel>
+	<!-- 可以模仿 StackPanel，其中 ItemWidth 和 ItemHeight 可以定义每一项的宽、高 -->
+	<WrapPanel Orientation="Vertical">
+		<Text Value="first text" />
+		<Text Value="second text" />
+	</WrapPanel>
+
+
+	<Text Margin="0,20,0,5" Value="DockPanel:" FontSize="18" TextColor="#1e9ff8" />
+	<!-- DockPanel 就是方位布局，先出现的方位，占据更多的位置 -->
+	<!-- 方位有: Top/Left/Bottom/Right/Fill -->
+	<!-- 其中 Fill 是填充剩下的所有位置，是默认值 -->
+	<DockPanel>
+		<Rectangle ux:Class="MyRectangle" MinWidth="50" MinHeight="50" />
+		<MyRectangle Color="Teal" />
+		<MyRectangle Color="Green" Dock="Top" />
+		<MyRectangle Color="Blue" Dock="Bottom" />
+		<MyRectangle Color="Yellow" Dock="Left" />
+		<MyRectangle Color="Red" Dock="Right" />
+	</DockPanel>
+
+
+	<!-- Viewbox，将类似图片的存在，能保证宽高比 -->
+	<!-- 仅有1个子元素，可生效哦~ -->
+	<Text Margin="0,20,0,5" Value="Viewbox:" FontSize="18" TextColor="#1e9ff8" />
+	<Panel Width="250" Height="100" ClipToBounds="true">
+		<Viewbox StretchMode="PixelPrecise">
+			<Text Value="Text" FontSize="100" TextColor="#1e9ff7" />
+		</Viewbox>
+	</Panel>
+
+
+</StackPanel>
+</ScrollView>
+</App>

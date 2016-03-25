@@ -1,0 +1,43 @@
+<App Theme="Basic" Background="#eeeeeeff">
+	<Panel>
+		<StackLayout />
+		<!-- 元素应该默认是居中的，但是，可以通过 Anchor 改变元素居左 -->
+		<!-- Offset 类似于相对定位，但是，只有左和上的设置 -->
+		<Rectangle Width="200" Height="50" Color="#f00" Anchor="100%,0%" Offset="40,20" />
+		<!-- 因为 Rectangle 设置了 Offset，所以，把这里的文字，阻挡了一部分  -->
+		<Text Value="Test" />
+
+		<StackPanel Margin="0,20,0,0">
+			<Text Value="LayoutMaster:" />
+			<!-- 下面两个方形，将重叠 -->
+			<Rectangle ux:Name="master" Height="150" Color="#f00a" />
+			<Rectangle LayoutMaster="master" Color="#00fa" Height="50" />
+			<Text Value="LayoutMaster End1" />
+
+			<Text Margin="0,20,0,0" Value="LayoutMaster Test2:" />
+			<!-- LayoutMaster 就当作是 xxx 的皮肤，就可理解了 -->
+			<Rectangle ux:Name="selection" LayoutMaster="target1">
+				<Stroke Width="2" Brush="#3498db" Offset="2" />
+				<LayoutAnimation>
+					<Move RelativeTo="WorldPositionChange" X="1" Y="1" Duration="0.3" Easing="CubicInOut" />
+					<Resize RelativeTo="SizeChange" X="1" Y="1" Duration="0.3" Easing="CubicInOut" />
+				</LayoutAnimation>
+			</Rectangle>
+
+			<Panel ux:Name="target1" Margin="10" Height="50" Background="#eee">
+				<Text Alignment="Center">Click me</Text>
+				<Clicked>
+					<Set selection.LayoutMaster="target1" />
+				</Clicked>
+			</Panel>
+
+			<Panel ux:Name="target2" Width="150" Height="100" Background="#eee">
+				<Text Alignment="Center">Me too1</Text>
+				<Clicked>
+					<Set selection.LayoutMaster="target2" />
+				</Clicked>
+			</Panel>
+			<Text Value="LayoutMaster End2" />
+		</StackPanel>
+	</Panel>
+</App>

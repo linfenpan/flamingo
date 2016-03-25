@@ -8,17 +8,41 @@
 
 
 
-3、虚拟 dom，diff 算法
+(X)3、虚拟 dom，diff 算法
 	
 	虚拟 dom 就是模拟出 dom 出来的 javascript 对象。
 	通过新旧两个 虚拟 dom 对象 进行对比，找出两个dom的差异的算法，就是 diff 算法。
 
 
-4、mongodb学习
-	
-	
+(OK)4、mongodb学习
+
+	学习了增删查改，简单的分页操作
 
 
+5、搭建可拖拽的活动站点
+	
+	就搭了个框
+
+
+(OK) 6、看看这个属性 clip-path
+	
+	只有 webkit 内核的浏览器支持，可裁剪方形、圆形、椭圆，甚至和 svg 配合，切出奇怪的图案和文字。
+
+
+7、学习 fuse，一个两端开发的工具集合
+
+
+8、编写一个移动端使用的工具集
+
+
+9、元素倒影
+    -webkit-box-reflect: below 4px -webkit-gradient(linear, 0 0, 0 100%, from(transparent), color-stop(.7, transparent), to(rgba(255,255,255,0.6)));
+    -webkit-box-orient: vertical;
+    -webkit-box-align: center;
+    -webkit-box-pack: end;
+
+
+	
 
 ===================== 长期任务 ===========================
 

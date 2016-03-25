@@ -1,0 +1,34 @@
+<App Theme="Basic" Background="#eeeeeeff">
+<StackPanel>
+	<!-- 横向滚动 -->
+	<!-- 竖向滚动: Vertical [默认] -->
+	<!-- 横向滚动: Horizontal -->
+	<!-- 双向滚动: Both -->
+	<Text Value="Try to scroll it~:" />
+	<ScrollView AllowedScrollDirections="Horizontal" >
+		<Panel Width="2000" Height="300" Background="#6295E0">
+			<Text Value="Start" />
+			<Text X="1950" Value="End" />
+		</Panel>
+	</ScrollView>
+
+	<!-- 滚动动画 -->
+	<Panel Margin="0,20,0,0">
+		<Panel Alignment="Top" Height="50" ux:Name="ledge">
+			<Text Alignment="Center" TextAlignment="Center" TextColor="#fff" Value="Top Ledge" />
+			<Rectangle Fill="#000" />
+		</Panel>
+		<ScrollView Y="50">
+			<!-- 滚动 50px，透明就为0 -->
+			<ScrollingAnimation From="0" To="50">
+				<Change ledge.Opacity="0" />
+			</ScrollingAnimation>
+			<StackPanel>
+				<Panel Height="50" Background="#fff">
+					<Text Alignment="VerticalCenter" TextAlignment="Center" Value="Try to drag up" />
+				</Panel>
+			</StackPanel>
+		</ScrollView>
+	</Panel>
+</StackPanel>
+</App>

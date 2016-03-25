@@ -80,7 +80,7 @@ util.insertAtCursor = function(text, el){
     }
 };
 
-// 保存选区
+// 保存选区，在离开可输入区域时，应该保存起来
 util.save = (function(){
     if(window.getSelection){
         return function(){
@@ -118,9 +118,37 @@ util.restore = (function(){
 })();
 
 setTimeout(function(){
-    // util.replace("xxxxxx");
+    var b = document.createElement("b");
+    b.innerHTML = "xxxx";
+    util.replace(b);
 }, 3000);
 
+
+
+// 某个网站，找到最见到粗暴的插入方式
+function insertAtCaret(inputField, myValue) {
+    if (document.selection) {
+        //For browsers like Internet Explorer
+        inputField.focus();
+        var sel = document.selection.createRange();
+        sel.text = myValue;
+        inputField.focus();
+    }
+    else if (inputField.selectionStart || inputField.selectionStart == '0') {
+        //For browsers like Firefox and Webkit based
+        var startPos = inputField.selectionStart;
+        var endPos = inputField.selectionEnd;
+        var scrollTop = inputField.scrollTop;
+        inputField.value = inputField.value.substring(0, startPos)+myValue+inputField.value.substring(endPos,inputField.value.length);
+        inputField.focus();
+        inputField.selectionStart = startPos + myValue.length;
+        inputField.selectionEnd = startPos + myValue.length;
+        inputField.scrollTop = scrollTop;
+    } else {
+        inputField.focus();
+        inputField.value += myValue;
+    }
+  }
 
 </script>
 </html>

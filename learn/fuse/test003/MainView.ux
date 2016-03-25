@@ -1,0 +1,40 @@
+<App Theme="Basic" Background="#eee">
+	<Font ux:Global="msyh" File="../test001/msyh.ttf" />
+	<ScrollView>
+		<StackPanel>
+			<!-- 图片 -->
+			<!-- 本地图片 -->
+			<Image Width="220" Height="220" File="../test001/assert/personal.jpg" />
+			<!-- 绝对路径图片 -->
+			<Image Width="120" Height="120" Url="http://linfenpan.github.io/assert/personal.jpg" />
+
+
+			<!-- 脚本控制 -->
+			<!-- FileImageSource 不能使用 Url 属性 -->
+			<FileImageSource ux:Key="pic2" File="Images/Image2.jpg"/>
+			<JavaScript>
+				module.exports = {
+					imageResource: "pic2",
+					url: "http://h.hiphotos.baidu.com/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=ccc7a2214936acaf4ded9eae1db0e675/38dbb6fd5266d0160e0c7f30952bd40735fa3594.jpg"
+				};
+			</JavaScript>
+			<Image File="Images/Image1.jpg" />
+			<!-- 没有前缀 DataToResouce 是无法使用的 -->
+			<Image Source="{DataToResource imageResource}" />
+			<Image Url="{url}" />
+
+			<!-- 图片颜色滤镜 -->
+			<Image Margin="20" File="Images/Image1.jpg" Color="#ff0" />
+
+			<!-- 缩放模式:  -->
+			<!-- Fill 填充容器 -->
+			<!-- PixelPrecise 真实像素 -->
+			<!-- PointPrecise 屏幕点宽 -->
+			<!-- PointPrefer 尝试使用点宽 -->
+			<!-- Scale9 点9图，Scale9Margin 控制 -->
+			<!-- Uniform 保证显示全图，但不保证完全覆盖容器 -->
+			<!-- UniformToFill 保证覆盖容器，但不保证显示全图 -->
+			<Image File="Images/Image2.jpg" StretchMode="Uniform" />
+		</StackPanel>
+	</ScrollView>
+</App>

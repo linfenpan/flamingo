@@ -1,0 +1,56 @@
+<App Theme="Basic" Background="#eee">
+	<!-- 内敛脚本的 exports，实际是相同的出口 -->
+<JavaScript File="MainView.js"></JavaScript>
+<ScrollView>
+	<StackPanel>
+		<!-- 两种文本输入 -->
+		<Text Value="input:" />
+		<TextInput Margin="10" Background="#fff" ValueChanged="{bindEditAndInputChange}" />
+		<TextEdit Margin="10" Background="#fff" Value="{inputValue}" />
+
+		<!-- 尝试双向绑定 -->
+		<DockPanel>
+			<Text Dock="Left" Alignment="VerticalCenter" Value="Name:"/>
+			<TextInput Padding="10,5,10,10" PlaceholderText="please enter" PlaceholderColor="#ccc" Value="{name}" Alignment="VerticalCenter" />
+		</DockPanel>
+		<Text TextAlignment="Center" Value="{greeting}" />
+		<Button Clicked="{clearName}" Text="Clear" />
+
+
+		<!-- 密码、输入格式、多行、只读 -->
+		<DockPanel Margin="10,20">
+			<Text Value="Password:" Dock="Left" Alignment="VerticalCenter" />
+			<TextInput IsPassword="true" />
+		</DockPanel>
+		<DockPanel Margin="10,10">
+			<Text Value="Number:" Dock="Left" Alignment="VerticalCenter" />
+			<TextInput InputHint="Email" />
+		</DockPanel>
+		<DockPanel Margin="10,10">
+			<Text Value="Multiline:" Dock="Left" Alignment="VerticalCenter" />
+			<TextInput IsMultiline="true" />
+		</DockPanel>
+		<DockPanel Margin="10,10">
+			<Text Value="Read only:" Dock="Left" Alignment="VerticalCenter" />
+			<TextInput IsReadOnly="true" Value="Text read only" />
+		</DockPanel>
+
+		<!-- 当键盘出现 -->
+		<Text Value="Instructions of some kind">
+			<WhileKeyboardVisible>
+				<Move Y="-1" RelativeTo="Keyboard" />
+			</WhileKeyboardVisible>
+		</Text>
+		<TextInput />
+
+
+		<!-- 配置样式 -->
+		<!-- CaretColor 光标颜色 -->
+		<!-- SelectionColore 选中颜色 -->
+		<!-- PlaceholderText 默认文本 -->
+		<!-- PlaceholderColor 默认文本颜色 -->
+		<!-- TextAlignment 文本位置 -->
+		<TextInput TextAlignment="Center" SelectionColor="#00ffaa" CaretColor="#ff0000" />
+	</StackPanel>
+</ScrollView>
+</App>

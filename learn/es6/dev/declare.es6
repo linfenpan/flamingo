@@ -1,5 +1,11 @@
 console.log("变量声明");
 
+class Person {
+    get kidCount(){ return 11; }
+    // 别这样做，会死循环的
+    set size(value) { this.size = value; }
+}
+
 var declareFn1 = () => {
     let name = "da宗熊";
     {
@@ -27,6 +33,8 @@ var fibonacci = {
         };
     }
 };
+
+
 for (var n of fibonacci) {
     if (n > 5) {
         break;

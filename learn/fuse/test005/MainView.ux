@@ -1,0 +1,5 @@
+<App Theme="Basic" Background="#eeeeeeff">
+	<StackPanel>
+		<TestOutside></TestOutside>
+	</StackPanel>
+</App>

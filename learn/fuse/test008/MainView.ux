@@ -1,0 +1,16 @@
+<App Theme="Native" Background="#eeeeeeff">
+	<!-- 没装玩模拟，暂时用不了 -->
+    <StackPanel>
+		<Button Text="I'm a Native button!" />
+		<GraphicsView>
+            <Button Text="I'm a Fuse button!" />
+        </GraphicsView>
+		<Panel>
+			<!-- 使用 Native 的原生元素，注意，这个元素元素，会比 fuse 中的元素，先运行 -->
+			<NativeViewHost>
+				<WebView Url="http://m.baidu.com/"/>
+			</NativeViewHost>
+		</Panel>
+
+    </StackPanel>
+</App>

@@ -1,0 +1,31 @@
+<App Theme="Basic">
+<ScrollView>
+    <StackPanel>
+        <!-- ClipToBounds 等同于 overflow:hidden，如果不设置，则超出会显示 -->
+        <Panel Width="100" Height="100" ClipToBounds="true">
+            <Image Margin="-100" File="Asserts/Image1.jpg" StretchMode="UniformToFill" />
+        </Panel>
+
+        <!-- Panel 相当于绝对定位，但是，所有元素，都默认居中 -->
+        <!-- 透明度 -->
+        <Panel Width="200" Height="200">
+            <Slider Value="50">
+                <ProgressAnimation>
+                    <Change opacityImage.Opacity="0" />
+                </ProgressAnimation>
+            </Slider>
+            <Image ux:Name="opacityImage" File="Asserts/Image2.jpg" StretchMode="Uniform" Opacity="1" />
+        </Panel>
+
+
+        <!-- Layer 决定元素以什么角色，绘制到页面 [ZOffset类似zIndex的存在] -->
+        <!-- Background 以背景层显示 -->
+        <!-- Overlay 以顶层显示 -->
+        <Panel Margin="0,20,0,0" Width="200" Height="200">
+            <Rectangle Fill="#000" Layer="Background" />
+            <Text TextColor="#fff" Value="Text" Alignment="Center" />
+        </Panel>
+
+    </StackPanel>
+</ScrollView>
+</App>

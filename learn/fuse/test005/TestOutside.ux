@@ -1,0 +1,97 @@
+<StackPanel ux:Class="TestOutside">
+    <Button Margin="0,10,0,0" Text="Click me!" ux:Name="button1">
+        <Clicked>
+            <Set button1.Text="Clicked!" />
+        </Clicked>
+    </Button>
+
+    <!-- 在 fuse 中，很容易让所有一切，可点击 -->
+    <Rectangle Margin="0,10,0,0" Height="50" CornerRadius="5" Fill="#309">
+        <Clicked>
+            <!-- 开启 monitor，可看到消息 -->
+            <DebugAction Message="Rectangle got clicked" />
+        </Clicked>
+    </Rectangle>
+
+    <!-- 事件绑定 -->
+    <JavaScript>
+        module.exports = {
+            buttonClick: function(e) {
+                console.log("Button was clicked", e);
+            }
+        }
+    </JavaScript>
+    <Button Margin="0,10,0,0" Text="Click me 2!" Clicked="{buttonClick}" />
+
+    <!-- 开关, 设置默认值，为 true -->
+    <JavaScript>
+        module.exports = {
+            switchChanged: function(el){
+                console.log("Switch value is: " + el.value);
+            }
+        };
+    </JavaScript>
+    <Switch ValueChanged="{switchChanged}" Value="true">
+        <WhileTrue>
+            <Change rectangle.Width="160" Duration="0.5" Easing="CircularInOut" />
+        </WhileTrue>
+    </Switch>
+    <Rectangle ux:Name="rectangle" Width="70" Height="70" Fill="#909"></Rectangle>
+
+
+    <!-- 脚本控制 Switch -->
+    <JavaScript>
+        var Observable = require("FuseJS/Observable");
+        var switchValue = Observable(false);
+        module.exports = {
+            switchValue: switchValue,
+            enableSwitch: function() { switchValue.value = true; },
+            disableSwitch: function() { switchValue.value = false; },
+            switchChanged: function(el) {
+                console.log("Switch value is: " + el.value);
+            }
+        }
+    </JavaScript>
+    <Switch Value="{switchValue}" ValueChanged="{switchChanged}" />
+    <Grid ColumnCount="2">
+        <Button Text="Disable" Clicked="{disableSwitch}" />
+        <Button Text="Enable" Clicked="{enableSwitch}" />
+    </Grid>
+
+    <!-- 滑动条 -->
+    <Slider />
+
+    <!-- 滑动条，控制动画 -->
+    <Text Margin="10,10,0,0" Value="Slider control the degrees of rectangle:" />
+    <JavaScript>
+        module.exports = {
+            sliderValueChange: function(el) {
+                // value 是 0-100
+                console.log("Slider value: " + el.value);
+            }
+        };
+    </JavaScript>
+    <Slider ValueChanged="{sliderValueChange}">
+        <ProgressAnimation>
+            <!-- 滑动到100%时，旋转至90度 -->
+            <Rotate Target="sliderRect" Degrees="90" />
+        </ProgressAnimation>
+    </Slider>
+    <Rectangle ux:Name="sliderRect" Width="100" Height="100" Fill="#808" />
+
+    <JavaScript>
+        var Observable = require("FuseJS/Observable");
+
+        var sliderValue = Observable("Set Minimum and Maximun value: 0");
+
+        module.exports = {
+            sliderValue: sliderValue,
+            sliderBindWithText: function(e){
+                sliderValue.value = "Set Minimum and Maximun value: " + Math.floor(e.value);
+            }
+        }
+    </JavaScript>
+    <Text Margin="10,10,0,0" Value="{sliderValue}" />
+    <Slider Maximum="50" Minimum="10" ValueChanged="{sliderBindWithText}" />
+
+</StackPanel>

@@ -1,0 +1,24 @@
+<App Theme="Basic" Background="#eeeeeeff">
+	<StackPanel>
+		<!-- 动画会自动重置，按下，旋转90度，松开，则自动跑回0度 -->
+		<Rectangle Width="200" Height="50" Fill="#808">
+			<WhilePressed>
+				<Rotate Degrees="90" Duration="0.5" Easing="QuadraticIn" />
+			</WhilePressed>
+		</Rectangle>
+
+
+
+		<Rectangle Margin="0,100,0,0" Width="200" Height="50" Fill="#d33" >
+			<WhilePressed>
+				<Rotate Degrees="90" Duration="0.5" />
+				<!-- 设置回退动画的初始状态 -->
+				<TriggerAnimation ux:Binding="BackwardAnimation">
+					<Rotate Degrees="270" Duration="1" Easing="QuadraticIn" />
+					<Scale Factor="0.8" Duration="1" />
+				</TriggerAnimation>
+			</WhilePressed>
+		</Rectangle>
+
+	</StackPanel>
+</App>

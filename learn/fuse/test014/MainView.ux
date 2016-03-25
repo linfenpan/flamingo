@@ -1,0 +1,11 @@
+<App Theme="Basic">
+    <Viewport Perspective="400">
+        <Panel>
+            <Rectangle Width="200" Height="200" Background="#2ecc71">
+                <Clicked>
+                    <Rotate DegreesX="360" Duration="1.5" DurationBack="1" Easing="QuadraticInOut" />
+                </Clicked>
+            </Rectangle>
+        </Panel>
+    </Viewport>
+</App>
