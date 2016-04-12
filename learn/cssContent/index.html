@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>css content 测试</title>
+    <style media="screen">
+        /* 普通插入 */
+        .p1:after { content: "da宗熊"; }
+        /* 获取属性，别乱插入引号 */
+        .p2:after { content: attr(title); }
+
+/* counter-reset: 定义一个新的计数器 */
+/* counter-increment: 某个计算器 + 1 */
+        ol { list-style: none; counter-reset: counter1; }
+        li:before {
+            content: "第" counter(counter1) "行: ";
+            counter-increment: counter1;
+        }
+
+/* :lang(en) 匹配英文环境，:lang 包含 [lang]，但反之，却不通 */
+/* [lang=en] 匹配有 lang=en 属性的元素 */
+    /* 定义引号的样式 */
+    :lang(en)  q { quotes: '"' '"'; }
+    :lang(ch)  q { quotes: '<' '>'; }
+    q:before { content: open-quote; }
+    q:after { content: close-quote; }
+
+/* 用 content 替换掉原本的文字 */
+    .bear { content: url(./bear.png); }
+    </style>
+</head>
+<body>
+    <p class="p1">欢迎:</p>
+    <p title="p2标题" class="p2">title属性:</p>
+    <ol>
+        <li>内容1</li>
+        <li>内容2</li>
+    </ol>
+
+    <q>
+        It's only work if somebody makes you do it.
+    </q>
+
+    <div>
+        <span class="bear">熊</span>: hello
+    </div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+    <meta charset="utf-8">
+    <title>全屏滚动demo</title>
+    <link rel="stylesheet" href="./css/swiper.min.css">
+    <style>
+    * { padding: 0; margin: 0; }
+    html, body { height: 100%; }
+    body { background: #eee; }
+    .swiper-container { width: 100%; height: 100%; }
+    .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    </style>
+</head>
+<body>
+
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <img src="http://linfenpan.github.io/demo/swiper/images/1.jpg" />
+            </div>
+            <div class="swiper-slide">
+                <img src="http://linfenpan.github.io/demo/swiper/images/2.jpg" />
+            </div>
+            <div class="swiper-slide">
+                <img src="http://linfenpan.github.io/demo/swiper/images/3.jpg" />
+            </div>
+            <div class="swiper-slide">
+                <img src="http://linfenpan.github.io/demo/swiper/images/4.jpg" />
+            </div>
+            <div class="swiper-slide">
+                <img src="http://linfenpan.github.io/demo/swiper/images/5.jpg" />
+            </div>
+            <div class="swiper-slide">
+                <img src="http://linfenpan.github.io/demo/swiper/images/6.jpg" />
+            </div>
+            <div class="swiper-slide">
+                <img src="http://linfenpan.github.io/demo/swiper/images/7.jpg" />
+            </div>
+            <div class="swiper-slide">
+                <img src="http://linfenpan.github.io/demo/swiper/images/8.jpg" />
+            </div>
+        </div>
+        <!-- 添加指示器 -->
+        <div class="swiper-pagination"></div>
+    </div>
+
+<script src="./js/swiper.min.js"></script>
+<script type="text/javascript">
+    var swiper = new Swiper(".swiper-container", {
+        pagination: ".swiper-pagination",
+        paginationClickable: true
+    });
+
+
+</script>
+</body>
+</html>

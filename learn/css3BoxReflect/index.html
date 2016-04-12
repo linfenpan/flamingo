@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>倒影学习</title>
+    <style>
+        /*
+            box-reflect 有3个参数
+                box-reflect: direction offset mask-box-image|渐变
+                direction -> above,below,left,right
+                offset -> 定义倒影和元素之间的距离，可以是百分比和像素
+                mask-box-image -> 渐变|图片【实际上，图片没测试成功】
+
+        */
+        img {
+            box-reflect: below 1px linear-gradient(180deg, rgba(255,255,255,0) 70%, rgba(255,255,255,1));
+            -webkit-box-reflect: below 1px -webkit-linear-gradient(270deg, rgba(255,255,255,0) 70%, rgba(255,255,255,1));
+        }
+
+        /** 加个3d观察 */
+        body {
+            transform-style: preserve-3d;
+            perspective: 1500px;
+        }
+        img {
+            transform: rotateY(45deg) translateZ(200px);
+            transition: transform .4s ease;
+        }
+        img:hover {
+            transform: rotateY(0deg) translateZ(0px);
+        }
+    </style>
+</head>
+<body>
+    <img src="./pic.jpg" />
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+    下面一些自由，有些是缓存了的，有些，是没有缓存的，试试禁止网络之后，再访问试试？
+    <ul id="cacheList" style="display:none;">
+        <li>
+            <a href="./service/test02/static/pre_text.txt" target="_blank">文本02</a>
+        </li>
+        <li>
+            <a href="./service/test02/static/pre_fetched.html" target="_blank">网页02</a>
+        </li>
+    </ul>
+<script>
+    function waitUntilInstalled(registration){
+        return new Promise(function(resolve, reject){
+            if (registration.installing) {
+                // 如果正在安装，则等待安装完成，再进行下一步
+                registration.installing.addEventListener("statechange", function(e){
+                    if (e.target.state == "installed") {
+                        resolve();
+                    } else if (e.target.state == "redundant") {
+                        reject();
+                    }
+                })
+            } else {
+                resolve();
+            }
+        });
+    };
+    function showFileList(e){
+        document.querySelector("#cacheList").style.display = "block";
+    };
+
+    navigator.serviceWorker.register("./service/test02/test02.js")
+        .then(waitUntilInstalled)
+        .then(showFileList)
+        .catch(function(error){
+            console.error("安装错误:", error);
+        });
+</script>
+</body>
+</html>

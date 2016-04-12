@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>有选择的缓存</title>
+    <link rel="stylesheet" href="./static/test03.css" />
+</head>
+<body>
+    <div id="message"></div>
+<script>
+    var $message = document.querySelector("#message");
+
+    if ("serviceWorker" in navigator) {
+        // scope 必须比脚本根路径要小
+        // 如果要缓存当前页面，脚本和页面，就需要放在相同目录
+        navigator.serviceWorker.register("./test03.js", {scope: "./"})
+            .then(function(registration){
+                // controller 存在，则表示设置成功
+                if (navigator.serviceWorker.controller) {
+                    $message.innerHTML = "安装成功";
+                } else {
+                    $message.innerHTML = "请刷新页面，启动serviceWorker";
+                }
+            }).catch(function(error){
+                console.error("安装失败:", error);
+            });
+    }
+</script>
+</body>
+</html>

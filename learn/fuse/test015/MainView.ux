@@ -20,5 +20,17 @@
 			</WhilePressed>
 		</Rectangle>
 
+
+		<Grid Columns="auto,1*" Margin="0,20,0,0" >
+			<Switch ux:Name="swipe"></Switch>
+			<Rectangle TransformOrigin="TopLeft" Margin="10,0" Height="10" Fill="#d65">
+				<Stroke Brush="#ff0" />
+				<WhileTrue Source="swipe">
+					<!-- Delay 和 DelayBack 是延后多少时间，才执行 -->
+					<Scale X="0.5" Duration="1" Delay=".2" />
+				</WhileTrue>
+			</Rectangle>
+		</Grid>
+
 	</StackPanel>
 </App>

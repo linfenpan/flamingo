@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>web server</title>
+</head>
+<body>
+    <div class="message">
+        service worker 注册状态: <span class="status">doing...</span><br/>
+        serviceWorker.register的状态: <span class="statusR"></span><br/>
+        注册状态更变，应该如下:
+        <ol>
+            <li>installing</li>
+            <li>installed</li>
+            <li>activing</li>
+            <li>actived</li>
+        </ol>
+    </div>
+
+<script>
+    var $status = document.querySelector(".status");
+
+    // 默认 scope 为 "/" --> "./"
+    navigator.serviceWorker.register("./service/test01/test01.js")
+        .then(function(registration){
+            $status.innerHTML = "success";
+
+            var serviceWorker, status;
+            if (registration.installing) {
+                serviceWorker = registration.installing;
+                status = "installing";
+            } else if (registration.waiting) {
+                serviceWorker = registration.waiting;
+                status = "waiting";
+            } else if (registration.active) {
+                // 应该是 active 状态
+                serviceWorker = registration.active;
+                status = "actived";
+            }
+            document.querySelector(".statusR").innerHTML = status;
+
+            if (serviceWorker) {
+                console.log(serviceWorker.state);
+                serviceWorker.addEventListener("statechange", function(e){
+                    console.log(e.target.state);
+                });
+            }
+
+        }).catch(function(error){
+            $status.innerHTML = "fail";
+            console.log("fail:", error);
+        });
+</script>
+</body>
+</html>

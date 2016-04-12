@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>createEvent</title>
+    <style>
+        * { padding: 0; margin: 0; }
+        h1 { padding: 1rem; }
+        .item { padding: 0 2rem; }
+        .trg { margin-left: 1rem; }
+    </style>
+</head>
+<body>
+    <h1>HTMLEvents</h1>
+    <div class="item">
+        <a href="javascript:alert('1');" id="btn1">点击弹出1</a>
+        <a href="javascript:;" onclick="btn1Click()" class="trg">触发前面弹出</a>
+    </div>
+
+    <h1>UIEvents</h1>
+    <div class="item">
+        <a href="javascript:;" onkeyup="alert(2)" id="btn2">keyup一下</a>
+        <a href="javascript:;" class="trg" onclick="btn2Click()">触发前面的keyup</a>
+    </div>
+
+    <h1>MouseEvents</h1>
+    <div class="item">
+        <a href="javascript:;" onmousedown="alert(3)" id="btn3">鼠标事件</a>
+        <a href="javascript:;" class="trg" onclick="btn3Click()">触发前面的keyup</a>
+    </div>
+
+    <h1>MutationEvents</h1>
+    <div class="item">
+        适应以下事件: http://help.dottoro.com/ljimhdto.php <br/>
+        'DOMAttrModified'[没生效],<br/>
+        'DOMNodeInserted'[ok], <br/>
+        'DOMNodeRemoved'[ok], <br/>
+        'DOMCharacterDataModified'[ok，修改文本，产生的事件，textNode有data属性，修改后，可直接映射到显示上，有addData, deleteData等方法], <br/>
+        'DOMNodeInsertedIntoDocument',[ok，节点插入document产生]<br/>
+        'DOMNodeRemovedFromDocument', [ok，节点从document中移除]<br/>
+        'DOMSubtreeModified'[ok，容器的子节点，发生新增、删除时]
+    </div>
+
+<script type="text/javascript">
+    // HTMLEvents 配合 initEvent 使用
+    // 其中 initEvent 3个参数，分别是:
+    //    initEvent(eventType, canBubble, canPreventDefault);
+    //    eventType可选值: abort, blur, change, error, focus, load, reset, resize, scroll, select, submit, unload, click[也可以用MouseEvents]
+    //    canBubble 是否起泡，true自动起泡
+    //    canPreventDefault 是否可通过preventDefault()取消事件，true则调用 preventDefault 则取消此事件
+    function btn1Click(){
+        var clickEvent = document.createEvent("HTMLEvents");
+        clickEvent.initEvent("click", false, true);
+        // type 在 initEvent 中指定后，是不能更改的哦~
+        clickEvent.type = "myselfclick";
+
+        document.getElementById("btn1").dispatchEvent(clickEvent);
+    };
+
+
+
+    // UIEvents 配合 initUIEvent 使用，此事件，间接包含 MouseEvents
+    // 其中 initUIEvent 有5个参数:
+    //      eventType 事件类型: DOMActivate, DOMFocusIn, DOMFocusOut, keydown, keyup, keypress
+    //    canBubble: 是否允许冒泡
+    //    canPreventDefault: 是否允许通过preventDefault阻止触发
+    //    windowObject: 当前触发的window对象
+    //    detail: 滚轮方位 1 or 0
+    function btn2Click(){
+        var keyupEvent = document.createEvent("UIEvents");
+        keyupEvent.initUIEvent("keyup", false, false, window, 1);
+        /// 可以设置 keyCode，模拟按键触发
+        keyupEvent.keyCode = 50;
+
+        document.getElementById("btn2").dispatchEvent(keyupEvent);
+
+    };
+    btn2.addEventListener("keyup", function(e){
+        console.log(e.keyCode)
+    }, false);
+
+
+    // MouseEvents 配合 initMouseEvent 一起使用
+    // 到了此刻，可看出，initXXEvent 的方法，实际上，不需要把所有参数都配置
+    // 后续有需要的，可逐一设置
+    // 其中，MouseEvents 包含: click, mousedown, mousemove, mouseout, mouseover, mouseup
+    function btn3Click(){
+        var mousedownEvent = document.createEvent("MouseEvents");
+        // 其实1个参数，也是可以的，之后再补上嘛
+        // mousedownEvent.initMouseEvent("mousedown");
+        mousedownEvent.initMouseEvent("mousedown", false, false, window, 1);
+        // 后续还有可选参数
+        // screenX, screenY, clientX, clientY
+        // ctrlKey, altKey, shiftKey, metaKey
+        // button, relatedTarget
+        document.getElementById("btn3").dispatchEvent(mousedownEvent);
+    };
+</script>
+</body>
+</html>

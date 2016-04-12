@@ -1,0 +1,26 @@
+<App Theme="Native" Background="#333">
+    <JavaScript>
+        module.exports = {
+            onPageLoaded: function(res) {
+                console.log("WebView arrived at ") + JSON.parse(res.json).url);
+            }
+        };
+    </JavaScript>
+    <DockPanel>
+        <StatusBarBackground Dock="Top" />
+        <NativeViewHost>
+            <WebView Dock="Fill" Url="http://www.google.com">
+                <PageLoaded>
+                    <EvaluateJS Handler="{onPageLoaded}">
+                        var result = {
+                            url: document.location.href
+                        };
+                        alert(1);
+                        return result;
+                    </EvaluateJS>
+                </PageLoaded>
+            </WebView>
+        </NativeViewHost>
+        <BottomBarBackground Dock="Bottom" />
+    </DockPanel>
+</App>

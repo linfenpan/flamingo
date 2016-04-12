@@ -1,0 +1,87 @@
+﻿2016年03月学习计划
+
+
+1、搭建 html 模板站点工具
+
+
+
+2、学习 fuse，一个两端开发的工具集合
+
+
+	
+(OK) 3、看看SSE
+
+https://segmentfault.com/a/1190000004682473
+
+非常简单，就是 EventSource 而已，主要用于服务器，往浏览器，推送消息用的。
+http://www.w3school.com.cn/html5/html_5_serversentevents.asp
+
+if(typeof(EventSource)!=="undefined"){
+	var source=new EventSource("sendMessage");//sendMessage后台的访问路径
+	source.onmessage=function(event){
+		  document.getElementById("result").innerHTML+=event.data + "<br />";
+	  };
+}else{
+	document.getElementById("result").innerHTML="对不起，您的浏览器不支持服务器发送的事件…";
+}
+
+
+
+(OK) 4、学习创建事件，并发布之
+
+	实际上不难，有4种常用的事件: HTMLEvents, UIEvents, MouseEvents, MutationEvents
+	对应不同的 init 方法，HTMLEvents -> initEvent, UIEvents -> initUIEvent, MouseEvents -> initMouseEvent, MutationEvents -> initMutationEvent
+	但是，所有 init 的方法，接受的参数，都是一样的， init(EventName, canBubble, canPreventDefault, windowObject, detail, screenX, screenY ... );
+	建议只设置 3 个参数，剩下的，按需配置。
+	http://linfenpan.github.io/20160405/1459846164133/index.html
+	
+	看个例子:
+	
+	let clickEvent = document.createEvent("HTMLEvents");
+	clickEvent.initEvent("click", false, false);
+	
+	element.dispatch(clickEvent);
+	
+	
+5、整理用过的 php 知识
+
+
+6、看看
+
+
+
+===================== 杂记 ===============================
+cursor: -webkit-grab; 光标手形
+cursor: -webkit-grabbing; 光标手抓下
+
+	
+
+===================== 长期任务 ===========================
+
+1、搭建 html 模板站点工具
+
+基于nunjuck，搭建模板站点支持服务，必要功能:
+	文件更变，刷新浏览器
+	指定资源域名，资源合并等操作
+	
+2、给予 electron 的移动端页面开发工具
+
+目标：简单拖拉工具，就能拼接处页面
+	
+
+
+
+===================== 遗留任务 ===========================
+
+(OK) 5、swipe.js
+
+http://cssload.net/en/horizontal-bars/6
+
+
+6、aow 改版
+
+
+4、python 3.5  学习
+
+http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386818214042e9c46552422e42d8a00f019e088506ce000
+

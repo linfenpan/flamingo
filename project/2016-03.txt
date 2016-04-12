@@ -6,7 +6,8 @@
 
 (OK)2、整理活动常用的功能，聚合成工具库
 
-
+	http://linfenpan.github.io/demo/flamingo/index.html
+	
 
 (X)3、虚拟 dom，diff 算法
 	
@@ -32,14 +33,68 @@
 7、学习 fuse，一个两端开发的工具集合
 
 
-8、编写一个移动端使用的工具集
+
+(OK)8、编写一个移动端使用的工具集【跟学习点2重复了】
+	
+	http://linfenpan.github.io/demo/flamingo/index.html
 
 
-9、元素倒影
+(OK)9、元素倒影
     -webkit-box-reflect: below 4px -webkit-gradient(linear, 0 0, 0 100%, from(transparent), color-stop(.7, transparent), to(rgba(255,255,255,0.6)));
-    -webkit-box-orient: vertical;
-    -webkit-box-align: center;
-    -webkit-box-pack: end;
+	
+	如上述例子，box-reflect 就仅仅支持3个参数，而且只有 chrome，safari，opera 支持
+	在手机端，出奇的支持好。
+	
+	box-reflect: 方向 偏移量 渐变
+	
+	方向：above, below, left, right
+	偏移量: 像素、百分比等
+	渐变: 线性、放射性渐变，都支持得很好，不过渐变的方向，都跟正常的相反
+		正常渐变：从内往外
+		倒影渐变：从外到内
+	
+	-webkit-box-reflect: below 2px -webkit-linear-gradient(270deg, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 1))
+
+
+(X)10、display: box;
+	
+	被 display: flex 代替之
+
+
+(OK)11、content 用法总结
+	
+	content: attr(title); // 获取标题的内容
+	content: "(" attr(title) ")"; // 也可多个合并在一起
+	content: url(./logo.png); // 替换掉原本的内容，换成一张图片
+	content: open-quote; // 开头的引号
+	content: close-quote; // 关闭的引号
+	content: counter(计数器); // 使用某个计数器的值
+	
+	
+	counter-reset: 定义一个新的计数器
+	counter-increment: 指定某个计算器自增1
+	
+	@example:
+		ol { counter-reset: counter1; }
+		li:before { content: counter(counter1); counter-increment: counter1; }
+	
+	
+	lang是一个特殊的元素属性，用于指定当前内容的语言环境
+		:lang(en) 代表语言环境，为英文时
+		:lang(ch) 代表语言环境，为中文时
+		
+		其中，肯定有疑惑，:lang 和 [lang=|] 到底有何区别？实际上，:lang 相当于 [lang=|]，但 [lang=|] 却不等于 :lang，可以在 html 中，定义 lang 属性，指定语言哦
+		
+		如定义不同语言中， q 元素的引号
+		:lang(ch) q { quotes: '“' '”'; }
+		:lang(en) q { quotes: '"' '"'; }
+		
+		q:before { content: open-quote; }
+		q:after { content : close-quote; }
+	
+	
+12、看看SSE
+https://segmentfault.com/a/1190000004682473
 
 
 	
@@ -64,6 +119,7 @@
 5、swipe.js
 
 http://cssload.net/en/horizontal-bars/6
+
 
 6、aow 改版
 
