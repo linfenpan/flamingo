@@ -67,6 +67,7 @@
     }).then(function(blob){
         var objectURL = URL.createObjectURL(blob);
         myImage.src = objectURL;
+        console.log("获取地址:" + objectURL);
     });
 
     </script>
