@@ -39,6 +39,71 @@
 
 
     <br><br><br>
+    <h1>Cache</h1>
+    Cache提供了存储 request/response 键值对的机制。<br>
+    每个浏览器，对每个域名拥有cache容量是有限制的，浏览器尽可能的管理cache空间，但也有可能自动删除cache。<br>
+    所以，给自己的缓存，打上独自的版本号，对于管理缓存，是很有必要的<br>
+    注意:
+    <ul>
+        <li>Cache.put/add/addAll只允许在get请求</li>
+        <li>Cache.put/add/addAll的promise对象，将在完全写完硬盘时触发完成。但近期较新的浏览器承诺，响应就算在流式传输中，也会立刻触发 promise 完成。</li>
+        <li>在Chrome 46版本，Cache api只允许存储安全域名的资源，如https/localhost/file等</li>
+    </ul>
+    写入缓存后，刷新页面试试:
+    <button id="writeCache">写入缓存</button>
+    <span id="cacheContent" style="color:red;"></span>
+
+    <script>
+        var $writeCache = document.querySelector("#writeCache");
+        var $cacheContent = document.querySelector("#cacheContent");
+        var CacheName = "/write/cache/text.txt";
+
+        $writeCache.addEventListener("click", function(){
+            caches.open("myCache1").then(function(cache){
+                var res = new Response("文本诶", {status: 200});
+                cache.put(CacheName, res);
+                alert("写入完成");
+            });
+        }, false);
+        caches.match(CacheName).then(function(response){
+            if (!response) {
+                return;
+            }
+
+            response.text().then(function(body){
+                $cacheContent.innerHTML = body;
+            });
+        });
+
+        // 自动执行 generator 函数
+        function autoExecute(iterator, value){
+            var next = iterator.next(value);
+            var callback = arguments.callee;
+            if (!next.done) {
+                var promise = next.value;
+                if (promise instanceof Promise) {
+                    promise.then(function(value){
+                        callback(iterator, value);
+                    });
+                } else {
+                    callback(iterator, promise);
+                }
+            }
+        };
+
+        // 测试 add 和 addAll
+        function* testCacheAdd(){
+            var cache = yield caches.open("myCache1");
+            console.log(2222, cache);
+        };
+        var testCacheAdds = testCacheAdd();
+
+        autoExecute(testCacheAdds);
+
+    </script>
+
+
+    <br><br><br>
 
     <h1>Response</h1>
     虽然可以通过 new Response() 生成 Response 对象，但是，更加鼓励，使用其它 API，如 Fetchevent.respondWith 或 更简单的 fetch(url).then(function(response){}) 等方法，进行创建。<br/>
