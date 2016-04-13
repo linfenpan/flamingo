@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>说说CacheStorage</title>
+</head>
+<body>
+    <h1>CacheStorage</h1>
+    CacheStorage 在浏览器上，引用的名字叫 caches 而不是 cacheStorage，它定义在 ServiceWorker 的规范中。<br/>
+    CacheStorage 是多个 Cache 的集合，而每个 Cache 都可以存储多个 Response 对象。<br/>
+    一共有下面几个方法:
+    <ul>
+        <li>caches.open("某个cache的名字") --> return Promise，如果给定名字的cache不存在，则创建，Promise中的第1个参数，为Cache对象</li>
+        <li>caches.delete("某个cache的名字") --> return Promise，Promise返回的第1个参数，true代表找到Cache对象，false代表没有此Cache对象</li>
+        <li>caches.has("某个cache的名字") --> return Promise，第1个参数为 true/false</li>
+        <li>caches.match("某个cache的名字") --> return Promise，如果cache存在，第1个参数，则为此cache对象</li>
+        <li>caches.keys() --> return Promise，返回当前CacheStorage拥有的所有Cache对象的名字列表，每个域名，都有独立的CacheStorage，类似localStorage</li>
+    </ul>
+    <script>
+        caches.delete("c1");
+        caches.delete("c2");
+        Promise.all([
+            caches.open("c1").then(function(cache){
+                var res = new Response("aaa", { status: 200 });
+                return cache.put("/hehe", res);
+            }),
+            caches.open("c2").then(function(cache){
+                var res = new Response("bbb", { status: 200 });
+                return cache.put("/hehe2", res);
+            })
+        ]).then(function(){
+            return caches.match("/hehe2");
+        }).then(function(response){
+            return response.text();
+        }).then(function(body){
+            console.log(body);
+        });
+    </script>
+
+
+    <br><br><br>
+
+    <h1>Response</h1>
+    虽然可以通过 new Response() 生成 Response 对象，但是，更加鼓励，使用其它 API，如 Fetchevent.respondWith 或 更简单的 fetch(url).then(function(response){}) 等方法，进行创建。<br/>
+    <img id="responseImage" />
+    <script>
+    // 接受两个参数 body/options
+    // body 为 Blob/BufferSource/FormData/URLSearchParams/USVString
+    // options 为 { status: 状态码, statusText: 状态code，如ok, headers: { 加入header的键值对 } }
+    var response1 = new Response("response测试", {status: 200});
+    response1.text().then(function(text){
+        console.log("自定义response:" + text);
+    });
+
+    var myData = {name: "da宗熊"};
+    // Blob 对象，也可以通过 fileReader 进行读取
+    var myBlob = new Blob([JSON.stringify(myData, null, 4)], {type: "application/json"});
+    var response2 = new Response(myBlob, {status: 200, statusText: "ok"});
+    response2.json().then(function(json){
+        console.log("自定义response:", json);
+    });
+
+    // 读取图片
+    var myImage = document.querySelector("#responseImage");
+    fetch("http://linfenpan.github.io/assert/personal.jpg").then(function(response){
+        return response.blob();
+    }).then(function(blob){
+        var objectURL = URL.createObjectURL(blob);
+        myImage.src = objectURL;
+    });
+
+    </script>
+</body>
+</html>

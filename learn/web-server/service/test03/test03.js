@@ -1,4 +1,5 @@
 
+importScripts("../serviceworker-cache-polyfill.js");
 
 var CacheVersion = 1;
 var CurrentCaches = {
