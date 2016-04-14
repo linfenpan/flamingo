@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>测试04</title>
+    <link rel="stylesheet" href="./test04/test04.css">
+</head>
+<body>
+    <p>很逗比</p>
+
+<script src="./test04/test04.js"></script>
+<script>
+    navigator.serviceWorker.register("/flamingo/learn/web-server/test04.js", {scope: "/flamingo/learn/web-server/"}).then(function(registration){
+        if (navigator.serviceWorker.controller) {
+            console.log("安装成功");
+        } else {
+            console.log("刷新页面后，serviceWoker生效");
+        }
+    }).catch(function(error){
+        console.error("安装错误:", error);
+    });
+</script>
+</body>
+</html>
