@@ -6,9 +6,6 @@
     <meta name="keywords" content="" />
     <meta name="description" content="" />
 
-    <!-- 使用modjs作为资源加载器 -->
-    <?php framework('static/js/mod.js'); ?>
-
     <!-- 标记css输出位置 -->
     <?php placeholder('css');?>
 
@@ -66,9 +63,7 @@
     如果不想改变内嵌js的位置可以不用php包裹，但注意此时可能modjs还没加载 -->
   <?php scriptStart(); ?>
     <script type="text/javascript">
-      require.async('widget/scroll/scroll.js',function(scroll){
-        scroll.init();
-      })
+        console.log("内敛脚本");
     </script>
   <?php scriptEnd(); ?>
 

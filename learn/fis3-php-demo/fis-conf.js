@@ -3,11 +3,6 @@
 //      fis3 server start
 //      fis3 release -wL -d [需要发布到的目录]
 
-//模块化方案，本项目选中CommonJS方案(同样支持异步加载哈)
-fis.hook('module', {
-  mode: 'commonJs'
-});
-
 // widget发布时产出到 /static 目录下
 fis.match('/widget/**', {
     isMod : true,

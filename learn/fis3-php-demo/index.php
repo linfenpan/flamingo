@@ -1,4 +1,7 @@
 <?php
+// 这是个人修改版本，通过 ngnix 重定向，到此页面，再进行正确地址和数据的分配
+// ngnix 配置： rewrite ^/(.+)\.html$ /index.php?page=$1 last;
+
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
@@ -13,9 +16,22 @@ FISResource::setConfig(array(
     'template_dir'  => $root . '/tpl/'
 ));
 
-$fis_data = array(
-    "title" => "da宗熊的测试"
-);
+$data_root = "data/";
+$page_root = "page/";
+
+$page_name = $_GET["page"];
+if (empty($page_name)) {
+    $page_name = "index";
+}
+
+// 判断一下存放数据的文件是否存在，引入此文件
+$data_url = $data_root . $page_name . ".php";
+if (is_file($data_url)) {
+    include $data_url;
+}
+
 
 //渲染首页
-display("page/index.php", $fis_data);
+$page_url = $page_root . $page_name . ".php";
+display($page_url, $fis_data);
+// display("page/index.php", $fis_data);
