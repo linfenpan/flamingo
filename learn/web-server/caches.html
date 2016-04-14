@@ -21,8 +21,8 @@
         caches.delete("c2");
         Promise.all([
             caches.open("c1").then(function(cache){
-                var res = new Response("aaa", { status: 200 });
-                return cache.put("/hehe", res);
+                var res2 = new Response("aaa", { status: 200 });
+                return cache.put("/hehe", res2);
             }),
             caches.open("c2").then(function(cache){
                 var res = new Response("bbb", { status: 200 });
@@ -52,6 +52,12 @@
     写入缓存后，刷新页面试试:
     <button id="writeCache">写入缓存</button>
     <span id="cacheContent" style="color:red;"></span>
+    <br>
+    <button id="readImageFromCache">从缓存读取图片</button><br/>
+    <img id="cacheImage" height="120" />
+    <br>
+    <button id="readAllImageFromCache">从缓存中读取所有图片</button>
+    <div id="allImage"></div>
 
     <script>
         var $writeCache = document.querySelector("#writeCache");
@@ -94,13 +100,73 @@
         // 测试 add 和 addAll
         function* testCacheAdd(){
             var cache = yield caches.open("myCache1");
-            console.log(2222, cache);
+            var x = cache.add("./images/1.jpg");
+            var y = cache.addAll([
+                "./images/2.jpg",
+                "./images/3.jpg",
+                "./images/4.jpg",
+                "./images/5.jpg",
+                "./images/1.jpg",        // 重复缓存，会自动去重
+                "./images/xx.jpg"        // 就算找不到，也会缓存的，只是 response 的状态，是 Not Found 而已
+            ]);
+            console.log("%c缓存了图片: ./images/1.jpg", "color: blue;");
         };
-        var testCacheAdds = testCacheAdd();
+        autoExecute(testCacheAdd());
+        document.querySelector("#readImageFromCache").addEventListener("click", function(){
+            autoExecute((function*(){
+                var cache = yield caches.open("myCache1");
+                var response = yield cache.match("./images/1.jpg");
+                var blob = yield response.blob();
 
-        autoExecute(testCacheAdds);
+                // 还有另外一种方式，是 URL.createObjectURL(blob) 创建临时链接
+                var reader = new FileReader();
+                reader.onload = function(){
+                    var src = this.result;
+                    document.querySelector("#cacheImage").src = src;
+                };
+                reader.readAsDataURL(blob);
+            })());
+        }, false);
+
+
+        // 读取所有图片
+        document.querySelector("#readAllImageFromCache").addEventListener("click", function(){
+            autoExecute((function*(){
+                var cache = yield caches.open("myCache1");
+                var keys = yield cache.keys();
+                console.log("缓存列表:", keys);
+                // matchAll 跟 match 差不多，只是返回了数组
+                // 而且，这个数组，测试到现在，也没试过数量超过1，除非什么参数都不传入
+                var responses = yield cache.matchAll();
+                var html = "";
+                for (var i = 0, max = responses.length; i < max; i++) {
+                    var response = responses[i];
+                    var header = response.headers;
+                    var type = header.get("content-type");
+                    if (response.status == 200 && /image/.test(type)) {
+                        var blob = yield response.blob();
+                        var src = URL.createObjectURL(blob);
+                        html += `<img src="${src}" height="120" />`;
+                    }
+                };
+                document.querySelector("#allImage").innerHTML = html;
+            })());
+        }, false);
 
     </script>
+
+    <div>
+        有几个方法，需要补充说明一下:
+        <ul>
+            <li>Cache.match(链接): 返回一个带有response对象的Promise</li>
+            <li>Cache.matchAll(链接?, 参数?): 返回一个response列表对象的Promise</li>
+            <li>Cache.add(链接): 缓存当前链接，没返回</li>
+            <li>Cache.addAll(链接列表): 缓存一系列链接，没返回</li>
+            <li>Cache.put(链接, Response对象): 添加一个缓存</li>
+            <li>Cache.delete(链接, 参数?): 删除一个缓存</li>
+            <li>Cache.keys(链接?, 参数?): 返回Request对象列表</li>
+        </ul>
+    </div>
 
 
     <br><br><br>
